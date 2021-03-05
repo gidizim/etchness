@@ -1,31 +1,42 @@
 .search_bar {
-    line-height: 2em;
+    line-height: 3em;
     text-align: center;
-    font-size: 25px;
+    font-size: 30px;
+
+    border-radius: 20px;
+
+
+    margin-left: 20%;
+    width: 60%;
 }
 
 .search_button{
-    margin 100px;
+    width: 10%;
+    font-size: 14px;
+    margin-right: 10%
+    
+    border-radius: 100px;
+
 }
 
 .search_box{
+
     display: flex;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding-left: auto;
-    padding-right: auto;
+    padding-top: 15px;
+
+
+    width: 100%;
 }
 
 .item {
     display: flex;
-    padding: 10px;
+    padding: 20px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
     width: 80%;
     height: 150px;
     border-style: solid;
-
 }
 
 .thumbnail {

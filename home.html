@@ -3,23 +3,27 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="nav.css">
       <link rel="stylesheet" href="home.css">
+
     <title>Home</title>
   </head>
   <body>
-    <h1>Home</h1>
 
-    <div>
+    <div class="navMenu">
         <nav>
-            <a href="home.html">Home</a>
+            <a class="noHover"><img src=jobicon.png width='15px'/> Website Name</a>
+            <a class="active" href="home.html">Home</a>
             <a href="watchlist.html">Watchlist</a>
             <a href="newsfeed.html">Newsfeed</a>
-            <a href="profile.html">JavaScript</a>
+            <a href="profile.html">Profile</a>
         </nav>
     </div>
 
     <div class="search_box">
-        <input type="text" class="search_bar" placeholder="Search For Jobs" size="25">
+        <input type="text" class="search_bar" placeholder="Search For Jobs" >
         <input type="button" class="search_button" value="search">
     </div>
 
@@ -66,6 +70,10 @@
         </div>
 
     </div>
+
+    <footer>
+        <p><i class="fa fa-bullhorn"></i> Website Name | Etchness SENG2011 21T1 </p>
+    </footer>
 
     </body>
 </html>
