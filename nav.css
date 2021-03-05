@@ -31,6 +31,10 @@ footer {
     font-size: 17px;
 }
 
+.navMenu a.login {
+    float:right;
+}
+
 /* Change the color of links on hover */
 .navMenu a:hover {
     background-color: #ddd;
