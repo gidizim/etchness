@@ -26,6 +26,12 @@ body {
     color: white;
     margin-bottom: 20px;
     border: 1px solid black;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #1581ac;
+    
 }
 
 html {
