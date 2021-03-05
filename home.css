@@ -1,0 +1,50 @@
+.search_bar {
+    line-height: 2em;
+    text-align: center;
+    font-size: 25px;
+}
+
+.search_button{
+    margin 100px;
+}
+
+.search_box{
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: auto;
+    padding-right: auto;
+}
+
+.item {
+    display: flex;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    width: 80%;
+    height: 150px;
+    border-style: solid;
+
+}
+
+.thumbnail {
+    display: flex;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 10px;
+    margin-right: 20px;
+    float: left
+}
+
+.description {
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+text-align: center;
+}
+
+p {
+margin: 0.5em;}
