@@ -18,12 +18,12 @@ body {
 
 .submit-btn {
     width: 250px;
-    border-radius: 5px;
     font-size: 18px;
-    padding: 15px;
+    padding: 10px;
     background-color: #076c94;
     font-weight: bold;
     color: white;
+    border-radius: 5px;
     margin-bottom: 20px;
     border: 1px solid black;
     cursor: pointer;
@@ -31,7 +31,6 @@ body {
 
 .submit-btn:hover {
     background-color: #1581ac;
-    
 }
 
 html {
@@ -47,6 +46,35 @@ input {
     margin: 3px;
 }
 
-p {
-    margin-top: 0;
+.profile-box {
+    margin: auto;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(192, 213, 231);
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 20px;
+    padding-top: 0;
+    margin-top: 50px;
+    font-size: 14pt;
+}
+
+label {
+    margin-right: 15px;
+}
+
+#edit-btn {
+    padding: 10px;
+    width: 150px;
+    font-size: 14pt;
+    background-color: #076c94;
+    font-weight: bold;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border: 1px solid black;
+    cursor: pointer;
 }

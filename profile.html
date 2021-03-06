@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="nav.css">
+        <link rel="stylesheet" href="login.css">
         <title>Profile</title>
     </head>
     <body>
@@ -17,9 +18,48 @@
                 <a class="login" href="Login.html">Login</a>
             </nav>
         </div>
-        <h1>Profile</h1>
+        <div class="profile-box">
+            <h1>Profile</h1>
+            <table>
+                <tr>
+                    <td>
+                        <label><b>First name:</b></label>
+                    </td>
+                    <td>
+                        <input type="text" disabled value="John" name="profile"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label><b>Last name:</b></label>
+                    </td>
+                    <td>
+                        <input type="text" disabled value="Smith" name="profile"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label><b>Email: </b></label>
+                    </td>
+                    <td>
+                        <input type="text" disabled value="john.smith@gmail.com" name="profile"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label><b>Password:</b></label>
+                    </td>
+                    <td>
+                        <input type="text" disabled value="*********" name="profile"></label>
+                    </td>
+                </tr>
+            </table>
+            </br>
+            <input type="button" id="edit-btn" onclick="edit()" type="submit" value="Edit profile"></button>
+        </div>
         <footer>
             <p> Website Name | Etchness SENG2011 21T1 </p>
         </footer>
     </body>
+    <script src="login.js"></script>
 </html>
