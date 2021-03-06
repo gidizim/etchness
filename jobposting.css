@@ -1,0 +1,33 @@
+.header-info {
+    border-bottom: 20px black;
+    font-size: 15pt;
+}
+
+.job-container {
+    border: 5px black;
+    margin: auto;
+    margin-bottom: 100px;
+    width: 75%;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    font-size: 14pt;
+}
+
+.btn-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: fit-content;
+}
+.button {
+    width: fit-content;
+    font-size: 15pt;
+    margin: 10px 15px 10px 0;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.company-logo {
+    width: 200px;
+}

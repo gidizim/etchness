@@ -25,3 +25,14 @@ const edit = () => {
         profileFeatures[i].disabled = !profileFeatures[i].disabled;
     }
 }
+const addToWatchlist = () => {
+    const button = document.getElementById('add');
+    if (button.value == "Add to watchlist") {
+        button.value = "Remove from watchlist";
+        // button.style.backgroundColor = "#332e2e";
+    } else {
+        button.value = "Add to watchlist";
+        // button.disabled = "true";
+    }
+    // location.href = "watchlist.html";
+}
