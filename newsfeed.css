@@ -1,0 +1,21 @@
+.newsContainer {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 10px;
+    justify-content: space-between;
+    padding: auto;
+    row-gap: 20px;
+}
+
+.newsItem {
+    text-align: left;
+    border: 2px solid black;
+    margin: auto 20% auto;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.newsItem img {
+    float: left;
+    margin-right: 20px;
+}
