@@ -2,25 +2,28 @@ body {
     font-family: Arial;
 }
 
-.signup-box {
-    background-color: rgb(192, 213, 231);
+.profile-box {
+    /* background-color: #d3eefa; */
+    background-color: #ebebeb;
     align-items: center;
     text-align: center;
     display: flex;
     flex-direction: column;
     margin: auto;
     width: 400px;
-    margin-top: 50px;
-    margin-bottom: 50px;
+    margin-top: 100px;
+    margin-bottom: 100px;
     border-radius: 10px;
     border: 1px solid black;
+    box-shadow: 10px 15px 15px grey;
 }
 
 .submit-btn {
-    width: 250px;
+    width: 200px;
     font-size: 18px;
     padding: 10px;
-    background-color: #076c94;
+    background-color: #332e2e;
+    /* background-color: #076c94; */
     font-weight: bold;
     color: white;
     border-radius: 5px;
@@ -30,14 +33,8 @@ body {
 }
 
 .submit-btn:hover {
-    background-color: #1581ac;
+    opacity: 0.85;
 }
-
-html {
-    /* background: linear-gradient(45deg, #205097 10%, #537fa3 90%); */
-    background-color: rgb(179, 170, 170);
-}
-
 input {
     font-size: 14pt;
     padding: 5px;
@@ -46,35 +43,6 @@ input {
     margin: 3px;
 }
 
-.profile-box {
-    margin: auto;
-    width: 400px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: rgb(192, 213, 231);
-    border-radius: 5px;
-    border: 1px solid black;
-    padding: 20px;
-    padding-top: 0;
-    margin-top: 50px;
-    font-size: 14pt;
-}
-
 label {
     margin-right: 15px;
-}
-
-#edit-btn {
-    padding: 10px;
-    width: 150px;
-    font-size: 14pt;
-    background-color: #076c94;
-    font-weight: bold;
-    color: white;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    border: 1px solid black;
-    cursor: pointer;
 }
