@@ -1,4 +1,4 @@
-
+/* 
 .fav-btn {
     font-size:24px;
     cursor: pointer;
@@ -12,7 +12,7 @@
 
 .fav-container {
     display:flex;
-    /* height: 100%; */
+    height: 100%;
     justify-content: center;
     align-items: center;
     flex:1;
@@ -20,8 +20,15 @@
 
 #btn1, #btn2 {
     color: red;
-}
-
-.item {
+} */
+/* .item {
     justify-content: space-between;
+} */
+
+#watchlist-container {
+    display: flex;
+    margin: auto;
+    width: 75%;
+    flex-direction: column;
+    /* padding: 50px; */
 }
