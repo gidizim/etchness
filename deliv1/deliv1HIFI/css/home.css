@@ -91,6 +91,11 @@ margin: 0.5em;
 }
 
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
+body {
+    min-height: 100px;
+    /* Margin bottom prevents footer from blocking last block*/
+    margin-bottom: 80px;
+}
