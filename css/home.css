@@ -33,7 +33,7 @@
     width: 60%;
     margin-left: 20%;
     margin-right: 20%;
-    padding-bottom: 18%;
+    padding-bottom: 15%;
 }
 
 .filter{
@@ -44,12 +44,19 @@
 .item {
     display: flex;
     padding: 20px;
+
     margin-left: auto;
     margin-right: auto;
-    margin-top: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
     width: 80%;
     height: 150px;
     border-style: solid;
+}
+
+.item p {
+margin: 0.5em;
 }
 
 .thumbnail {
@@ -78,7 +85,7 @@
     margin-right: 49%;
 }
 
-h1
+#recommend_text
 {
     text-align: center;
 }
@@ -87,6 +94,3 @@ html {
   scroll-behavior: smooth;
 }
 
-p {
-margin: 0.5em;
-}
