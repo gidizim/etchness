@@ -1,5 +1,5 @@
 body {
-    font-family: Arial;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .profile-box {
@@ -24,10 +24,11 @@ body {
     background-color: rgb(252, 76, 56);;
     font-weight: bold;
     color: white;
-    border-radius: 5px;
+    border-radius: 20px;
     margin-bottom: 20px;
     border: none;
     cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .submit-btn:hover {
@@ -44,4 +45,8 @@ input {
 
 label {
     margin-right: 15px;
+}
+
+h1 {
+    font-family: 'Varela Round', sans-serif;
 }

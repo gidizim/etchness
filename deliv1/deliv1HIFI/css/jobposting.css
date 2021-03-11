@@ -4,7 +4,6 @@
 }
 
 .job-container {
-    border: 5px black;
     margin: auto;
     margin-bottom: 100px;
     width: 75%;
@@ -12,6 +11,9 @@
     display: flex;
     flex-direction: column;
     font-size: 14pt;
+    background-color: #FDF2ED;
+    border-radius: 10px;
+    border: 4px solid rgb(252, 76, 56);
 }
 
 .btn-container {
@@ -26,8 +28,24 @@
     margin: 10px 15px 10px 0;
     padding: 10px;
     cursor: pointer;
+    border-radius: 20px;
+    background-color: rgb(252, 76, 56);
+    font-weight: bold;
+    color: white;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .company-logo {
     width: 200px;
+}
+
+h1 {
+    font-family: 'Varela Round', sans-serif;
+}
+
+h3 {
+    font-family: 'Varela Round', sans-serif;
 }

@@ -7,6 +7,7 @@
     margin-left: 20%;
     outline: none;
     width: 60%;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .search_bar:hover {
@@ -27,6 +28,7 @@
     outline: none;
     border: none;
     cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .search_box{
@@ -62,6 +64,7 @@
     border: 3px solid rgb(252, 76, 56);
     border-radius: 400px;
     outline: none;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .item {
