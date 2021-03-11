@@ -3,21 +3,18 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="js/index.js"></script>
+        <script src="js/navbarload.js"></script>
+        
         <link rel="stylesheet" href="css/nav.css">
         <link rel="stylesheet" href="css/newsfeed.css">
         <title>newsfeed</title>
     </head>
     <body>
-        <div class="navMenu">
-            <nav>
-                <a class="noHover"><img src=img/jobicon.png width='15px'/> Website Name</a>
-                <a href="home.html">Home</a>
-                <a href="watchlist.html">Watchlist</a>
-                <a class="active" href="newsfeed.html">Newsfeed</a>
-                <a href="profile.html">Profile</a>
-                <a class="login" href="Login.html">Login</a>
-            </nav>
-        </div>
+        <div id="nav"></div>
+
         <!-- Filler content for actual api implementation -->
         <div class="newsContainer">
             <div class="newsItem">
@@ -49,9 +46,6 @@
             </div>
         </div>
 
-
-        <footer>
-            <p> Website Name | Etchness SENG2011 21T1 </p>
-        </footer>
+        <div id="footer"></div>
     </body>
 </html>

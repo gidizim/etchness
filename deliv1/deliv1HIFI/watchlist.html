@@ -4,6 +4,10 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="js/index.js"></script>
+        <script src="js/navbarload.js"></script>
+
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/nav.css">
         <link rel="stylesheet" href="css/home.css">
@@ -13,16 +17,8 @@
     </head>
     <body>
 
-    <div class="navMenu">
-        <nav>
-            <a class="noHover"><img src=img/jobicon.png width='15px'/> Website Name</a>
-            <a href="home.html">Home</a>
-            <a class="active" href="watchlist.html">Watchlist</a>
-            <a href="newsfeed.html">Newsfeed</a>
-            <a href="profile.html">Profile</a>
-            <a class="login" href="Login.html">Login</a>
-        </nav>
-    </div>
+    <div id="nav"></div>
+
     <h1>Watchlist</h1>
     <div id="watchlist-container">
         <h3>Added Today</h3>
@@ -67,11 +63,8 @@
             </div>
         </div>
     </div>
-    <footer>
-        <p> Website Name | Etchness SENG2011 21T1 </p>
-    </footer>
-    <script src="js/index.js"></script>
+
+    <div id="footer"></div>
 
     </body>
 </html>
-

@@ -8,17 +8,18 @@ footer {
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: #333;
+    background-color: #073B4C;
     color: white;
     text-align: left;
     padding-left: 10px;
 }
 
 .navMenu {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
-    background-color: #333;
+    background-color: #073B4C;
     overflow: auto;
   }
   
@@ -32,7 +33,7 @@ footer {
     font-size: 17px;
 }
 
-.navMenu a.login {
+#login {
     float:right;
 }
 
@@ -40,13 +41,14 @@ footer {
 .navMenu a:hover {
     background-color: #ddd;
     color: black;
-    border-bottom: 3px solid #ddd;
+    /* border-bottom: 3px solid #ddd;  only need once active is ready*/
 }
 
 /* Add a color to the active/current link */
-.navMenu a.active {
-    border-bottom: 3px solid #4CAF50;
-    color: white;
+.active {
+    /* border: 10px solid #4CAF50;
+    color: white; */
+    background-color: red;
 }
 .noHover{
     pointer-events: none;
