@@ -1,16 +1,3 @@
-const login = () => {
-    const formDetails = document.querySelectorAll('[required]');
-    for (let i = 0; i < formDetails.length; i++) {
-        if (formDetails[i].value == "") {
-            alert("Please fill in all the fields");
-            return;
-        };
-    }
-    
-    location.href = "home.html";
-
-}
-
 const edit = () => {
     const profileFeatures = document.getElementsByName('profile');
     const button = document.getElementById('edit-btn');
@@ -33,14 +20,3 @@ const addToWatchlist = () => {
         button.value = "Add to watchlist";
     }
 }
-// gotta fix this code later
-// const like = () => {
-//     const button = document.getElementsByClassName('fav-btn')[0];
-//     if (button.value == "unliked") {
-//         button.value = "liked";
-//         button.style.color = "red";
-//     } else {
-//         button.value = "unliked";
-//         button.style.color = "grey";
-//     }
-// }
