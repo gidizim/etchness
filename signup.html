@@ -6,20 +6,20 @@
     <link href="css/login.css" rel="stylesheet" type="text/css" />
     <link href="css/nav.css" rel="stylesheet" type="text/css" />
     <title>Sign up</title>
-    <div class="navMenu">
-        <nav>
-            <a class="noHover">Website Name</a>
-            <a class="active" href="home.html">Home</a>
-            <a href="watchlist.html">Watchlist</a>
-            <a href="newsfeed.html">Newsfeed</a>
-            <a href="profile.html">Profile</a>
-        </nav>
-    </div>
     </head>
     <body>
+        <div class="navMenu">
+            <nav>
+                <a class="noHover">Website Name</a>
+                <a class="active" href="home.html">Home</a>
+                <a href="watchlist.html">Watchlist</a>
+                <a href="newsfeed.html">Newsfeed</a>
+                <a href="profile.html">Profile</a>
+            </nav>
+        </div>
         <div class="profile-box">
             <h1>Fill in this form to sign up!</h1>
-            <form class="signup">
+            <form class="signup" action="home.html" method="post">
                 <input type="text" placeholder="First name" name="fname" required>
                 <input type="text" placeholder="Last name" name="lname" required>
                 <input type="text" placeholder="Email" name="email" required>
@@ -28,13 +28,11 @@
                 <p>Have an account already? 
                     <a href="login.html">Log in</a>
                 </p>
-                <input class="submit-btn" type="button" onclick="login()" value="Create my account"></button>
+                <input class="submit-btn" type="submit" value="Create my account"></input>
             </form>
         </div>
-        
         <footer>
             <p>Etchness SENG2011 21T1</p>
         </footer>
     </body>
-    <script src="js/index.js"></script>
 </html>

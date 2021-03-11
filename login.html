@@ -6,36 +6,35 @@
     <link href="css/login.css" rel="stylesheet"/>
     <link href="css/nav.css" rel="stylesheet"/>
     <title>Login</title>
-    <div class="navMenu">
-        <nav>
-            <a class="noHover"><img src=img/jobicon.png width='15px'/> Website Name</a>     
-            <a href="home.html">Home</a>
-            <a href="watchlist.html">Watchlist</a>
-            <a href="newsfeed.html">Newsfeed</a>
-            <a href="profile.html">Profile</a>
-            <a class= "active login" href="Login.html">Login</a>
-        </nav>
-    </div>
     </head>
     <body>
+        <div class="navMenu">
+            <nav>
+                <a class="noHover"><img src=img/jobicon.png width='15px'/> Website Name</a>     
+                <a href="home.html">Home</a>
+                <a href="watchlist.html">Watchlist</a>
+                <a href="newsfeed.html">Newsfeed</a>
+                <a href="profile.html">Profile</a>
+                <a class= "active login" href="Login.html">Login</a>
+            </nav>
+        </div>
         <div class="profile-box">
             <h1>Log in</h1>
-            <form class="login">
+            <form class="login" action="home.html" method="post">
                 <input type="text" placeholder="Email" name="email" required>
                 <input type="password" placeholder="Password" name="password" required>
-            </br>
+                <br>
                 <p>Haven't signed up yet? 
                     <a href="signup.html">Create an account</a>
                 </p>
                 <p>Forgot password? 
                     <a href="resetpw.html">Reset password</a>
                 </p>
-                <input class="submit-btn"  onclick="login()" type="button" value="Log in"></button>
+                <input class="submit-btn"  type="submit" value="Log in"></input>
             </form>
         </div>
         <footer>
             <p>Etchness SENG2011 21T1</p>
         </footer>
     </body>
-    <script src="js/index.js"></script>
 </html>
