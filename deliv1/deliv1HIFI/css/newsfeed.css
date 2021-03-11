@@ -1,7 +1,7 @@
 .newsContainer {
     display: flex;
     flex-direction: column;
-    margin: 10px 10px;
+    margin-top: 100px;
     justify-content: space-between;
     padding: auto;
     row-gap: 20px;
@@ -9,7 +9,7 @@
 
 .newsItem {
     text-align: left;
-    border: 2px solid black;
+    border: 2px solid rgb(252, 76, 56);;
     margin: auto 20% auto;
     padding: 10px;
     border-radius: 20px;
@@ -18,4 +18,18 @@
 .newsItem img {
     float: left;
     margin-right: 20px;
+}
+
+.newsItem a:link {
+    color: black;
+    background-color: transparent;
+}
+
+.newsItem a:visited {
+    color: black;
+    background-color: transparent;
+}
+
+.newsItem p {
+    font-weight: bold;
 }
