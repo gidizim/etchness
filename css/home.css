@@ -2,9 +2,7 @@
     line-height: 3em;
     text-align: center;
     font-size: 30px;
-
     border-radius: 20px;
-
     margin-left: 20%;
     width: 60%;
 }
@@ -16,16 +14,31 @@
     border-radius: 20px;
     display: inline-block;
 
+    /* Styling for the search button */
+    background-color: #332e2e;
+    font-weight: bold;
+    border: 1px solid black;
+    color: white;
 }
 
 .search_box{
-
     display: flex;
-    padding-top: 19%;
-    padding-bottom: 19%;
-
-
+    padding-top: 13%;
     width: 100%;
+    padding-bottom: 10px;
+}
+
+.filters{
+    display: flex;
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
+    padding-bottom: 18%;
+}
+
+.filter{
+    margin-left: 1%;
+    width: 19%;
 }
 
 .item {
@@ -58,11 +71,16 @@
     color: #000000;
 }
 
+#recommend_image {
+    width: 40px;
+    height: 40px;
+    margin-left: 49%;
+    margin-right: 49%;
+}
+
 h1
 {
-
     text-align: center;
-
 }
 
 html {
@@ -70,4 +88,5 @@ html {
 }
 
 p {
-margin: 0.5em;}
+margin: 0.5em;
+}
