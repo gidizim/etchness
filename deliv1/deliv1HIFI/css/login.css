@@ -1,10 +1,10 @@
 body {
-    font-family: Arial;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .profile-box {
     /* background-color: #d3eefa; */
-    background-color: #ebebeb;
+    background-color: #FDF2ED;
     align-items: center;
     text-align: center;
     display: flex;
@@ -14,22 +14,21 @@ body {
     margin-top: 100px;
     margin-bottom: 100px;
     border-radius: 10px;
-    border: 1px solid black;
-    box-shadow: 10px 15px 15px grey;
+    border: 4px solid rgb(252, 76, 56);
 }
 
 .submit-btn {
     width: 200px;
     font-size: 18px;
     padding: 10px;
-    background-color: #332e2e;
-    /* background-color: #076c94; */
+    background-color: rgb(252, 76, 56);
     font-weight: bold;
     color: white;
-    border-radius: 5px;
+    border-radius: 20px;
     margin-bottom: 20px;
-    border: 1px solid black;
+    border: none;
     cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .submit-btn:hover {
@@ -46,4 +45,8 @@ input {
 
 label {
     margin-right: 15px;
+}
+
+h1 {
+    font-family: 'Varela Round', sans-serif;
 }
