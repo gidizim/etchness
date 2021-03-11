@@ -10,7 +10,7 @@ body {
 }
 
 footer {
-    position: absolute;
+    position: fixed;
     left: 0;
     bottom: 0px;
     width: 100%;
@@ -41,6 +41,9 @@ footer {
 }
 
 #login {
+    float:right;
+}
+#signup {
     float:right;
 }
 
