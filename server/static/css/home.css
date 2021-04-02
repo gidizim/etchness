@@ -1,0 +1,131 @@
+.search_bar {
+    line-height: 3em;
+    text-align: center;
+    font-size: 30px;
+    border: 4px solid rgb(252, 76, 56);
+    border-radius: 400px;
+    margin-left: 20%;
+    outline: none;
+    width: 60%;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.search_bar:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.search_button{
+    width: 10%;
+    font-size: 30px;
+    margin-left: 3px;
+    border-radius: 400px;
+    display: inline-block;
+
+    /* Styling for the search button */
+    background-color: rgb(252, 76, 56);
+    font-weight: bold;
+    color: white;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.search_box{
+    display: flex;
+    padding-top: 13%;
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+.title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 150px;
+    text-align: center;
+    margin-top: 150px;
+    margin-bottom: -140px;
+    margin-left: -200px;
+}
+
+
+
+.filters{
+    display: flex;
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
+    padding-bottom: 10%;
+    
+}
+
+.filter{
+    margin-left: 1%;
+    width: 19%;
+    border: 3px solid rgb(252, 76, 56);
+    border-radius: 400px;
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.item {
+    display: flex;
+    padding: 20px;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #FDF2ED;
+    width: 80%;
+    height: 150px;
+    border: 5px solid rgb(252, 76, 56);
+    border-radius: 20px;
+}
+.item:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.item p {
+margin: 0.5em;
+}
+
+.thumbnail {
+    display: flex;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 10px;
+    margin-right: 20px;
+    float: left
+}
+
+.description {
+    display: flex;
+    flex-direction: column;
+}
+
+#recommend_header {
+    text-decoration: none;
+    color: #000000;
+}
+
+#recommend_image {
+    width: 40px;
+    height: 40px;
+    margin-left: 49%;
+    margin-right: 49%;
+}
+
+#recommend_text
+{
+    text-align: center;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100px;
+    /* Margin bottom prevents footer from blocking last block*/
+    margin-bottom: 80px;
+}

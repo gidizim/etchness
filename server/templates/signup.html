@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="static/js/index.js"></script>
+    <script src="static/js/navbarload.js"></script>
+    
+    <link href="static/css/login.css" rel="stylesheet" type="text/css" />
+    <link href="static/css/nav.css" rel="stylesheet" type="text/css" />
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Varela+Round&display=swap" rel="stylesheet">
+    <title>Sign up</title>
+    </head>
+    <body>
+        <div id="nav"></div>
+        <div class="profile-box">
+            <h1>Fill in this form <br> to sign up!</h1>
+            <form class="signup" action="home.html" method="post">
+                <input type="text" placeholder="First name" name="fname" required>
+                <input type="text" placeholder="Last name" name="lname" required>
+                <input type="text" placeholder="Email" name="email" required>
+                <input type="password" placeholder="Password" name="password" required>   
+                <input type="password" placeholder="Confirm password" name="confirmpw" required>
+                <p>Have an account already? 
+                    <a href="login.html">Log in</a>
+                </p>
+                <input class="submit-btn" type="submit" value="Create my account"></input>
+            </form>
+        </div>
+        <div id="footer"></div>
+    </body>
+</html>

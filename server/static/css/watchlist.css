@@ -1,0 +1,15 @@
+#watchlist-container {
+    display: flex;
+    margin: auto;
+    width: 75%;
+    flex-direction: column;
+}
+
+.title {
+    font-family: 'Varela Round', sans-serif;
+    font-size: 100px;
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}

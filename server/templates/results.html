@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="static/js/index.js"></script>
+        <script src="static/js/navbarload.js"></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="static/css/nav.css">
+        <link rel="stylesheet" href="static/css/home.css">
+        <link rel="stylesheet" href="static/css/watchlist.css">
+
+
+        <!-- font -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Varela+Round&display=swap" rel="stylesheet">
+        
+        <title>Home</title>
+    </head>
+    <body>
+
+        <div id="nav"></div>
+        
+        <div class="search_box" style="margin-top: -100px;">
+            <input type="text" class="search_bar" placeholder="Search For Jobs" >
+            <input type="button" class="search_button" value="Search" onclick="location.href='results.html'">
+        </div>
+
+        <div class="filters">
+            <b><p> Only show jobs where</p></b>
+            <select id="date_posted" class="filter">
+                <option value="" selected disabled hidden>Posted on</option>
+                <option value="1_week">1 week ago</option>
+                <option value="2_week">2 weeks ago</option>
+                <option value="1_month">1 month ago</option>
+                <option value="2_month">2 months ago</option>
+            </select>
+    
+            <select id="country" class="filter">
+                <option value="None" selected disabled hidden>Country</option>
+                <option value="Australia">Australia</option>
+                <option value="America"> America </option>
+            </select>
+    
+            <select id="state" class="filter">
+                <option value="None" selected disabled hidden>State</option>
+                <option value="NSW">NSW</option>
+                <option value="VIC">VIC</option>
+                <option value="WA">WA</option>
+                <option value="SA">SA</option>
+                <option value="QLD">QLD</option>
+                <option value="TAS">TAS</option>
+            </select>
+    
+            <select id="suburb" class="filter">
+                <option value="None" selected disabled hidden>Suburb</option>
+                <option value="Epping">Epping</option>
+                <option value="Hornsby">Hornsby</option>
+                <option value="Chatswood">Chatswood</option>
+            </select>
+        </div>
+
+        <div class="title" style="margin-top:-150px">Search Results</div>
+
+        <div class="item">
+            <div class="thumbnail"> <img src="static/img/google.png" width="100" height="100"> </div>
+            <div class="description">
+                <p><a href="jobposting.html">Google Engineer</a></p>
+                <p> Be an Engineer at Google</p>
+                <p> Date Posted: 00/00/0000 </p>
+                <p> Apply at ________ </p>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="thumbnail"> <img src="static/img/google.png" width="100" height="100"> </div>
+            <div class="description">
+                <p><a href="jobposting.html">Google Engineer</a></p>
+                <p> Be an Engineer at Google</p>
+                <p> Date Posted: 00/00/0000 </p>
+                <p> Apply at ________ </p>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="thumbnail"> <img src="static/img/google.png" width="100" height="100"> </div>
+            <div class="description">
+                <p><a href="jobposting.html">Google Engineer</a></p>
+                <p> Be an Engineer at Google</p>
+                <p> Date Posted: 00/00/0000 </p>
+                <p> Apply at ________ </p>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="thumbnail"> <img src="static/img/google.png" width="100" height="100"> </div>
+            <div class="description">
+                <p><a href="jobposting.html">Google Engineer</a></p>
+                <p> Be an Engineer at Google</p>
+                <p> Date Posted: 00/00/0000 </p>
+                <p> Apply at ________ </p>
+            </div>
+        </div>
+        <div id="footer"></div>
+
+    </body>
+</html>

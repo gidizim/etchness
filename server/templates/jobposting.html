@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="static/js/index.js"></script>
+        <script src="static/js/navbarload.js"></script>
+
+        <link rel="stylesheet" href="static/css/nav.css">
+        <link rel="stylesheet" href="static/css/jobposting.css">
+
+        <!-- font -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Varela+Round&display=swap" rel="stylesheet">
+        <title>Job Posting</title>
+    </head>
+    <body>
+        <div id="nav"></div>
+
+        <div class="job-container">
+            
+            <img class="company-logo" src="static/img/google.png">
+            <div class="header-info">
+                <h1>Company name</h1>
+                <p class="salary">100 000K</p>
+                <p class="location">Randwick</p>
+                <p class="jobtype">Full-time</p>
+            </div>
+            <h3>Job description</h3>
+            <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi et est in turpis ornare bibendum ut in est. Ut fringilla nunc vel erat lobortis, vel sodales eros ultricies. Nulla ultricies ligula ut viverra blandit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut nisi dui, volutpat non leo sed, dignissim lacinia ex. Nulla aliquam nunc quam, vel efficitur elit semper nec. Nam ullamcorper non ex vel condimentum. Fusce malesuada odio eros, non sollicitudin turpis tempus eu. Donec id velit ut magna fringilla mattis ut ornare nisl. Ut ultrices lacinia tellus vitae malesuada. Nulla ut tortor eget odio fringilla ornare id eget ex.</p>
+            <p class="description">Aliquam posuere sagittis risus non tincidunt. Sed ornare dignissim pellentesque. Ut elit neque, iaculis non porttitor vel, maximus nec erat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus gravida felis id odio finibus, a tincidunt arcu dignissim. Cras nunc neque, volutpat nec sodales in, laoreet ac lorem. Nam odio massa, vestibulum sed urna in, semper varius justo. Donec pharetra consectetur fermentum. Cras eleifend lacus mattis pulvinar dignissim. Fusce imperdiet ipsum sapien, at malesuada mauris blandit ac. Duis porttitor ligula et metus molestie, a ornare sapien facilisis. Pellentesque eget consectetur sem, id lacinia nibh. Nunc luctus eros a ultricies scelerisque. Vestibulum condimentum rhoncus erat et dignissim. Donec purus diam, tristique quis arcu sit amet, lobortis commodo sem. Fusce viverra ultricies elementum.</p>
+            <div class="btn-container">
+                <input id="back" class="button" type="button" value="Back to results" onclick="location.href='results.html'"></input>
+                <input id="add" class="button" type="button" value="Add to watchlist" onclick="addToWatchlist()"></input>
+                <input id="apply" class="button" type="button" value="Apply now" onclick=" window.open('https://au.indeed.com/rc/clk?jk=18b67b024782982c&fccid=a5b4499d9e91a5c6&vjs=3','_blank')"></input>
+            </div>
+        </div>
+        <div id="footer"></div>
+
+    </body>
+</html>

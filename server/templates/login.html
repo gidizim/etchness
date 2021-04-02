@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="static/js/index.js"></script>
+    <script src="static/js/navbarload.js"></script>
+
+    <link href="static/css/login.css" rel="stylesheet"/>
+    <link href="static/css/nav.css" rel="stylesheet"/>
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Varela+Round&display=swap" rel="stylesheet">
+    <title>Login</title>
+    </head>
+    <body>
+        <div id="nav"></div>
+
+        <div class="profile-box">
+            <h1>Log in</h1>
+            <form class="login" action="home.html" method="post">
+                <input type="text" placeholder="Email" name="email" required>
+                <input type="password" placeholder="Password" name="password" required>
+                <br>
+                <p>Haven't signed up yet? 
+                    <a href="signup.html">Create an account</a>
+                </p>
+                <p>Forgot password? 
+                    <a href="resetpw.html">Reset password</a>
+                </p>
+                <input class="submit-btn"  type="submit" value="Log in"></input>
+            </form>
+        </div>
+
+        <div id="footer"></div>
+
+    </body>
+</html>
