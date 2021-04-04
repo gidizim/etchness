@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="static/js/index.js"></script>
+        <script src="static/js/navbarload.js"></script>
+
+        <link rel="stylesheet" href="static/css/nav.css">
+        <link rel="stylesheet" href="static/css/newsfeed.css">
+
+
+        <!-- font -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Varela+Round&display=swap" rel="stylesheet">
+
+        <title>newsfeed</title>
+    </head>
+    <body>
+        <div id="nav"></div>
+
+        <div class="title">Newsfeed</div>
+        <!-- Filler content for actual api implementation -->
+        <div class="newsContainer">
+            <div class="newsItem">
+                <img src="https://multitools.newscdn.com.au/multitools/poll/content/1614905985781/How-has-the-COVID-19-pandemic-impacted-your-household-financially_UDezEWKyp.jpg" width='150px'/>
+                <h2><a href="https://www.news.com.au/finance/economy/australian-economy/up-to-250000-jobs-could-be-lost-as-jobkeeper-ends/news-story/a311f47581af3542af00ffa369d46dd8">Up to 250,000 jobs could be lost as JobKeeper ends</a></h2>
+                <p>news.com.au | yesterday</p>
+                <ul>
+                    <li>Up to a quarter of a million Aussies could lose their jobs in a wave of business collapses as JobKeeper ends this month, experts have warned.</li>
+                </ul>
+            </div>      
+        </div>
+        {% for article in articles %}
+            {{article.title}}
+        {% endfor %}
+        <div id="footer"></div>
+    </body>
+</html>
