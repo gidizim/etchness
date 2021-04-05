@@ -21,8 +21,9 @@
     <div class="title"> <img src=static/img/jobicon.png width='200px'/>Job-Hunta</div>
 
     <div class="search_box">
-        <input type="text" class="search_bar" placeholder="Search For Jobs" >
-        <input type="button" class="search_button" value="Search" onclick="location.href='results.html'">
+        <input type="text" class="search_bar" id="search-input" placeholder="Search For Jobs" >
+        <input type="button" class="search_button" id="search-btn" value="Search"> 
+        <!-- onclick="location.href='results.html'"> -->
     </div>
     <br>
     <br>
@@ -36,10 +37,10 @@
             <option value="2_month">2 months ago</option>
         </select>
 
-        <select id="country" class="filter">
-            <option value="None" selected disabled hidden>Country</option>
-            <option value="Australia">Australia</option>
-            <option value="America"> America </option>
+        <select id="jobtype" class="filter">
+            <option value="None" selected disabled hidden>Job type</option>
+            <option value="Full Time">Full Time</option>
+            <option value="Part Time"> Part Time </option>
         </select>
 
         <select id="state" class="filter">
@@ -102,9 +103,8 @@
                 <p> Apply at ________ </p>
             </div>
         </div>
-
     </div>
     <div id="footer"></div>
-
+    <script src="static/js/search.js"></script>
     </body>
 </html>

@@ -1,7 +1,9 @@
 import requests
+from flask import request
+from careerjet_api import CareerjetAPIClient
 
 def get_github_results(descrip, location, full_time, page):
-    baseURL = "https://jobs.github.com/positions.json"
+    baseURL = 'https://jobs.github.com/positions.json'
     params = {
         'description': descrip,
         'location': location,
@@ -12,14 +14,14 @@ def get_github_results(descrip, location, full_time, page):
     }
     return requests.get(baseURL, params = params).json()
 
-ADZUNA_API = "fee7b067359bebd25438ecd0db7c5f95"
-ADZUNA_ID = "0c843767"
+ADZUNA_API = 'fee7b067359bebd25438ecd0db7c5f95'
+ADZUNA_ID = '0c843767'
 
-def get_adzuna_results(descrip, location, full_time, part_time, contract, permanent, salary_min, page):
+def get_adzuna_results(descrip, location, full_time, part_time, page):
     # assuming that we are only getting jobs in australia
-    country = "au"
+    country = 'au'
     # return results in json
-    baseURL = "http://api.adzuna.com/v1/api/jobs/" + country + "/search/" + str(page)
+    baseURL = 'http://api.adzuna.com/v1/api/jobs/' + country + '/search/' + str(page)
     params = {
         'app_id': ADZUNA_ID,
         'app_key': ADZUNA_API,
@@ -29,17 +31,36 @@ def get_adzuna_results(descrip, location, full_time, part_time, contract, perman
         'sort_by': 'relevance',
         'full_time': full_time,
         'part_time': part_time,
-        'contract': contract,
-        'permanent': permanent,
         'salary_include_unknown': 1,
-        'salary_min': salary_min
     }
-    return requests.get(baseURL, params = params).json()
-    
+    response = requests.get(baseURL, params = params)
+    # print(response)
+    return response.json()
 
-def get_combined_results(descrip, location, full_time, part_time, contract, permanent, salary_min, page):
+CAREERJET_ID = 'ace0afe5820cf82e55eea526ed3aeb39'
+
+def get_careerjet_results(client_useragent, client_ip, descrip, location, page, job_type, page_size):
+    cj  =  CareerjetAPIClient("en_AU");
+    # baseURL = 'https://www.careerjet.com.au'
+    baseURL = 'https://www.careerjet.com.au/search/jobs?'
+    result_json = cj.search({
+                        'affid'       : CAREERJET_ID,
+                        'user_agent'  : client_useragent,
+                        'user_ip'     : client_ip,
+                        'url'         : baseURL, # + "s=" + descrip + "&l=" + location + "&sort=relevance",
+                        'location'    : location,
+                        'keywords'    : descrip,
+                        'page'        : page,
+                        # full time or part time (f/p)
+                        'contractperiod': job_type,
+                        'pagesize'   : page_size
+                      });
+
+    return result_json
+
+def get_combined_results(descrip, location, full_time, part_time, page):
     job_results = []
-    adzuna_resp = get_adzuna_results(descrip, location, full_time, part_time, contract, permanent, salary_min, page)
+    adzuna_resp = get_adzuna_results(descrip, location, full_time, part_time, page)
     github_resp = get_github_results(descrip, location, full_time, page)
 
     for job in github_resp:
