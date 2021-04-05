@@ -1,4 +1,4 @@
 venv/
 server/__pycache__/
 JobHunta/__pycache__/
-JobHunta/server/__pycache__/
+JobHunta/app/__pycache__/
