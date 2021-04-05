@@ -75,12 +75,15 @@ def get_job_results():
     return render_template('results.html', jobs=jobs[:15])
     # return render_template('results.html', jobs=jobs[:15]), json.dumps({'Success': True, 'results': jobs})
 
-# could add a count to make it somewhat unique?
-@app.route('/jobposting/<title>/<location>/<company>/<description>/<created>/<job_type>/<url>')
-def get_job(title, location, company, description, created, job_type, url):
-    return render_template('jobposting.html', 
-        title=title, location=location, company=company, description=description,
-        created=created, job_type=job_type, url=url)
+# GET method - 404 not found depending on params given
+# @app.route('/jobposting/<title>/<location>/<company>/<description>/<created>/<job_type>/<url>')
+# def get_job(title, location, company, description, created, job_type, url):
+#     return render_template('jobposting.html', 
+#         title=title, location=location, company=company, description=description,
+#         created=created, job_type=job_type, url=url)
+@app.route('/job/<description>/<title>')
+def get_job(description, title):
+    return render_template('jobposting.html', description=description, title=title)
 
 
 if __name__ == "__main__":

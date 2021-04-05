@@ -50,6 +50,7 @@
     flex-direction: row;
     justify-content: space-between;
     width: fit-content;
+    flex-wrap: wrap;
 }
 .button {
     width: fit-content;

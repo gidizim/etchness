@@ -5,11 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-        <script src="static/js/index.js"></script>
-        <script src="static/js/navbarload.js"></script>
-
-        <link rel="stylesheet" href="static/css/nav.css">
-        <link rel="stylesheet" href="static/css/jobposting.css">
+        <script src="{{ url_for('static', filename='js/navbarload.js') }}"></script>
+        
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/jobposting.css') }}">
 
         <!-- font -->
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -20,21 +19,22 @@
         <div id="nav"></div>
         <div class="job-container">
             <div class="header-info">
+                <!-- <h2>TEMP TITLE</h2> -->
                 <h2>{{title}}</h2>
-                <h3>{{company}}</h3>
+                <!-- <h3>{{company}}</h3>
                 <h4>{{location}}</h4>
                 <h4>{{job_type}}</h4>
-                <p><b>Posted on:</b> {{created}}</p>
+                <p><b>Posted on:</b> {{created}}</p> -->
             </div>
             <h3>Job description</h3>
             <p class="description">{{description|striptags}}</p>
             <div class="btn-container">
                 <input class="button" type="button" value="Back to results" onclick="location.href='/results'"></input>
-                <input class="button" type="button" value="Add to watchlist" onclick="addToWatchlist()"></input>
-                <input class="button" type="button" value="Apply now" onclick=" window.open({{url}},'_blank')"></input>
+                <input id="add" class="button" type="button" value="Add to watchlist" onclick="addToWatchlist()"></input>
+                <input class="button" type="button" value="Apply now" onclick=" window.open({{joburl}},'_blank')"></input>
             </div>
         </div>
         <div id="footer"></div>
-        <script src='static/js/index.js'></script>
+        <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     </body>
 </html>
