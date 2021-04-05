@@ -29,6 +29,7 @@ body {
     border: none;
     cursor: pointer;
     font-family: 'Montserrat', sans-serif;
+    outline: none;
 }
 
 .submit-btn:hover {
