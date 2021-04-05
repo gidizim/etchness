@@ -33,8 +33,6 @@ def get_news():
 
 @app.route('/components/<file>')
 def get_component(file="home.html"):
-    print(auth.signup("qwer123@test.com", "password1", "brock", "brock"))
-
 
     return render_template("components/" + file)
 

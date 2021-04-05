@@ -8,7 +8,6 @@ def signup(email, password, first_name, last_name):
     cur.execute("INSERT INTO user (email, password, first_name, last_name) VALUES (?, ?, ?, ?);", data)
 
     conn.commit()
-
     db.close_db()
 
     return email
