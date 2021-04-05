@@ -6,7 +6,7 @@ from flask import json, jsonify, render_template, request, url_for
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world():
+def get_home():
     return render_template('home.html')
 
 @app.route('/newsfeed')
@@ -51,3 +51,6 @@ def get_job_results():
     
     jobs = get_combined_results(useragent, ip, descrip, data['location'], full_time, part_time, job_type, data['page'])
     return render_template('results.html', jobs=jobs[:15])
+
+if __name__ == "__main__":
+    app.run()
