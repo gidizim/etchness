@@ -11,8 +11,8 @@ def hello_world():
 
 @app.route('/newsfeed')
 def get_news():
-    articles = getNews()
-    return render_template('newsfeed.html', articles=articles)
+    articles = getNews("jobs", "en", 3)
+    return render_template('newsfeed.html', articles=articles['articles'][:5])
 
 # browser gets data
 @app.route('/search')

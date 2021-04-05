@@ -25,18 +25,18 @@
         <div class="title">Newsfeed</div>
         <!-- Filler content for actual api implementation -->
         <div class="newsContainer">
-            <div class="newsItem">
-                <img src="https://multitools.newscdn.com.au/multitools/poll/content/1614905985781/How-has-the-COVID-19-pandemic-impacted-your-household-financially_UDezEWKyp.jpg" width='150px'/>
-                <h2><a href="https://www.news.com.au/finance/economy/australian-economy/up-to-250000-jobs-could-be-lost-as-jobkeeper-ends/news-story/a311f47581af3542af00ffa369d46dd8">Up to 250,000 jobs could be lost as JobKeeper ends</a></h2>
-                <p>news.com.au | yesterday</p>
-                <ul>
-                    <li>Up to a quarter of a million Aussies could lose their jobs in a wave of business collapses as JobKeeper ends this month, experts have warned.</li>
-                </ul>
-            </div>      
+            {% for article in articles %}
+                <div class="newsItem">
+                    <img src={{article.urlToImage}} width='150px'>
+                    <h2><a href={{article.url}}>{{article.title}}</a></h2>
+                    <p>{{article.source['name']}} | {{article.publishedAt}}</p>
+                    <ul>
+                        <li>{{article.description}}</li>
+                    </ul>
+                </div>
+            {% endfor %}  
         </div>
-        {% for article in articles %}
-            {{article.title}}<br>
-        {% endfor %}
+
         <div id="footer"></div>
     </body>
 </html>
