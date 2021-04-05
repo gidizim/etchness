@@ -1,10 +1,26 @@
 from flask.templating import render_template_string
-from server.newsfeed import getNews
-from server.getJobs import get_combined_results, get_careerjet_results
+from .newsfeed import getNews
+from .getJobs import get_combined_results, get_combined_results, get_careerjet_results
 from flask import Flask
 from flask import json, jsonify, render_template, request, url_for
+from . import db
+from . import auth
 
-app = Flask(__name__)
+import os
+
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_mapping(
+    SECRET_KEY='dev',
+    DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+)
+
+# ensure the instance folder exists
+try:
+    os.makedirs(app.instance_path)
+except OSError:
+    pass
+
+db.init_app(app)
 
 @app.route('/')
 def get_home():
@@ -17,6 +33,7 @@ def get_news():
 
 @app.route('/components/<file>')
 def get_component(file="home.html"):
+
     return render_template("components/" + file)
 
 @app.route('/<file>')
