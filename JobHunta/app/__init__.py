@@ -1,5 +1,5 @@
 from flask.templating import render_template_string
-from .newsfeed import getNews
+# from .newsfeed import getNews
 from .getJobs import get_combined_results, get_combined_results, get_careerjet_results
 from flask import Flask
 from flask import json, jsonify, render_template, request, url_for
@@ -40,10 +40,12 @@ def get_component(file="home.html"):
 def get_html(file="home.html"):
     return render_template(file)
 
+jobs = []
 @app.route('/results', methods=['GET', 'POST'])
 def get_job_results():
+    global jobs
     if request.method != 'POST':
-        return 'Invalid'
+        return render_template('results.html', jobs=jobs)
     ip = request.remote_addr
     useragent = request.headers.get('User-Agent')
     print(ip)
@@ -67,9 +69,19 @@ def get_job_results():
     if data['description'] == 'None':
         descrip = ''
     
+    # resp = get_careerjet_results(useragent, ip, descrip, data['location'], data['page'], job_type)
     jobs = get_combined_results(useragent, ip, descrip, data['location'], full_time, part_time, job_type, data['page'])
+    # print(resp)
     return render_template('results.html', jobs=jobs[:15])
-    # return json.dumps({'Success': True, 'results': jobs}), 200
+    # return render_template('results.html', jobs=jobs[:15]), json.dumps({'Success': True, 'results': jobs})
+
+# could add a count to make it somewhat unique?
+@app.route('/jobposting/<title>/<location>/<company>/<description>/<created>/<job_type>/<url>')
+def get_job(title, location, company, description, created, job_type, url):
+    return render_template('jobposting.html', 
+        title=title, location=location, company=company, description=description,
+        created=created, job_type=job_type, url=url)
+
 
 if __name__ == "__main__":
     app.run()

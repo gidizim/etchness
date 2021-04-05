@@ -66,21 +66,19 @@
     outline: none;
     font-family: 'Montserrat', sans-serif;
 }
-
+/* 
 .item {
     display: flex;
+    flex-direction: column;
     padding: 20px;
-
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin: 10px auto;
     background-color: #FDF2ED;
     width: 80%;
     height: 150px;
     border: 5px solid rgb(252, 76, 56);
     border-radius: 20px;
 }
+
 .item:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -101,7 +99,7 @@ margin: 0.5em;
 .description {
     display: flex;
     flex-direction: column;
-}
+} */
 
 #recommend_header {
     text-decoration: none;

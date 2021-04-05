@@ -1,3 +1,32 @@
+
+.title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 400%;
+    text-align: center;
+    margin: auto;
+    margin-top: 100px;
+}
+
+
+.item {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin: 10px auto;
+    background-color: #FDF2ED;
+    width: 80%;
+    height: fit-content;
+    border: 5px solid rgb(252, 76, 56);
+    border-radius: 20px;
+    /* cursor: pointer */
+    text-decoration: none;
+    color: rgb(31, 30, 30);
+}
+
+.item:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
 .header-info {
     border-bottom: 20px black;
     font-size: 15pt;

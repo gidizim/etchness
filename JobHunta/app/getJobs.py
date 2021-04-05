@@ -92,52 +92,53 @@ def get_combined_results(useragent, ip, descrip, location, full_time, part_time,
             'salary': 'Unknown'
         }
         job_results.append(info)
+    
+    if careerjet_resp['hits'] != 0:
+        for job in careerjet_resp['jobs']:
+            if job_type == 'f':
+                jobtype = 'Full Time'
+            elif job_type == 'p':
+                jobtype = 'Part Time'
+            else:
+                jobtype = 'Unknown'
+            info = {
+                # 'id': None,
+                'title': job['title'],
+                'job_type': jobtype,
+                'description': job['description'],
+                'location': job['locations'],
+                'company': job['company'],
+                'created': job['date'],
+                'url': job['url'],
+                'salary': job['salary']
+            }
+            job_results.append(info)
 
-    for job in careerjet_resp['jobs']:
-        if job_type == 'f':
-            jobtype = 'Full Time'
-        elif job_type == 'p':
-            jobtype = 'Part Time'
-        else:
-            jobtype = 'Unknown'
-        info = {
-            # 'id': None,
-            'title': job['title'],
-            'job_type': jobtype,
-            'description': job['description'],
-            'location': job['locations'],
-            'company': job['company'],
-            'created': job['date'],
-            'url': job['url'],
-            'salary': job['salary']
-        }
-        job_results.append(info)
 
+    if adzuna_resp != 'invalid':
+        for job in adzuna_resp['results']:
+            if 'display_name' in job['company'].keys(): 
+                company = job['company']['display_name']
+            else:
+                company = 'Unknown'
+                
+            if 'salary_is_predicted' in job.keys(): 
+                salary = 'Unknown'
+            else:
+                salary = job['salary_min']
 
-    if adzuna_resp == 'invalid': return job_results
-    for job in adzuna_resp['results']:
-        if 'display_name' in job['company'].keys(): 
-            company = job['company']['display_name']
-        else:
-            company = 'Unknown'
-            
-        if 'salary_is_predicted' in job.keys(): 
-            salary = 'Unknown'
-        else:
-            salary = job['salary_min']
-
-        info = {
-            # 'id': job['id'],
-            'title': job['title'],
-            'job_type': job['contract_time'],
-            'description': job['description'],
-            'location': job['location']['display_name'],
-            'company': company,
-            'created': job['created'],
-            'url': job['redirect_url'],
-            'salary': salary
-        }
-        job_results.append(info)
+            info = {
+                # 'id': job['id'],
+                'title': job['title'],
+                'job_type': job['contract_time'],
+                'description': job['description'],
+                'location': job['location']['display_name'],
+                'company': company,
+                'created': job['created'],
+                'url': job['redirect_url'],
+                'salary': salary
+            }
+            job_results.append(info)
 
     return job_results
 
