@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.run(debug=True)
 
 @app.route('/')
-def hello_world():
+def get_home():
     return render_template('home.html')
 
 @app.route('/newsfeed')
@@ -91,3 +91,6 @@ def get_search_details():
     # jobs = get_combined_results(descrip, data['location'], full_time, part_time, data['page'])
     # print(jobs)
     return 'Success', 200
+
+if __name__ == "__main__":
+    app.run()

@@ -40,7 +40,7 @@ def get_adzuna_results(descrip, location, full_time, part_time, page):
 CAREERJET_ID = 'ace0afe5820cf82e55eea526ed3aeb39'
 
 def get_careerjet_results(client_useragent, client_ip, descrip, location, page, job_type, page_size):
-    cj  =  CareerjetAPIClient("en_AU");
+    cj  =  CareerjetAPIClient("en_AU")
     # baseURL = 'https://www.careerjet.com.au'
     baseURL = 'https://www.careerjet.com.au/search/jobs?'
     result_json = cj.search({
@@ -54,8 +54,7 @@ def get_careerjet_results(client_useragent, client_ip, descrip, location, page, 
                         # full time or part time (f/p)
                         'contractperiod': job_type,
                         'pagesize'   : page_size
-                      });
-
+                      })
     return result_json
 
 def get_combined_results(descrip, location, full_time, part_time, page):
