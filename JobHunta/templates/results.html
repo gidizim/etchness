@@ -5,15 +5,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="static/js/index.js"></script>
         <script src="static/js/navbarload.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="static/css/nav.css">
-        <link rel="stylesheet" href="static/css/home.css">
-        <!-- font -->
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet" href="static/css/nav.css">
+        <link rel="stylesheet" href="static/css/newsfeed.css">
+
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Varela+Round&display=swap" rel="stylesheet">
         <title>Results page</title>
     </head>
     <body>
@@ -69,7 +70,7 @@
                 <p> Apply at ________ </p>
             </div>
         </div>
-        <div class="results-container">
+        <div id="results-container">
             {% for job in jobs %}
                 <div class="item" href="{{job.url}}">
                    <div class="description">
@@ -81,6 +82,6 @@
             {% endfor %}
         </div>
         <div id="footer"></div>
-
+    <script src="static/js/search.js"></script>
     </body>
 </html>
