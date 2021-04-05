@@ -1,2 +1,4 @@
 venv/
-server/__pycache__/server.cpython-39.pyc
+server/__pycache__/
+JobHunta/__pycache__/
+JobHunta/server/__pycache__/

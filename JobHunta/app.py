@@ -13,8 +13,8 @@ def hello_world():
 
 @app.route('/newsfeed')
 def get_news():
-    articles = getNews()
-    return render_template('newsfeed.html', articles=articles)
+    articles = getNews("jobs", "en", 3)
+    return render_template('newsfeed.html', articles=articles['articles'][:5])
 
 @app.route('/components/<file>')
 def get_component(file="home.html"):
