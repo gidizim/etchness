@@ -19,14 +19,14 @@
         <div id="nav"></div>
         <div class="profile-box">
             <h1>Fill in this form <br> to sign up!</h1>
-            <form class="signup" action="home.html" method="post">
-                <input type="text" placeholder="First name" name="fname" required>
-                <input type="text" placeholder="Last name" name="lname" required>
-                <input type="text" placeholder="Email" name="email" required>
-                <input type="password" placeholder="Password" name="password" required>   
-                <input type="password" placeholder="Confirm password" name="confirmpw" required>
+            <form class="signup" method="post">
+                <input type="text" placeholder="First name" name="reg_fname" id="reg_fname" required>
+                <input type="text" placeholder="Last name" name="reg_lname" id="reg_lname" required>
+                <input type="text" placeholder="Email" name="reg_email" id="reg_email" required>
+                <input type="password" placeholder="Password" name="reg_pw" id="reg_pw" required>   
+                <input type="password" placeholder="Confirm password" name="reg_pw2" id="reg_pw2" required>
                 <p>Have an account already? 
-                    <a href="login.html">Log in</a>
+                    <a href="{{url_for('get_login')}}">Log in</a>
                 </p>
                 <input class="submit-btn" type="submit" value="Create my account"></input>
             </form>

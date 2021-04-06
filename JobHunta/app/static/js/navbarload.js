@@ -2,15 +2,16 @@
 function navLoaded()
 {
     var path = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
-    if (path == 'home.html')
+    console.log(path)
+    if (path == 'home')
         $('#home').addClass('active');
-    else if (path == 'login.html')
+    else if (path == 'login')
         $('#login').addClass('active');
-    else if (path == 'watchlist.html')
+    else if (path == 'watchlist')
         $('#watchlist').addClass('active');
-    else if (path == 'profile.html')
+    else if (path == 'profile')
         $('#profile').addClass('active');
-    else if (path == 'newsfeed.html')
+    else if (path == 'newsfeed')
         $('#newsfeed').addClass('active');
 }
 

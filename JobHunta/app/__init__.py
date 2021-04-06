@@ -2,11 +2,13 @@ from flask.templating import render_template_string
 from .newsfeed import getNews
 from .getJobs import get_combined_results, get_github_results
 from flask import Flask
-from flask import render_template, request, url_for
+from flask import render_template, request, url_for, redirect
 from flask_paginate import Pagination, get_page_parameter
 from . import db
 from . import auth
 import os
+import re
+
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
@@ -131,7 +133,47 @@ def remove_from_watchlist():
 def get_watchlist():
     # get watchlist from db
     jobs = []
-    render_template('watchlist.html', jobs=jobs)
+    return render_template('watchlist.html', jobs=jobs)
+
+@app.route('/profile')
+def get_profile():
+    return render_template('profile.html')
+
+@app.route('/login')
+def get_login():
+    return render_template('login.html')
+
+@app.route('/signup', methods=['GET', 'POST'])
+def get_signup():
+    if request.method == 'POST':
+        fname = request.form.get('reg_fname')
+        lname = request.form.get('reg_lname')
+        email = request.form.get('reg_email')
+        pw = request.form.get('reg_pw')
+        pw2 = request.form.get('reg_pw2')
+        regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
+        error = None
+        if pw != pw2:
+            print("passwords doesnt match")
+            # error = passwords no match
+        elif (re.search(regex, email)):
+            print("invalid email")
+            # error = invalid email
+        #blah blah maybe more checks, e.g. user exists
+
+        if error == None:
+            # insert into db here
+            print(fname, lname, email, pw, pw2)
+        else:
+            print(error)
+            # flash error
+        return redirect(url_for('get_login'))
+    return render_template('signup.html')
+        
+@app.route('/reset_ password')
+def get_resetpw():
+    return render_template('resetpw.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True)

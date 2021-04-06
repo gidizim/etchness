@@ -25,10 +25,10 @@
                 <input type="password" placeholder="Password" name="password" required>
                 <br>
                 <p>Haven't signed up yet? 
-                    <a href="signup.html">Create an account</a>
+                    <a href="{{url_for('get_signup')}}">Create an account</a>
                 </p>
                 <p>Forgot password? 
-                    <a href="resetpw.html">Reset password</a>
+                    <a href="{{url_for('get_resetpw')}}">Reset password</a>
                 </p>
                 <input class="submit-btn"  type="submit" value="Log in"></input>
             </form>
