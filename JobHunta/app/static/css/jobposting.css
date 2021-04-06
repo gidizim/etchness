@@ -83,10 +83,10 @@ h3 {
     display: flex;
     list-style-type: none;
     justify-content: space-evenly;
-    width: 20%;
+    width: 30%;
     margin: auto;
 }
 
-.pagination li:active {
-    background-color: '';
+.active {
+    background-color: transparent;
 }

@@ -26,7 +26,7 @@
 
     <div id="watchlist-container">
         {% for job in jobs %}
-            <a class="item" href="#" onclick="createJobPosting(event, {{job|striptags}}, '/watchlist')">
+            <div class="item" onclick="createJobPosting(event, {{job|striptags}}, '/watchlist')">
                 {% if job.job_type == 'Unknown'%}
                 {% set jobtype = ''%}
                 {% else %}
@@ -43,7 +43,7 @@
                 <p>...{{descrip[:250]}}...</p>
                 <p> <b>Posted on:</b> {{job.created|striptags}} </p>
                 <input class="button" type="button" value="Remove from Watchlist" onclick="removeJob(this.parentNode, '{{job.url}}')"></input>
-            </a>
+            </div>
         {% endfor %}
     </div>
     <div id="footer"></div>

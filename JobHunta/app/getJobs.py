@@ -26,7 +26,7 @@ def get_adzuna_results(descrip, location, full_time, part_time, page):
     params = {
         'app_id': ADZUNA_ID,
         'app_key': ADZUNA_API,
-        'results_per_page': 15,
+        'results_per_page': 50,
         'what': descrip,
         'where': location,
         'sort_by': 'relevance',
@@ -64,7 +64,7 @@ def get_careerjet_results(client_useragent, client_ip, descrip, location, page, 
                         'page'        : page,
                         # full time or part time (f/p)
                         'contractperiod': job_type,
-                        'pagesize'   : 15
+                        'pagesize'   : 50
                       })
 
     return result_json
