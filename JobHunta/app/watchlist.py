@@ -52,7 +52,7 @@ def add_to_watchlist(u_id, job_posting):
 
     cur.execute("INSERT INTO watchlist VALUES (?, ?);", (u_id, job_id))
 
-    cur.execute("SELECT * FROM watchlist WHERE user_id = ? AND job_id = ?;", (u_id, job_id))
+    cur.execute("SELECT * FROM job WHERE id = (?);", (job_id,))
     result = cur.fetchall()
     if len(result) == 0:
         cur.execute("INSERT INTO job VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ;", job_data)
