@@ -10,20 +10,22 @@ def get_popular_jobs():
     results = []
 
     for row in cur.fetchall():
+
         curr_job = {}
         curr_job['id'] = row['id']
         curr_job['title'] = row['title']
         curr_job['job_type'] = row['job_type']
-        curr_job['description'] = row['description'][0],
-        curr_job['location'] = row['location'],
-        curr_job['company'] = row['company'],
-        curr_job['url'] = row['url'],
+        curr_job['description'] = row['description']
+        curr_job['location'] = row['location']
+        curr_job['company'] = row['company']
+        curr_job['url'] = row['url']
         curr_job['salary'] = row['salary']
 
-        results.append(curr_job)
+        results.append(dict(curr_job))
 
-        print(curr_job)
+
     db.close_db()
+
 
     return results
 
@@ -35,6 +37,7 @@ def append_popular_job(job_posting):
 
     job_id = job_posting['id']
 
+
     job_data = (job_posting['id'],
                 job_posting['title'],
                 job_posting['job_type'],
@@ -43,6 +46,7 @@ def append_popular_job(job_posting):
                 job_posting['company'],
                 job_posting['url'],
                 job_posting['salary'])
+
 
     cur.execute("INSERT INTO job VALUES ( ?, ?, ?, ?, ?, ?, ?, ?) ;", job_data)
     cur.execute("INSERT INTO popular VALUES ( ? ) ;", str(job_id))
