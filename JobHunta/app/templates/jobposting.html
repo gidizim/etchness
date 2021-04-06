@@ -19,19 +19,18 @@
         <div id="nav"></div>
         <div class="job-container">
             <div class="header-info">
-                <!-- <h2>TEMP TITLE</h2> -->
                 <h2>{{title}}</h2>
-                <!-- <h3>{{company}}</h3>
+                <h3>{{company}}</h3>
                 <h4>{{location}}</h4>
-                <h4>{{job_type}}</h4>
-                <p><b>Posted on:</b> {{created}}</p> -->
+                <h4>{{jobtype}}</h4>
+                <p><b>Posted on:</b> {{created}}</p>
             </div>
             <h3>Job description</h3>
-            <p class="description">{{description|striptags}}</p>
+            <p class="description">{{description}}</p>
             <div class="btn-container">
                 <input class="button" type="button" value="Back to results" onclick="location.href='/results'"></input>
                 <input id="add" class="button" type="button" value="Add to watchlist" onclick="addToWatchlist()"></input>
-                <input class="button" type="button" value="Apply now" onclick=" window.open({{joburl}},'_blank')"></input>
+                <input class="button" type="button" value="Apply now" onclick="window.open({{url}},'_blank')"></input>
             </div>
         </div>
         <div id="footer"></div>

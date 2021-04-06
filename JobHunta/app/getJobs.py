@@ -21,7 +21,8 @@ def get_adzuna_results(descrip, location, full_time, part_time, page):
     # assuming that we are only getting jobs in australia
     country = 'au'
     # return results in json
-    baseURL = 'http://api.adzuna.com/v1/api/jobs/' + country + '/search/' + str(page)
+    print(page+1)
+    baseURL = 'https://api.adzuna.com/v1/api/jobs/au/search/1'
     params = {
         'app_id': ADZUNA_ID,
         'app_key': ADZUNA_API,
@@ -29,29 +30,23 @@ def get_adzuna_results(descrip, location, full_time, part_time, page):
         'what': descrip,
         'where': location,
         'sort_by': 'relevance',
-        'full_time': full_time,
-        'part_time': part_time,
         'salary_include_unknown': 1,
-        # eg url has this in params
         'content-type': 'application/json'
     }
-    headers = {
-        'Accept': 'application/json',
-        'Content-type': 'application/json'
-    }
+    
+    if full_time and not part_time:
+        params['full_time'] = 1
+    elif part_time and not full_time:
+        params['part_time'] = 1
 
-    response = requests.get(baseURL, params = params, headers = headers)
-    # try:
-    #     resp_content = response.json()
-    # except ValueError:
-    #     resp_content = response.content
-    #     print(resp_content)
-    # return resp_content
-    if 'json' in response.headers.get('Content-Type'):
+    response = requests.get(baseURL, params = params)
+    print((response))
+    
+    if response.status_code == 200: 
         return response.json()
-    else:
-        print('Response content is not in JSON format.')
-        return 'invalid'
+    
+    print('Response content is not in JSON format.')
+    return 'invalid'
 
 CAREERJET_ID = 'ace0afe5820cf82e55eea526ed3aeb39'
 
@@ -93,6 +88,36 @@ def get_combined_results(useragent, ip, descrip, location, full_time, part_time,
         }
         job_results.append(info)
     
+    if adzuna_resp != 'invalid':
+        for job in adzuna_resp['results']:
+            if 'display_name' in job['company'].keys(): 
+                company = job['company']['display_name']
+            else:
+                company = 'Unknown'
+                
+            if 'salary_is_predicted' in job.keys(): 
+                salary = 'Unknown'
+            else:
+                salary = job['salary_min']
+                
+            if 'contract_time' in job.keys(): 
+                job_type = job['contract_time']
+            else:
+                job_type = 'Unknown'
+
+            info = {
+                # 'id': job['id'],
+                'title': job['title'],
+                'job_type': job_type,
+                'description': job['description'],
+                'location': job['location']['display_name'],
+                'company': company,
+                'created': job['created'],
+                'url': job['redirect_url'],
+                'salary': salary
+            }
+            job_results.append(info)
+
     if careerjet_resp['hits'] != 0:
         for job in careerjet_resp['jobs']:
             if job_type == 'f':
@@ -114,31 +139,6 @@ def get_combined_results(useragent, ip, descrip, location, full_time, part_time,
             }
             job_results.append(info)
 
-
-    if adzuna_resp != 'invalid':
-        for job in adzuna_resp['results']:
-            if 'display_name' in job['company'].keys(): 
-                company = job['company']['display_name']
-            else:
-                company = 'Unknown'
-                
-            if 'salary_is_predicted' in job.keys(): 
-                salary = 'Unknown'
-            else:
-                salary = job['salary_min']
-
-            info = {
-                # 'id': job['id'],
-                'title': job['title'],
-                'job_type': job['contract_time'],
-                'description': job['description'],
-                'location': job['location']['display_name'],
-                'company': company,
-                'created': job['created'],
-                'url': job['redirect_url'],
-                'salary': salary
-            }
-            job_results.append(info)
 
     return job_results
 

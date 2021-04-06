@@ -1,6 +1,6 @@
 from flask.templating import render_template_string
 # from .newsfeed import getNews
-from .getJobs import get_combined_results, get_combined_results, get_careerjet_results
+from .getJobs import get_combined_results, get_adzuna_results, get_careerjet_results
 from flask import Flask
 from flask import json, jsonify, render_template, request, url_for
 from . import db
@@ -68,23 +68,21 @@ def get_job_results():
 
     if data['description'] == 'None':
         descrip = ''
-    
-    # resp = get_careerjet_results(useragent, ip, descrip, data['location'], data['page'], job_type)
+        
     jobs = get_combined_results(useragent, ip, descrip, data['location'], full_time, part_time, job_type, data['page'])
-    # print(resp)
-    return render_template('results.html', jobs=jobs[:15])
-    # return render_template('results.html', jobs=jobs[:15]), json.dumps({'Success': True, 'results': jobs})
-
+    print(len(jobs))
+    return render_template('results.html', jobs=jobs)
+    
 # GET method - 404 not found depending on params given
-# @app.route('/jobposting/<title>/<location>/<company>/<description>/<created>/<job_type>/<url>')
-# def get_job(title, location, company, description, created, job_type, url):
-#     return render_template('jobposting.html', 
-#         title=title, location=location, company=company, description=description,
-#         created=created, job_type=job_type, url=url)
-@app.route('/job/<description>/<title>')
-def get_job(description, title):
-    return render_template('jobposting.html', description=description, title=title)
-
+# TODO: pagination
+@app.route('/jobposting/<title>/<location>/<company>/<description>/<created>/<job_type>')
+# @app.route('/jobposting/<title>/<location>/<company>/<description>/<created>')
+# @app.route('/jobposting/<title>/<location>/<company>/<description>')
+# @app.route('/jobposting/<title>/<location>/<company>')
+def get_job(title, location, company, description='', created='', job_type=''):
+    return render_template('jobposting.html', 
+        title=title, location=location, company=company, description=description,
+        created=created, job_type=job_type)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

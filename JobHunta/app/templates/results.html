@@ -29,12 +29,19 @@
                 <!-- <a class="item" href="{{url_for( 'get_job', 
                     title=job.title, location=job.location, company=job.company, 
                     description=job.description|striptags, created=job.created, job_type=job.job_type, url=job.url)}}"> -->
-                <a class="item" href="{{url_for( 'get_job', title=job.title, description=job.description|striptags)}}">
-                    <h3>{{job.title}}   |   {{job.company}}    | {{job.job_type}}</h3>
-                    <h4> {{job.location}}</h4>
+                <a class="item" href="{{url_for( 'get_job', 
+                    title=job.title|striptags, location=job.location|striptags, company=job.company|striptags, 
+                    description=job.description|striptags, created=job.created|striptags, job_type=job.job_type|striptags)}}">
+                    <!-- {% if job.job_type == 'Unknown'%}
+                    {% set jobtype = ''%}
+                    {% else %}
+                    {% set jobtype = "|  " + job.job_type%}
+                    {% endif %} -->
+                    <h3>{{job.title|striptags}}   |   {{job.company|striptags}}    {{jobtype|striptags}}</h3>
+                    <h4> {{job.location|striptags}}</h4>
                     {% set descrip = job.description|striptags%}
                     <p>...{{descrip[:250]}}...</p>
-                    <p> <b>Posted on:</b> {{job.created}} </p>
+                    <p> <b>Posted on:</b> {{job.created|striptags}} </p>
                 </a>
             {% endfor %}
         </div>
