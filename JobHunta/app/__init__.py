@@ -2,8 +2,9 @@ from flask.templating import render_template_string
 from .newsfeed import getNews
 from .getJobs import get_combined_results, get_github_results
 from flask import Flask
-from flask import render_template, request, url_for, redirect
+from flask import render_template, request, url_for, redirect, session
 from flask_paginate import Pagination, get_page_parameter
+from flask_login import login_user, login_manager, login_required, current_user, logout_user, LoginManager
 from . import db
 from . import auth
 import os
@@ -23,6 +24,20 @@ except OSError:
     pass
 
 db.init_app(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+app.secret_key= b'\x8b\x13\xac\xcc\x9b(\xdc\xf6\x80^T\xc9y\xd2n\x9d'
+# @login_manager.user_loader
+# def load_user(user_id):
+#     return User.get(user_id)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('get_home'))
+
 
 @app.route('/')
 def get_home():
