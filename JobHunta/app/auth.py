@@ -1,4 +1,5 @@
 from . import db
+from werkzeug.security import check_password_hash, generate_password_hash
 
 # Attempts to signup with user details, returns a user id to be used as a token
 def signup(email, password, first_name, last_name):
@@ -8,10 +9,19 @@ def signup(email, password, first_name, last_name):
     conn = db.get_db()
     cur = conn.cursor()
 
+    # Checking if user already exists
+    cur.execute("SELECT * FROM user WHERE email = '%s';" % email)
+
+    if len(cur.fetchall()) > 0:
+        db.close_db()
+
+        # Raise error
+        raise ValueError("Email already taken")
+
     # Creating user and obtaining u_id
     cur.execute("INSERT INTO user (email, password, first_name, last_name) VALUES (?, ?, ?, ?);", data)
-    cur.execute("SELECT id FROM user WHERE email = ? AND password = ?;", email, password)
-    u_id = cur.fetch()[0]
+    cur.execute("SELECT id FROM user WHERE email = '%s' AND password = '%s';" % (email, password))
+    u_id = cur.fetchone()[0]
 
     conn.commit()
     db.close_db()
@@ -23,18 +33,27 @@ def login(email, password):
     conn = db.get_db()
     cur = conn.cursor()
 
-    # Getting expected password
-    cur.execute("SELECT password FROM user WHERE email = ?;", email)
+    cur.execute("SELECT id, password FROM user WHERE email = '%s';" % email)
 
-    expected_password = cur.fetch()[0]
+    if len(cur.fetchall()) == 0:
+        db.close_db()
+        raise ValueError("No user with given email")
+
+
+    (u_id, expected_password) = cur.fetchall()
+
+    check_password_hash(expected_password, password)
+
+    if not check_password_hash(expected_password, password):
+        db.close_db()
+        raise ValueError("Incorrect password")
 
     # Saving changes and disconnecting from DB
-    conn.commit()
     db.close_db()
-
-    return expected_password == password
+    return u_id
 
 
 # Since we aren't doing token checking atm, there is no token to invalidate
 def logout(token):
     return True
+

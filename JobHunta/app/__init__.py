@@ -194,6 +194,12 @@ def get_signup():
 def get_resetpw():
     return render_template('resetpw.html')
 
+@app.route('/db_testing')
+def test_db():
+    auth.signup("qwertman2", "1", "qwer", "qwer")
+    auth.login("qwertman2", "1")
+    return render_template("home.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

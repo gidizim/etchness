@@ -35,6 +35,10 @@ def add_to_applied(u_id, job_posting):
 
     job_id = job_posting['id']
 
+    cur.execute("SELECT * FROM job WHERE  job_id = ?;", job_id)
+
+    if cur.rowcount != 0:
+
 
     job_data = (job_posting['id'],
                 job_posting['title'],
@@ -47,12 +51,25 @@ def add_to_applied(u_id, job_posting):
 
 
     cur.execute("INSERT INTO job VALUES ( ?, ?, ?, ?, ?, ?, ?, ?) ;", job_data)
-    cur.execute("INSERT INTO applied VALUES (?, ?);", u_id, job_id)
+    cur.execute("INSERT INTO applied VALUES (?, ?);", (u_id, job_id))
 
     conn.commit()
     db.close_db()
 
     return True
+
+# Checks if job has already been applied to
+def already_applied(u_id, job_id):
+    conn = db.get_db()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM applied WHERE user_id = ? AND job_id = ?;", (u_id, job_id))
+
+    result = cur.rowcount > 0
+
+    db.close_db()
+
+    return result
 
 # Removes job posting to applied
 def remove_from_applied(u_id, job_posting):
@@ -62,9 +79,13 @@ def remove_from_applied(u_id, job_posting):
 
     job_id = job_posting['id']
 
-    cur.execute("DELETE FROM applied WHERE user_id = ? AND job_id = ?;", u_id, job_id)
+    cur.execute("SELECT * FROM applied WHERE user_id = ? AND job_id = ?;", (u_id, job_id))
 
-    conn.commit()
+    if cur.rowcount != 0:
+        cur.execute("DELETE FROM applied WHERE user_id = ? AND job_id = ?;", (u_id, job_id))
+
+        conn.commit()
+
     db.close_db()
 
     return True
