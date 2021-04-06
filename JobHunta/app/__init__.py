@@ -2,14 +2,18 @@ from flask.templating import render_template_string
 from .newsfeed import getNews
 from .getJobs import get_combined_results, get_github_results
 from flask import Flask
-from flask import render_template, request, url_for, redirect
+from flask import render_template, request, url_for, redirect, session, g
 from flask_paginate import Pagination, get_page_parameter
+from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from . import auth
 from .popular import get_popular_jobs, append_popular_job, clear_popular_job
+from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist
 import os
 import re
 from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, in_watchlist
+# TODO need to add view functionality for if user is logged in or not
+
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
@@ -24,6 +28,8 @@ except OSError:
     pass
 
 db.init_app(app)
+
+app.secret_key= b'\x8b\x13\xac\xcc\x9b(\xdc\xf6\x80^T\xc9y\xd2n\x9d'
 
 @app.route('/')
 def get_home():
@@ -63,7 +69,6 @@ def get_news():
 
 @app.route('/components/<file>')
 def get_component(file="home.html"):
-
     return render_template("components/" + file)
 
 @app.route('/<file>')
@@ -160,8 +165,29 @@ def get_watchlist_jobs():
 def get_profile():
     return render_template('profile.html')
 
+@app.before_request
+def before_request_func():
+    print("before_request is running!")
+    u_id = session.get('user_id')
+    if u_id is not None:
+        print("logged in")
+        # change view depending on logged in
+
 @app.route('/login')
 def get_login():
+    email = "test"
+    password = "test"
+    error = None
+
+    if error is None:
+        session.clear()
+        try:
+            u_id = auth.login(email, password)
+            session['user_id'] = u_id
+            return redirect(url_for('get_home'))
+        except:
+            print("error")
+
     return render_template('login.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -180,21 +206,26 @@ def get_signup():
         elif (re.search(regex, email)):
             print("invalid email")
             # error = invalid email
-        #blah blah maybe more checks, e.g. user exists
+            #blah blah maybe more checks, e.g. user exists
 
         if error == None:
-            # insert into db here
-            print(fname, lname, email, pw, pw2)
+            u_id = auth.signup(email, generate_password_hash(pw, method='sha256') ,fname, lname)
+            session['user_id'] = u_id
+            return redirect(url_for('get_home'))
         else:
             print(error)
             # flash error
         return redirect(url_for('get_login'))
     return render_template('signup.html')
         
-@app.route('/reset_ password')
+@app.route('/resetpassword')
 def get_resetpw():
     return render_template('resetpw.html')
 
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None) 
+    return redirect(url_for('get_home'))
 
 if __name__ == "__main__":
     app.run(debug=True)
