@@ -1,68 +1,40 @@
 from . import db
 
-# Gets list of jobs by a given u_id, returns a list of job postings
-def get_applied(u_id):
+# Attempts to signup with user details, returns a user id to be used as a token
+def signup(email, password, first_name, last_name):
+    data = (email, password, first_name, last_name)
 
     # Getting db and cursor
     conn = db.get_db()
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM jobs, applied WHERE applied.u_id = ? AND applied.job_id = job.id;", u_id)
-
-    results = []
-
-    for row in cur.fetchall():
-        curr_job = {}
-        curr_job['id'] = row['id']
-        curr_job['title'] = row['title']
-        curr_job['job_type'] = row['job_type']
-        curr_job['description'] = row['description']
-        curr_job['company'] = row['company']
-        curr_job['url'] = row['url']
-        curr_job['salary'] = row['salary']
-
-        results.append(curr_job)
-
-    db.close_db()
-
-    return results
-
-# Adds job posting to applied
-def add_to_applied(u_id, job_posting):
-    # Getting db and cursor
-    conn = db.get_db()
-    cur = conn.cursor()
-
-    job_id = job_posting['id']
-
-
-    job_data = (job_posting['id'],
-                job_posting['title'],
-                job_posting['job_type'],
-                job_posting['description'],
-                job_posting['company'],
-                job_posting['url'],
-                job_posting['salary'])
-
-    cur.execute("INSERT INTO job VALUES ? ", job_data)
-    cur.execute("INSERT INTO applied VALUES (?, ?);", u_id, job_id)
+    # Creating user and obtaining u_id
+    cur.execute("INSERT INTO user (email, password, first_name, last_name) VALUES (?, ?, ?, ?);", data)
+    cur.execute("SELECT id FROM user WHERE email = ? AND password = ?;", email, password)
+    u_id = cur.fetch()[0]
 
     conn.commit()
     db.close_db()
 
-    return True
+    return u_id
 
-# Removes job posting to applied
-def remove_from_applied(u_id, job_posting):
-    # Getting db and cursor
+# Attempts to log in returns boolean on whether it was successful or not
+def login(email, password):
     conn = db.get_db()
     cur = conn.cursor()
 
-    job_id = job_posting['id']
+    # Getting expected password
+    cur.execute("SELECT password FROM user WHERE email = ?", email)
 
-    cur.execute("DELETE FROM applied WHERE user_id = ? AND job_id = ?;", u_id, job_id)
+    expected_password = cur.fetch()[0]
 
+    # Saving changes and disconnecting from DB
     conn.commit()
     db.close_db()
 
+    return expected_password == password
+
+
+# Since we aren't doing token checking atm, there is no token to invalidate
+def logout(token):
     return True
