@@ -5,7 +5,7 @@ from flask import Flask
 from flask import json, jsonify, render_template, request, url_for
 from . import db
 from . import auth
-
+from flask_paginate import Pagination, get_page_parameter
 import os
 
 app = Flask(__name__, instance_relative_config=True)
@@ -41,15 +41,20 @@ def get_html(file="home.html"):
     return render_template(file)
 
 jobs = []
+JOBS_PER_PAGE = 15
 @app.route('/results', methods=['GET', 'POST'])
 def get_job_results():
     global jobs
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    i = (page - 1) * JOBS_PER_PAGE
+    curr_jobs = jobs[i : i + JOBS_PER_PAGE]
+    pagination = Pagination(page=page, per_page=JOBS_PER_PAGE, total=len(jobs), record_name='jobs')
+
     if request.method != 'POST':
-        return render_template('results.html', jobs=jobs)
+        print("in get")
+        return render_template('results.html', jobs=curr_jobs, pagination=pagination)
     ip = request.remote_addr
     useragent = request.headers.get('User-Agent')
-    print(ip)
-    print(useragent)
 
     data = request.get_json(force=True)
     print(data)
@@ -70,15 +75,14 @@ def get_job_results():
         descrip = ''
         
     jobs = get_combined_results(useragent, ip, descrip, data['location'], full_time, part_time, job_type, data['page'])
-    print(len(jobs))
-    return render_template('results.html', jobs=jobs)
     
+    curr_jobs = jobs[i : i + JOBS_PER_PAGE]
+    print(len(jobs))
+    return render_template('results.html', jobs=curr_jobs, pagination=pagination)
+    
+
 # GET method - 404 not found depending on params given
-# TODO: pagination
 @app.route('/jobposting/<title>/<location>/<company>/<description>/<created>/<job_type>')
-# @app.route('/jobposting/<title>/<location>/<company>/<description>/<created>')
-# @app.route('/jobposting/<title>/<location>/<company>/<description>')
-# @app.route('/jobposting/<title>/<location>/<company>')
 def get_job(title, location, company, description='', created='', job_type=''):
     return render_template('jobposting.html', 
         title=title, location=location, company=company, description=description,
