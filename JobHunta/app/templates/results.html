@@ -5,12 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-        <script src="static/js/index.js"></script>
-        <script src="static/js/navbarload.js"></script>
-
-        <link rel="stylesheet" href="static/css/home.css">
-        <link rel="stylesheet" href="static/css/nav.css">
-        <link rel="stylesheet" href="static/css/jobposting.css">
+        <script src="{{ url_for('static', filename='js/navbarload.js') }}"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/jobposting.css') }}">
 
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
@@ -30,9 +28,7 @@
                     title=job.title, location=job.location, company=job.company, 
                     description=job.description|striptags, created=job.created, job_type=job.job_type, url=job.url)}}"> -->
                 {{ loop.index + pagination.skip }}
-                <a class="item" href="{{url_for( 'get_job', 
-                    title=job.title|striptags, location=job.location|striptags, company=job.company|striptags, 
-                    description=job.description|striptags, created=job.created|striptags, job_type=job.job_type|striptags)}}">
+                <a class="item" href="#" onclick="createJobPosting({{job|striptags}})">
                     {% if job.job_type == 'Unknown'%}
                     {% set jobtype = ''%}
                     {% else %}
@@ -53,5 +49,6 @@
         </div>
         {{ pagination.links }}
         <div id="footer"></div>
+        <script src="{{ url_for('static', filename='js/jobposting.js') }}"></script>
     </body>
 </html>

@@ -76,7 +76,6 @@ def get_combined_results(useragent, ip, descrip, location, full_time, part_time,
     careerjet_resp = get_careerjet_results(useragent, ip, descrip, location, page, job_type)
     for job in github_resp:
         info = {
-            # 'id': job['id'],
             'title': job['title'],
             'job_type': job['type'],
             'description': job['description'],
@@ -106,7 +105,6 @@ def get_combined_results(useragent, ip, descrip, location, full_time, part_time,
                 job_type = 'Unknown'
 
             info = {
-                # 'id': job['id'],
                 'title': job['title'],
                 'job_type': job_type,
                 'description': job['description'],
@@ -127,7 +125,6 @@ def get_combined_results(useragent, ip, descrip, location, full_time, part_time,
             else:
                 jobtype = 'Unknown'
             info = {
-                # 'id': None,
                 'title': job['title'],
                 'job_type': jobtype,
                 'description': job['description'],

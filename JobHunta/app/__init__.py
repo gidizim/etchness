@@ -81,12 +81,40 @@ def get_job_results():
     return render_template('results.html', jobs=curr_jobs, pagination=pagination)
     
 
+job = {}
 # GET method - 404 not found depending on params given
-@app.route('/jobposting/<title>/<location>/<company>/<description>/<created>/<job_type>')
-def get_job(title, location, company, description='', created='', job_type=''):
-    return render_template('jobposting.html', 
-        title=title, location=location, company=company, description=description,
-        created=created, job_type=job_type)
+@app.route('/jobposting', methods=['GET', 'POST'])
+def get_job():
+    global job
+
+    if request.method == 'POST':
+        data = request.get_json(force=True)
+        print(data)
+        job = data
+        # job['title'] = data['title']
+        # job['location'] = data['location']
+        # job['company'] = data['company']
+        # job['description'] = data['description']
+        # job['created'] = data['created']
+        # job['job_type'] = data['job_type']
+        # job['url'] = data['url']
+        
+    if request.method == 'GET':
+        print("in get")
+    
+    return render_template('jobposting.html', job=job)
+
+
+
+@app.route('/addToWatchlist', methods=['GET', 'POST'])
+def add_to_watchlist():
+    # call db function
+    return 'Success', 200
+
+@app.route('/removeFromWatchlist', methods=['GET', 'POST'])
+def remove_from_watchlist():
+    # call db function
+    return 'Success', 200
 
 if __name__ == "__main__":
     app.run(debug=True)
