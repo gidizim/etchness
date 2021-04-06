@@ -91,13 +91,6 @@ def get_job():
         data = request.get_json(force=True)
         print(data)
         job = data
-        # job['title'] = data['title']
-        # job['location'] = data['location']
-        # job['company'] = data['company']
-        # job['description'] = data['description']
-        # job['created'] = data['created']
-        # job['job_type'] = data['job_type']
-        # job['url'] = data['url']
         
     if request.method == 'GET':
         print("in get")
