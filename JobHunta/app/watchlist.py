@@ -47,6 +47,9 @@ def add_to_watchlist(u_id, job_posting):
     cur.execute("INSERT INTO job VALUES ? ", job_data)
     cur.execute("INSERT INTO watchlist VALUES (?, ?);", u_id, job_id)
 
+    conn.commit()
+    db.close_db()
+
     return True
 
 # Removes job posting to watchlist
@@ -57,7 +60,9 @@ def remove_from_watchlist(u_id, job_posting):
 
     job_id = job_posting['id']
 
-
     cur.execute("DELETE FROM watchlist WHERE user_id = ? AND job_id = ?;", u_id, job_id)
+
+    conn.commit()
+    db.close_db()
 
     return True
