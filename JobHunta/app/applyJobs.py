@@ -40,11 +40,12 @@ def add_to_applied(u_id, job_posting):
                 job_posting['title'],
                 job_posting['job_type'],
                 job_posting['description'],
+                job_posting['location'],
                 job_posting['company'],
                 job_posting['url'],
                 job_posting['salary'])
 
-    cur.execute("INSERT INTO job VALUES ? ;", job_data)
+    cur.execute("INSERT INTO job VALUES ( ?, ?, ?, ?, ?, ?, ?, ?) ;", job_data)
     cur.execute("INSERT INTO applied VALUES (?, ?);", u_id, job_id)
 
     conn.commit()
