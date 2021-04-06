@@ -1,6 +1,6 @@
 from flask.templating import render_template_string
 # from .newsfeed import getNews
-from .getJobs import get_combined_results, get_adzuna_results, get_careerjet_results
+from .getJobs import get_combined_results, get_github_results
 from flask import Flask
 from flask import json, jsonify, render_template, request, url_for
 from . import db
@@ -24,7 +24,22 @@ db.init_app(app)
 
 @app.route('/')
 def get_home():
-    return render_template('home.html')
+    # Show top 5 results
+    jobs = []
+    data = get_github_results('software', 'Sydney', False, 1)
+    for job in data:
+        info = {
+            'title': job['title'],
+            'job_type': job['type'],
+            'description': job['description'],
+            'location': job['location'],
+            'company': job['company'],
+            'created': job['created_at'],
+            'url': job['url'],
+            'salary': 'Unknown'
+        }
+        jobs.append(info)
+    return render_template('home.html', jobs=jobs[:6])
 
 @app.route('/newsfeed')
 def get_news():
@@ -82,20 +97,23 @@ def get_job_results():
     
 
 job = {}
+prev = None
 # GET method - 404 not found depending on params given
 @app.route('/jobposting', methods=['GET', 'POST'])
 def get_job():
     global job
+    global prev
 
     if request.method == 'POST':
         data = request.get_json(force=True)
         print(data)
-        job = data
-        
+        job = data['job']
+        prev = data['prev']
+
     if request.method == 'GET':
         print("in get")
     
-    return render_template('jobposting.html', job=job)
+    return render_template('jobposting.html', job=job, prev=prev)
 
 
 
@@ -108,6 +126,12 @@ def add_to_watchlist():
 def remove_from_watchlist():
     # call db function
     return 'Success', 200
+
+@app.route('/watchlist')
+def get_watchlist():
+    # get watchlist from db
+    jobs = []
+    render_template('watchlist.html', jobs=jobs)
 
 if __name__ == "__main__":
     app.run(debug=True)

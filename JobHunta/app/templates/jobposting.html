@@ -28,7 +28,7 @@
             <h3>Job description</h3>
             <p class="description">{{job.description}}</p>
             <div class="btn-container">
-                <input class="button" type="button" value="Back to results" onclick="location.href='/results'"></input>
+                <input class="button" type="button" value="Back" onclick="location.href='{{prev}}'"></input>
                 <input id="add" class="button" type="button" value="Add to watchlist" onclick="addToWatchlist({{job}})"></input>
                 <input class="button" type="button" value="Apply now" onclick="window.open('{{job.url}}','_blank')"></input>
             </div>

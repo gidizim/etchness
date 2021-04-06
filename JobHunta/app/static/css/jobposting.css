@@ -18,8 +18,7 @@
     height: fit-content;
     border: 5px solid rgb(252, 76, 56);
     border-radius: 20px;
-    /* cursor: pointer */
-    text-decoration: none;
+    cursor: pointer;
     color: rgb(31, 30, 30);
 }
 
@@ -86,4 +85,8 @@ h3 {
     justify-content: space-evenly;
     width: 20%;
     margin: auto;
+}
+
+.pagination li:active {
+    background-color: '';
 }

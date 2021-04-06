@@ -1,19 +1,15 @@
 
-const createJobPosting = (job) => {
+const createJobPosting = (event, job, prevPage) => {
+    console.log(event.target)
+    if (event.target.value == 'Remove from Watchlist') return;
     console.log(job);
-    // const postDetails = {
-    //     'title': job.title,
-    //     'company': job.company,
-    //     'location': job.location,
-    //     'job_type': job.job_type,
-    //     'created': job.created,
-    //     'description': job.description,
-    //     'url': job.url            
-    // }
-
+    const details = {
+        'job': job,
+        'prev': prevPage
+    }
     fetch('/jobposting', {
         method: 'POST',
-        body: JSON.stringify(job)
+        body: JSON.stringify(details)
     }).then((response) => {
         console.log(response);
         window.location.href = '/jobposting';
@@ -58,4 +54,17 @@ const addToWatchlist = (job) => {
             console.log(response);
         }).catch((error) => console.log(error))
     }
+}
+
+const removeJob = (job) => {
+    const watchlistContainer = document.getElementById('recommendation');
+    // confirm with user
+    const confirm = window.confirm('Are you sure you want to remove this job from your watchlist?\nThis action is irreversible.')
+    if (confirm) {
+        watchlistContainer.removeChild(job);
+    }
+}
+// go back to home or results page
+const clickBack = () => {
+    location.href='/results'
 }
