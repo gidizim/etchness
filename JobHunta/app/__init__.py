@@ -1,11 +1,11 @@
 from flask.templating import render_template_string
-# from .newsfeed import getNews
+from .newsfeed import getNews
 from .getJobs import get_combined_results, get_github_results
 from flask import Flask
-from flask import json, jsonify, render_template, request, url_for
+from flask import render_template, request, url_for
+from flask_paginate import Pagination, get_page_parameter
 from . import db
 from . import auth
-from flask_paginate import Pagination, get_page_parameter
 import os
 
 app = Flask(__name__, instance_relative_config=True)
