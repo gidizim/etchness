@@ -80,7 +80,7 @@ h3 {
     font-family: 'Varela Round', sans-serif;
 }
 
-.pagination {
+.pagination ul {
     display: flex;
     list-style-type: none;
     justify-content: space-evenly;
