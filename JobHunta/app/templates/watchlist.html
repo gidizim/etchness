@@ -26,27 +26,30 @@
     <div class="title">Watchlist</div>
 
     <div id="watchlist-container">
-        {% for job in jobs %}
-            <div class="item" onclick="createJobPosting(event, {{job}}, '/watchlist')">
-                {% if job.job_type == 'Unknown'%}
-                {% set jobtype = ''%}
-                {% else %}
-                {% set jobtype = "   |   " + job.job_type%}
-                {% endif %}
-                {% if job.company == 'Unknown'%}
-                {% set comp = ''%}
-                {% else %}
-                {% set comp = "   |   " + job.company%}
-                {% endif %}
-                <h3>{{job.title}}     {{comp}}     {{jobtype}}</h3>
-                <h4> {{job.location}}</h4>
-                <h4> {{job.id}}</h4>
-                {% set descrip = job.description%}
-                <p>...{{descrip[:250]}}...</p>
-                <p> <b>Posted on:</b> {{job.created}} </p>
-                <input class="button" type="button" value="Remove from Watchlist" onclick="removeJob(this.parentNode, '{{job.id}}')"></input>
-            </div>
-        {% endfor %}
+        {% if jobs != [] %}
+            {% for job in jobs %}
+                <div class="item" onclick="createJobPosting(event, {{job|striptags}}, '/watchlist')">
+                    {% if job.job_type == 'Unknown'%}
+                    {% set jobtype = ''%}
+                    {% else %}
+                    {% set jobtype = "   |   " + job.job_type%}
+                    {% endif %}
+                    {% if job.company == 'Unknown'%}
+                    {% set comp = ''%}
+                    {% else %}
+                    {% set comp = "   |   " + job.company%}
+                    {% endif %}
+                    <h3>{{job.title}}     {{comp}}     {{jobtype}}</h3>
+                    <h4> {{job.location}}</h4>
+                    {% set descrip = job.description|striptags%}
+                    <p>...{{descrip[:250]}}...</p>
+                    <p> <b>Posted on:</b> {{job.created}} </p>
+                    <input class="button" type="button" value="Remove from Watchlist" onclick="removeJob(this.parentNode, '{{job.url}}')"></input>
+                </div>
+            {% endfor %}        
+        {% else %}
+            <h3>Empty</h3>
+        {% endif %}
     </div>
     <div id="footer"></div>
     <script src='static/js/jobposting.js'></script>

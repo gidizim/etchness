@@ -18,6 +18,7 @@ def get_popular_jobs():
         curr_job['description'] = row['description']
         curr_job['location'] = row['location']
         curr_job['company'] = row['company']
+        curr_job['created'] = row['created']
         curr_job['url'] = row['url']
         curr_job['salary'] = row['salary']
 
@@ -35,21 +36,21 @@ def append_popular_job(job_posting):
     conn = db.get_db()
     cur = conn.cursor()
 
-    job_id = job_posting['id']
-
-
-    job_data = (job_posting['id'],
+    job_id = job_posting['url']
+    
+    job_data = (job_id,
                 job_posting['title'],
                 job_posting['job_type'],
                 job_posting['description'],
                 job_posting['location'],
                 job_posting['company'],
+                job_posting['created'],
                 job_posting['url'],
                 job_posting['salary'])
 
 
-    cur.execute("INSERT INTO job VALUES ( ?, ?, ?, ?, ?, ?, ?, ?) ;", job_data)
-    cur.execute("INSERT INTO popular VALUES ( ? ) ;", str(job_id))
+    cur.execute("INSERT INTO job VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?) ;", job_data)
+    cur.execute("INSERT INTO popular VALUES ( ? ) ;", (job_id,))
 
     conn.commit()
 

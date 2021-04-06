@@ -34,6 +34,7 @@ CREATE TABLE job (
   location TEXT,
   company TEXT,
   created TEXT,
+  url TEXT,
   salary INTEGER
 );
 

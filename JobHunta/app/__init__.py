@@ -9,7 +9,7 @@ from . import auth
 from .popular import get_popular_jobs, append_popular_job, clear_popular_job
 import os
 import re
-from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist
+from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, in_watchlist
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
@@ -39,7 +39,6 @@ def get_home():
         data = get_github_results('software', 'Sydney', False, 1)
         for job in data:
             info = {
-                'id': index,
                 'title': job['title'],
                 'job_type': job['type'],
                 'description': job['description'],
@@ -114,7 +113,6 @@ def get_job_results():
 
 job = {}
 prev = None
-# GET method - 404 not found depending on params given
 @app.route('/jobposting', methods=['GET', 'POST'])
 def get_job():
     global job
@@ -126,10 +124,14 @@ def get_job():
         job = data['job']
         prev = data['prev']
 
-    if request.method == 'GET':
-        print("in get")
-    
-    return render_template('jobposting.html', job=job, prev=prev)
+    if in_watchlist('q', job['url']):
+        added = True
+    else:
+        added = False
+
+    print(job['url'])
+    print(added)
+    return render_template('jobposting.html', job=job, prev=prev, added=added)
 
 
 
@@ -142,15 +144,14 @@ def add_watchlist_job():
 @app.route('/removeFromWatchlist', methods=['GET', 'POST'])
 def remove_watchlist_job():
     # call db function
-    print(request.form.get('url'))
-    print(request.get_json())
-    print(request.get_json(force=True))
     remove_from_watchlist('q', request.get_json()['url'])
     return 'Success', 200
 
 @app.route('/watchlist')
 def get_watchlist_jobs():
     # get watchlist from db
+    
+    # plz change these 'q' back to u_id once implemented
     jobs = get_watchlist('q')
     print(jobs)
     return render_template('watchlist.html', jobs=jobs)
