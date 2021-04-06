@@ -56,11 +56,17 @@ const addToWatchlist = (job) => {
     }
 }
 
-const removeJob = (job) => {
+const removeJob = (job, url) => {
     const watchlistContainer = document.getElementById('recommendation');
     // confirm with user
     const confirm = window.confirm('Are you sure you want to remove this job from your watchlist?\nThis action is irreversible.')
     if (confirm) {
+        fetch('/removeFromWatchList', {
+            method: 'POST',
+            body: JSON.stringify({'url': url})
+        }).then((response) => {
+            console.log(response);
+        }).catch((error) => console.log(error))
         watchlistContainer.removeChild(job);
     }
 }

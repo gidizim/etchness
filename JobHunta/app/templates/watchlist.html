@@ -42,7 +42,7 @@
                 {% set descrip = job.description|striptags%}
                 <p>...{{descrip[:250]}}...</p>
                 <p> <b>Posted on:</b> {{job.created|striptags}} </p>
-                <input class="button" type="button" value="Remove from Watchlist" onclick="removeJob(this.parentNode)"></input>
+                <input class="button" type="button" value="Remove from Watchlist" onclick="removeJob(this.parentNode, '{{job.url}}')"></input>
             </a>
         {% endfor %}
     </div>
