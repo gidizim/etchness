@@ -24,7 +24,7 @@ def login(email, password):
     cur = conn.cursor()
 
     # Getting expected password
-    cur.execute("SELECT password FROM user WHERE email = ?", email)
+    cur.execute("SELECT password FROM user WHERE email = ?;", email)
 
     expected_password = cur.fetch()[0]
 

@@ -7,6 +7,7 @@ from flask_paginate import Pagination, get_page_parameter
 from flask_login import login_user, login_manager, login_required, current_user, logout_user, LoginManager
 from . import db
 from . import auth
+from .popular import get_popular_jobs, append_popular_job, clear_popular_job
 import os
 import re
 
@@ -42,20 +43,30 @@ def logout():
 @app.route('/')
 def get_home():
     # Show top 5 results
-    jobs = []
-    data = get_github_results('software', 'Sydney', False, 1)
-    for job in data:
-        info = {
-            'title': job['title'],
-            'job_type': job['type'],
-            'description': job['description'],
-            'location': job['location'],
-            'company': job['company'],
-            'created': job['created_at'],
-            'url': job['url'],
-            'salary': 'Unknown'
-        }
-        jobs.append(info)
+
+    jobs = get_popular_jobs()
+
+    if jobs == []:
+
+        index = 0
+
+        data = get_github_results('software', 'Sydney', False, 1)
+        for job in data:
+            info = {
+                'id': index,
+                'title': job['title'],
+                'job_type': job['type'],
+                'description': job['description'],
+                'location': job['location'],
+                'company': job['company'],
+                'created': job['created_at'],
+                'url': job['url'],
+                'salary': 'Unknown'
+            }
+            jobs.append(info)
+            append_popular_job(info)
+            index += 1
+
     return render_template('home.html', jobs=jobs[:6])
 
 @app.route('/newsfeed')
