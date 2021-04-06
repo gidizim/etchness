@@ -3,6 +3,7 @@
     margin: auto;
     width: 75%;
     flex-direction: column;
+    text-align: center;
 }
 
 .title {

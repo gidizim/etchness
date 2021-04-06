@@ -2,7 +2,6 @@
 const createJobPosting = (event, job, prevPage) => {
     console.log(event.target)
     if (event.target.value == 'Remove from Watchlist') return;
-
     console.log(job);
     const details = {
         'job': job,
