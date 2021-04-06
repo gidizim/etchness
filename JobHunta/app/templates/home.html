@@ -29,13 +29,13 @@
     <br>
     <div class="filters">
         <b><p> Only show jobs where</p></b>
-        <select id="date_posted" class="filter">
+        <!-- <select id="date_posted" class="filter">
             <option value="" selected disabled hidden>Posted on</option>
             <option value="1_week">1 week ago</option>
             <option value="2_week">2 weeks ago</option>
             <option value="1_month">1 month ago</option>
             <option value="2_month">2 months ago</option>
-        </select>
+        </select> -->
 
         <select id="jobtype" class="filter">
             <option value="None" selected disabled hidden>Job type</option>
@@ -64,45 +64,28 @@
     <a href="#recommendation"><img id="recommend_image" src="static/img/down_arrow.png"></a>
     <h1 id="recommend_text"><a href="#recommendation" id="recommend_header"> Recommended Jobs </a></h1>
     <div class="container" id="recommendation">
-        <div class="item">
-            <div class="description">
-                <p><a href="jobposting.html">Google Engineer</a></p>
-                <p> Be an Engineer at Google</p>
-                <p> Date Posted: 00/00/0000 </p>
-                <p> Apply at ________ </p>
+        {% for job in jobs %}
+            <div class="item" onclick="createJobPosting(event, {{job|striptags}}, '/')">
+                {% if job.job_type == 'Unknown'%}
+                {% set jobtype = ''%}
+                {% else %}
+                {% set jobtype = "   |   " + job.job_type%}
+                {% endif %}
+                {% if job.company == 'Unknown'%}
+                {% set comp = ''%}
+                {% else %}
+                {% set comp = "   |   " + job.company%}
+                {% endif %}
+                <h3>{{job.title|striptags}}     {{comp|striptags}}     {{jobtype|striptags}}</h3>
+                <h4> {{job.location|striptags}}</h4>
+                {% set descrip = job.description|striptags%}
+                <p>...{{descrip[:250]}}...</p>
+                <p> <b>Posted on:</b> {{job.created|striptags}} </p>
             </div>
-        </div>
-
-        <div class="item">
-            <!-- <div class="thumbnail"> <img src="static/img/google.png" width="100" height="100"> </div> -->
-            <div class="description">
-                <p><a href="jobposting.html">Google Engineer</a></p>
-                <p> Be an Engineer at Google</p>
-                <p> Date Posted: 00/00/0000 </p>
-                <p> Apply at ________ </p>
-            </div>
-        </div>
-
-        <div class="item">
-            <div class="thumbnail"> <img src="static/img/google.png" width="100" height="100" alt="google"> </div>
-            <div class="description">
-                <p><a href="jobposting.html">Google Engineer</a></p>
-                <p> Be an Engineer at Google</p>
-                <p> Date Posted: 00/00/0000 </p>
-                <p> Apply at ________ </p>
-            </div>
-        </div>
-
-        <div class="item">
-            <div class="description">
-                <p><a href="jobposting.html">Google Engineer</a></p>
-                <p> Be an Engineer at Google</p>
-                <p> Date Posted: 00/00/0000 </p>
-                <p> Apply at ________ </p>
-            </div>
-        </div>
+        {% endfor %}
     </div>
     <div id="footer"></div>
     <script src="static/js/search.js"></script>
+    <script src="static/js/jobposting.js"></script>
     </body>
 </html>

@@ -12,11 +12,3 @@ const edit = () => {
         profileFeatures[i].disabled = !profileFeatures[i].disabled;
     }
 }
-const addToWatchlist = () => {
-    const button = document.getElementById('add');
-    if (button.value == "Add to watchlist") {
-        button.value = "Remove from watchlist";
-    } else {
-        button.value = "Add to watchlist";
-    }
-}

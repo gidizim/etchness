@@ -1,74 +1,76 @@
 
-const createJobPosting = (job) => {
-    const jobContainer = document.getElementById('job-container')
-    if (!jobContainer)
+const createJobPosting = (event, job, prevPage) => {
+    console.log(event.target)
+    if (event.target.value == 'Remove from Watchlist') return;
     console.log(job);
-
-    const header = document.createElement('div');
-    header.className = 'header-info';
-    
-    const title = document.createElement('h2');
-    title.textContent = job.title;
-    header.append(title);
-    
-    const company = document.createElement('h3');
-    company.textContent = job.company;
-    header.append(company);
-    const location = document.createElement('h4');
-    location.textContent = job.location;
-    header.append(location);
-    
-    const jobtype = document.createElement('h4');
-    jobtype.textContent = job.job_type;
-    header.append(jobtype);
-    
-    jobContainer.append(header);
-    const descripTitle = document.createElement('h2');
-    descripTitle.textContent = 'Job Description';
-    jobContainer.append(descripTitle);
-
-    const description = document.createElement('h4');
-    description.textContent = job.description;
-    description.className = 'description';
-    jobContainer.append(description);
-
-    const btnContainer = document.createElement('div');
-    btnContainer.className = 'btn-container';
-
-    const backBtn = document.createElement('input');
-    backBtn.className = 'button';
-    backBtn.type = 'button';
-    backBtn.value = 'Back to results';
-    backBtn.onclick = (event) => {
-        event.preventDefault();
-        window.location.href = '/results';
+    const details = {
+        'job': job,
+        'prev': prevPage
     }
-    btnContainer.append(backBtn);
+    fetch('/jobposting', {
+        method: 'POST',
+        body: JSON.stringify(details)
+    }).then((response) => {
+        console.log(response);
+        window.location.href = '/jobposting';
+    }).catch((error) => console.log(error))
+}
 
-    const watchlistBtn = document.createElement('input');
-    watchlistBtn.className = 'button';
-    watchlistBtn.type = 'button';
-    watchlistBtn.value = 'Add to watchlist';
-    watchlistBtn.onclick = (event) => {
-        event.preventDefault();
-        // add to watchlist
-        // TODO: actually add to watchlist
-        if (watchlistBtn.value == "Add to watchlist") {
-            watchlistBtn.value = "Remove from watchlist";
-        } else {
-            watchlistBtn.value = "Add to watchlist";
-        }
-    }
-    btnContainer.append(watchlistBtn);
 
-    const applyBtn = document.createElement('input');
-    applyBtn.className = 'button';
-    applyBtn.type = 'button';
-    applyBtn.value = 'Apply now';
-    applyBtn.onclick = (event) => {
-        event.preventDefault();
-        window.open = job.url;
+// update db
+const addToWatchlist = (job) => {
+    console.log(job)
+    // console.log(title)
+    // console.log(location)
+    // console.log(company)
+    // console.log(jobtype)
+    // console.log(created)
+    // console.log(url)
+    const button = document.getElementById('add');
+    if (button.value == "Add to watchlist") {
+        button.value = "Remove from watchlist";
+        // const postDetails = {
+        //     'title': title,
+        //     'company': company,
+        //     'location': location,
+        //     'jobtype': jobtype,
+        //     'created': created,
+        //     'description': description,
+        //     'url': url            
+        // }
+        fetch('/addToWatchList', {
+            method: 'POST',
+            body: JSON.stringify(job)
+        }).then((response) => {
+            console.log(response);
+        }).catch((error) => console.log(error))
+        
+    } else {
+        button.value = "Add to watchlist";
+        fetch('/removeFromWatchList', {
+            method: 'POST',
+            body: JSON.stringify({'url': job['url']})
+        }).then((response) => {
+            console.log(response);
+        }).catch((error) => console.log(error))
     }
-    btnContainer.append(applyBtn);
-    jobContainer.append(btnContainer);
+}
+
+const removeJob = (job, url) => {
+    const watchlistContainer = document.getElementById('recommendation');
+    // confirm with user
+    const confirm = window.confirm('Are you sure you want to remove this job from your watchlist?\nThis action is irreversible.')
+    if (confirm) {
+        fetch('/removeFromWatchList', {
+            method: 'POST',
+            body: JSON.stringify({'url': url})
+        }).then((response) => {
+            console.log(response);
+        }).catch((error) => console.log(error))
+        watchlistContainer.removeChild(job);
+    }
+}
+// go back to home or results page
+const clickBack = () => {
+    location.href='/results'
 }

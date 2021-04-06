@@ -19,21 +19,21 @@
         <div id="nav"></div>
         <div class="job-container">
             <div class="header-info">
-                <h2>{{title}}</h2>
-                <h3>{{company}}</h3>
-                <h4>{{location}}</h4>
-                <h4>{{jobtype}}</h4>
-                <p><b>Posted on:</b> {{created}}</p>
+                <h2>{{job.title}}</h2>
+                <h3>{{job.company}}</h3>
+                <h4>{{job.location}}</h4>
+                <h4>{{job.jobtype}}</h4>
+                <p><b>Posted on:</b> {{job.created}}</p>
             </div>
             <h3>Job description</h3>
-            <p class="description">{{description}}</p>
+            <p class="description">{{job.description}}</p>
             <div class="btn-container">
-                <input class="button" type="button" value="Back to results" onclick="location.href='/results'"></input>
-                <input id="add" class="button" type="button" value="Add to watchlist" onclick="addToWatchlist()"></input>
-                <input class="button" type="button" value="Apply now" onclick="window.open({{url}},'_blank')"></input>
+                <input class="button" type="button" value="Back" onclick="location.href='{{prev}}'"></input>
+                <input id="add" class="button" type="button" value="Add to watchlist" onclick="addToWatchlist({{job}})"></input>
+                <input class="button" type="button" value="Apply now" onclick="window.open('{{job.url}}','_blank')"></input>
             </div>
         </div>
         <div id="footer"></div>
-        <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jobposting.js') }}"></script>
     </body>
 </html>
