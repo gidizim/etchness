@@ -54,6 +54,19 @@ def add_to_watchlist(u_id, job_posting):
 
     return True
 
+# Checks if job is in the watchlist
+def in_watchlist(u_id, job_id):
+    conn = db.get_db()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM watchlist WHERE u_id = ? AND job_id = ?", (u_id, job_id))
+
+    result = cur.rowcount > 0
+
+    db.close_db()
+
+    return result
+
 # Removes job posting to watchlist
 def remove_from_watchlist(u_id, url):
     # Getting db and cursor
