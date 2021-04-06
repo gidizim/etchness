@@ -31,9 +31,10 @@ def get_home():
 
     jobs = get_popular_jobs()
 
+
     if jobs == []:
 
-        index = 0
+        index = 1
 
         data = get_github_results('software', 'Sydney', False, 1)
         for job in data:
@@ -50,7 +51,9 @@ def get_home():
             }
             jobs.append(info)
             append_popular_job(info)
+
             index += 1
+
 
     return render_template('home.html', jobs=jobs[:6])
 

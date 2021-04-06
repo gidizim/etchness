@@ -21,13 +21,13 @@ CREATE TABLE applied (
 
 CREATE TABLE watchlist (
   user_id INTEGER NOT NULL,
-  job_id INTEGER NOT NULL,
+  job_id TEXT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user(id),
   FOREIGN KEY (job_id) REFERENCES job(id)
 );
 
 CREATE TABLE job (
-  id INTEGER PRIMARY KEY,
+  id TEXT PRIMARY KEY,
   title TEXT,
   job_type TEXT,
   description TEXT,
@@ -38,7 +38,7 @@ CREATE TABLE job (
 );
 
 CREATE TABLE popular (
-  job_id INTEGER NOT NULL,
+  job_id TEXT NOT NULL,
   FOREIGN KEY (job_id) REFERENCES job(id)
 );
 
