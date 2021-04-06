@@ -8,10 +8,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from . import auth
 from .popular import get_popular_jobs, append_popular_job, clear_popular_job
+from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist
 import os
 import re
-
 # TODO need to add view functionality for if user is logged in or not
+
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
@@ -35,9 +36,10 @@ def get_home():
 
     jobs = get_popular_jobs()
 
+
     if jobs == []:
 
-        index = 0
+        index = 1
 
         data = get_github_results('software', 'Sydney', False, 1)
         for job in data:
@@ -54,7 +56,9 @@ def get_home():
             }
             jobs.append(info)
             append_popular_job(info)
+
             index += 1
+
 
     return render_template('home.html', jobs=jobs[:6])
 
@@ -134,19 +138,25 @@ def get_job():
 
 
 @app.route('/addToWatchlist', methods=['GET', 'POST'])
-def add_to_watchlist():
+def add_watchlist_job():
     # call db function
+    add_to_watchlist('q', request.get_json()['job'])
     return 'Success', 200
 
 @app.route('/removeFromWatchlist', methods=['GET', 'POST'])
-def remove_from_watchlist():
+def remove_watchlist_job():
     # call db function
+    print(request.form.get('url'))
+    print(request.get_json())
+    print(request.get_json(force=True))
+    remove_from_watchlist('q', request.get_json()['url'])
     return 'Success', 200
 
 @app.route('/watchlist')
-def get_watchlist():
+def get_watchlist_jobs():
     # get watchlist from db
-    jobs = []
+    jobs = get_watchlist('q')
+    print(jobs)
     return render_template('watchlist.html', jobs=jobs)
 
 @app.route('/profile')
