@@ -59,7 +59,7 @@ def in_watchlist(u_id, job_id):
     conn = db.get_db()
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM watchlist WHERE u_id = ? AND job_id = ?", (u_id, job_id))
+    cur.execute("SELECT * FROM watchlist WHERE u_id = ? AND job_id = ?;", (u_id, job_id))
 
     result = cur.rowcount > 0
 
