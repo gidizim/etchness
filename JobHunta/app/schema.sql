@@ -27,13 +27,13 @@ CREATE TABLE watchlist (
 );
 
 CREATE TABLE job (
-  id INTEGER PRIMARY KEY,
+  id TEXT PRIMARY KEY,
   title TEXT,
   job_type TEXT,
   description TEXT,
   location TEXT,
   company TEXT,
-  url TEXT,
+  created TEXT,
   salary INTEGER
 );
 

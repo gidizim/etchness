@@ -2,6 +2,7 @@
 const createJobPosting = (event, job, prevPage) => {
     console.log(event.target)
     if (event.target.value == 'Remove from Watchlist') return;
+
     console.log(job);
     const details = {
         'job': job,
@@ -9,6 +10,9 @@ const createJobPosting = (event, job, prevPage) => {
     }
     fetch('/jobposting', {
         method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
         body: JSON.stringify(details)
     }).then((response) => {
         console.log(response);
@@ -20,54 +24,52 @@ const createJobPosting = (event, job, prevPage) => {
 // update db
 const addToWatchlist = (job) => {
     console.log(job)
-    // console.log(title)
-    // console.log(location)
-    // console.log(company)
-    // console.log(jobtype)
-    // console.log(created)
-    // console.log(url)
     const button = document.getElementById('add');
     if (button.value == "Add to watchlist") {
-        button.value = "Remove from watchlist";
-        // const postDetails = {
-        //     'title': title,
-        //     'company': company,
-        //     'location': location,
-        //     'jobtype': jobtype,
-        //     'created': created,
-        //     'description': description,
-        //     'url': url            
-        // }
-        fetch('/addToWatchList', {
+        fetch('/addToWatchlist', {
             method: 'POST',
-            body: JSON.stringify(job)
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({'job': job})
         }).then((response) => {
             console.log(response);
+            if (response.status === 200) {
+                button.value = "Remove from watchlist";
+            }
         }).catch((error) => console.log(error))
         
     } else {
-        button.value = "Add to watchlist";
-        fetch('/removeFromWatchList', {
+        fetch('/removeFromWatchlist', {
             method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
             body: JSON.stringify({'url': job['url']})
         }).then((response) => {
+            if (response.status === 200) {
+                button.value = "Add to watchlist";
+            }
             console.log(response);
         }).catch((error) => console.log(error))
     }
 }
 
 const removeJob = (job, url) => {
-    const watchlistContainer = document.getElementById('recommendation');
+    const watchlistContainer = document.getElementById('watchlist-container');
     // confirm with user
+    console.log(url)
     const confirm = window.confirm('Are you sure you want to remove this job from your watchlist?\nThis action is irreversible.')
     if (confirm) {
-        fetch('/removeFromWatchList', {
+        fetch('/removeFromWatchlist', {
             method: 'POST',
             body: JSON.stringify({'url': url})
         }).then((response) => {
+            if (response.status === 200) {
+                watchlistContainer.removeChild(job);
+            }
             console.log(response);
         }).catch((error) => console.log(error))
-        watchlistContainer.removeChild(job);
     }
 }
 // go back to home or results page
