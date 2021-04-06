@@ -30,14 +30,18 @@
             {% for job in jobs %}
                 <div class="item" onclick="createJobPosting(event, {{job|striptags}}, '/watchlist')">
                     {% if job.job_type == 'Unknown'%}
-                    {% set jobtype = ''%}
+                        {% set jobtype = ''%}
+                    {% elif job.job_type == 'part_time' %}
+                        {% set jobtype =  "   |   " + 'Part Time'%}
+                    {% elif job.job_type == 'full_time' %}
+                        {% set jobtype = "   |   " + 'Full Time'%}
                     {% else %}
-                    {% set jobtype = "   |   " + job.job_type%}
+                        {% set jobtype = "    |   " + job.job_type%}
                     {% endif %}
                     {% if job.company == 'Unknown'%}
-                    {% set comp = ''%}
+                        {% set comp = ''%}
                     {% else %}
-                    {% set comp = "   |   " + job.company%}
+                        {% set comp = "   |   " + job.company%}
                     {% endif %}
                     <h3>{{job.title}}     {{comp}}     {{jobtype}}</h3>
                     <h4> {{job.location}}</h4>

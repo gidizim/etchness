@@ -25,14 +25,18 @@
                 {{ loop.index + pagination.skip }}
                 <div class="item" onclick="createJobPosting(event, {{job|striptags}}, '/results')">
                     {% if job.job_type == 'Unknown'%}
-                    {% set jobtype = ''%}
+                        {% set jobtype = ''%}
+                    {% elif job.job_type == 'part_time' %}
+                        {% set jobtype =  "   |   " + 'Part Time'%}
+                    {% elif job.job_type == 'full_time' %}
+                        {% set jobtype = "   |   " + 'Full Time'%}
                     {% else %}
-                    {% set jobtype = "   |   " + job.job_type%}
+                        {% set jobtype = "    |   " + job.job_type%}
                     {% endif %}
                     {% if job.company == 'Unknown'%}
-                    {% set comp = ''%}
+                        {% set comp = ''%}
                     {% else %}
-                    {% set comp = "   |   " + job.company%}
+                        {% set comp = "   |   " + job.company%}
                     {% endif %}
                     <h3>{{job.title|striptags}}     {{comp|striptags}}     {{jobtype|striptags}}</h3>
                     <h4> {{job.location|striptags}}</h4>
