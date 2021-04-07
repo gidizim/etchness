@@ -34,14 +34,9 @@ app.secret_key= b'\x8b\x13\xac\xcc\x9b(\xdc\xf6\x80^T\xc9y\xd2n\x9d'
 @app.route('/')
 def get_home():
     # Show top 5 results
-
     jobs = get_popular_jobs()
-
-
     if jobs == []:
-
         index = 1
-
         data = get_github_results('software', 'Sydney', False, 1)
         for job in data:
             info = {
@@ -126,7 +121,8 @@ prev = None
 def get_job():
     global job
     global prev
-
+    login=False
+    added=False
     if request.method == 'POST':
         data = request.get_json(force=True)
         print(data)
@@ -136,9 +132,9 @@ def get_job():
     u_id = session.get('user_id')
     if u_id is not None:
         added = in_watchlist(u_id, job['url'])
-    print(job['url'])
-    print(added)
-    return render_template('jobposting.html', job=job, prev=prev, added=added)
+        login = True
+
+    return render_template('jobposting.html', job=job, prev=prev, added=added, login=login)
 
 
 @app.route('/addToWatchlist', methods=['GET', 'POST'])
@@ -182,7 +178,6 @@ def before_request_func():
     u_id = session.get('user_id')
     if u_id is not None:
         print("logged in")
-        # change view depending on logged in
 
 @app.route('/login', methods=['GET', 'POST'])
 def get_login():

@@ -29,10 +29,14 @@
             <p class="description">{{job.description}}</p>
             <div class="btn-container">
                 <input class="button" type="button" value="Back" onclick="location.href='{{prev}}'"></input>
-                {% if added %}
-                    <input id="add" class="button" type="button" value="Remove from watchlist" onclick="addToWatchlist({{job}})"></input>
+                {% if login == true%}
+                    {% if added %}
+                        <input id="add" class="button" type="button" value="Remove from watchlist" onclick="addToWatchlist({{job}})"></input>
+                    {% else %}
+                        <input id="add" class="button" type="button" value="Add to watchlist" onclick="addToWatchlist({{job}})"></input>
+                    {% endif %}
                 {% else %}
-                    <input id="add" class="button" type="button" value="Add to watchlist" onclick="addToWatchlist({{job}})"></input>
+                <input id="add" class="button" type="button" value="Add to watchlist" onclick="{{url_for('get_login')}}"></input>
                 {% endif %}
                 <input class="button" type="button" value="Apply now" onclick="window.open('{{job.url}}','_blank')"></input>
             </div>
