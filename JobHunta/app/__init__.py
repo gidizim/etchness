@@ -158,7 +158,6 @@ def get_watchlist_jobs():
     
     # plz change these 'q' back to u_id once implemented
     jobs = get_watchlist('q')
-    print(jobs)
     return render_template('watchlist.html', jobs=jobs)
 
 @app.route('/profile')

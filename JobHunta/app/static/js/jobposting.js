@@ -62,6 +62,9 @@ const removeJob = (job, url) => {
     if (confirm) {
         fetch('/removeFromWatchlist', {
             method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
             body: JSON.stringify({'url': url})
         }).then((response) => {
             if (response.status === 200) {

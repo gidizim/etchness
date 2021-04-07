@@ -7,7 +7,7 @@ def get_watchlist(u_id):
     conn = db.get_db()
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM job, watchlist WHERE watchlist.user_id = ? AND watchlist.job_id = job.id;", u_id)
+    cur.execute("SELECT * FROM job, watchlist WHERE watchlist.user_id = '%s' AND watchlist.job_id = job.id;" % u_id)
 
     results = []
 
@@ -52,7 +52,7 @@ def add_to_watchlist(u_id, job_posting):
 
     cur.execute("INSERT INTO watchlist VALUES (?, ?);", (u_id, job_id))
 
-    cur.execute("SELECT * FROM job WHERE id = (?);", (job_id,))
+    cur.execute("SELECT * FROM job WHERE id = '%s';" % job_id)
     result = cur.fetchall()
     if len(result) == 0:
         cur.execute("INSERT INTO job VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ;", job_data)
@@ -67,7 +67,7 @@ def in_watchlist(u_id, job_id):
     conn = db.get_db()
     cur = conn.cursor()
     
-    cur.execute("SELECT * FROM watchlist WHERE user_id = ? AND job_id = ?;", (u_id, job_id))
+    cur.execute("SELECT * FROM watchlist WHERE user_id = '%s' AND job_id = '%s';" % (u_id, job_id))
 
     result = cur.fetchall()
 
@@ -81,10 +81,10 @@ def remove_from_watchlist(u_id, job_id):
     conn = db.get_db()
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM watchlist WHERE user_id = ? AND job_id = ?;", (u_id, job_id))
+    cur.execute("SELECT * FROM watchlist WHERE user_id = '%s' AND job_id = '%s';" % (u_id, job_id))
 
     if cur.rowcount != 0:
-        cur.execute("DELETE FROM watchlist WHERE user_id = ? AND job_id = ?;", (u_id, job_id))
+        cur.execute("DELETE FROM watchlist WHERE user_id = '%s' AND job_id = '%s';" % (u_id, job_id))
         conn.commit()
 
 
