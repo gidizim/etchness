@@ -210,7 +210,7 @@ def get_signup():
         error = None
         if pw != pw2:
             error = "Passwords does not match"
-        elif (re.search(regex, email)):
+        elif (not re.search(regex, email)):
             error = "Invalid email address"
         if error == None:
             try:
@@ -218,9 +218,11 @@ def get_signup():
                 session['user_id'] = u_id
                 return redirect(url_for('get_home'))
             except Exception as e:
+                print("Exception raised", e)
                 flash(e)
         else:
             flash(error)
+
     return render_template('signup.html')
         
 @app.route('/resetpassword')
