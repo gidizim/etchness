@@ -83,7 +83,8 @@ def get_combined_results(useragent, ip, descrip, location, full_time, part_time,
             'company': job['company'],
             'created': job['created_at'],
             'url': job['url'],
-            'salary': 'Unknown'
+            'salary': 'Unknown',
+            'in_watchlist': False
         }
         job_results.append(info)
     
@@ -112,7 +113,8 @@ def get_combined_results(useragent, ip, descrip, location, full_time, part_time,
                 'company': company,
                 'created': job['created'],
                 'url': job['redirect_url'],
-                'salary': salary
+                'salary': salary,
+                'in_watchlist': False
             }
             job_results.append(info)
 
@@ -132,7 +134,8 @@ def get_combined_results(useragent, ip, descrip, location, full_time, part_time,
                 'company': job['company'],
                 'created': job['date'],
                 'url': job['url'],
-                'salary': job['salary']
+                'salary': job['salary'],
+                'in_watchlist': False
             }
             job_results.append(info)
 

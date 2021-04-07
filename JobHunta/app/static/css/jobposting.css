@@ -20,6 +20,8 @@
     border-radius: 20px;
     cursor: pointer;
     color: rgb(31, 30, 30);
+    text-align: center;
+    align-items: center;
 }
 
 .item:hover {
@@ -85,4 +87,8 @@ h3 {
     justify-content: space-evenly;
     width: 30%;
     margin: auto;
+}
+
+.active {
+    background-color: transparent;
 }

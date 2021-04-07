@@ -65,6 +65,8 @@
     <h1 id="recommend_text"><a href="#recommendation" id="recommend_header"> Recommended Jobs </a></h1>
     <div class="container" id="recommendation">
         {% for job in jobs %}
+            {% set index = loop.index %}
+            {% set new_id = "add" + index|string %}
             <div class="item" onclick="createJobPosting(event, {{job|striptags}}, '/')">
                 {% if job.job_type == 'Unknown'%}
                     {% set jobtype = ''%}
@@ -85,6 +87,11 @@
                 {% set descrip = job.description|striptags%}
                 <p>...{{descrip[:250]}}...</p>
                 <p> <b>Posted on:</b> {{job.created|striptags}} </p>
+                {% if job.in_watchlist %}
+                    <input id={{new_id}} class="button" type="button" value="Remove from watchlist" onclick="addToWatchlist({{job}}, '{{new_id}}')"></input>
+                {% else %}
+                    <input id={{new_id}} class="button" type="button" value="Add to watchlist" onclick="addToWatchlist({{job}}, '{{new_id}}')"></input>
+                {% endif %}
             </div>
         {% endfor %}
     </div>

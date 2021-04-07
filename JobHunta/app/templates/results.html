@@ -8,6 +8,7 @@
         <script src="{{ url_for('static', filename='js/navbarload.js') }}"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/watchlist.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/jobposting.css') }}">
 
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -20,10 +21,14 @@
         <div id="nav"></div>
         <div class="title">Search Results</div>
         {{ pagination.links }}
-        <div id="job-container">
+        <div id="watchlist-container">
+            {% if jobs == [] %}
+                <h3>No results</h3>
+            {% endif %}
             {% for job in jobs %}
-                {{ loop.index + pagination.skip }}
-                <div class="item" onclick="createJobPosting(event, {{job|striptags}}, '/results')">
+                {% set index = loop.index %}
+                {% set new_id = "add" + index|string %}
+                <div class="item" onclick="createJobPosting(event, {{job|striptags}}, '/')">
                     {% if job.job_type == 'Unknown'%}
                         {% set jobtype = ''%}
                     {% elif job.job_type == 'part_time' %}
@@ -43,6 +48,11 @@
                     {% set descrip = job.description|striptags%}
                     <p>...{{descrip[:250]}}...</p>
                     <p> <b>Posted on:</b> {{job.created|striptags}} </p>
+                    {% if job.in_watchlist %}
+                        <input id={{new_id}} class="button" type="button" value="Remove from watchlist" onclick="addToWatchlist({{job}}, '{{new_id}}')"></input>
+                    {% else %}
+                        <input id={{new_id}} class="button" type="button" value="Add to watchlist" onclick="addToWatchlist({{job}}, '{{new_id}}')"></input>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>

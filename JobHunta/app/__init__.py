@@ -52,7 +52,8 @@ def get_home():
                 'company': job['company'],
                 'created': job['created_at'],
                 'url': job['url'],
-                'salary': 'Unknown'
+                'salary': 'Unknown',
+                'in_watchlist': False
             }
             jobs.append(info)
             append_popular_job(info)
@@ -84,11 +85,16 @@ JOBS_PER_PAGE = 15
 @app.route('/results', methods=['GET', 'POST'])
 def get_job_results():
     global jobs
+    
+    u_id = session.get('user_id')
     page = request.args.get(get_page_parameter(), type=int, default=1)
     i = (page - 1) * JOBS_PER_PAGE
     curr_jobs = jobs[i : i + JOBS_PER_PAGE]
     pagination = Pagination(page=page, per_page=JOBS_PER_PAGE, total=len(jobs), record_name='jobs')
-
+    for job in curr_jobs:
+        if in_watchlist(u_id, job['url']):
+            job['in_watchlist'] = True
+            
     if request.method != 'POST':
         print("in get")
         return render_template('results.html', jobs=curr_jobs, pagination=pagination)
@@ -116,6 +122,10 @@ def get_job_results():
     jobs = get_combined_results(useragent, ip, descrip, data['location'], full_time, part_time, job_type, data['page'])
     
     curr_jobs = jobs[i : i + JOBS_PER_PAGE]
+    for job in curr_jobs:
+        if in_watchlist(u_id, job['url']):
+            job['in_watchlist'] = True
+
     print(len(jobs))
     return render_template('results.html', jobs=curr_jobs, pagination=pagination)
     
@@ -134,11 +144,8 @@ def get_job():
         prev = data['prev']
 
     u_id = session.get('user_id')
-    if u_id is not None:
-        added = in_watchlist(u_id, job['url'])
-    print(job['url'])
-    print(added)
-    return render_template('jobposting.html', job=job, prev=prev, added=added)
+    
+    return render_template('jobposting.html', job=job, prev=prev)
 
 
 @app.route('/addToWatchlist', methods=['GET', 'POST'])
