@@ -2,7 +2,7 @@ from flask.templating import render_template_string
 from .newsfeed import getNews
 from .getJobs import get_combined_results, get_github_results
 from flask import Flask
-from flask import render_template, request, url_for, redirect, session, g
+from flask import render_template, request, url_for, redirect, session, flash
 from flask_paginate import Pagination, get_page_parameter
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
@@ -68,8 +68,12 @@ def get_news():
     return render_template('newsfeed.html', articles=articles['articles'][:5])
 
 @app.route('/components/<file>')
-def get_component(file="home.html"):
-    return render_template("components/" + file)
+def get_component(file):
+    login=False
+    u_id = session.get('user_id')
+    if u_id is not None:
+        login = True
+    return render_template("components/" + file, login=login)
 
 @app.route('/<file>')
 def get_html(file="home.html"):
@@ -129,35 +133,43 @@ def get_job():
         job = data['job']
         prev = data['prev']
 
-    if in_watchlist('q', job['url']):
-        added = True
-    else:
-        added = False
-
+    u_id = session.get('user_id')
+    if u_id is not None:
+        added = in_watchlist(u_id, job['url'])
     print(job['url'])
     print(added)
     return render_template('jobposting.html', job=job, prev=prev, added=added)
 
 
-
 @app.route('/addToWatchlist', methods=['GET', 'POST'])
 def add_watchlist_job():
-    # call db function
-    add_to_watchlist('q', request.get_json()['job'])
+    u_id = session.get('user_id')
+    if u_id is not None:
+        # call db function
+        add_to_watchlist(u_id, request.get_json()['job'])
+    else:
+        redirect(url_for('get_home'))
     return 'Success', 200
 
 @app.route('/removeFromWatchlist', methods=['GET', 'POST'])
 def remove_watchlist_job():
-    # call db function
-    remove_from_watchlist('q', request.get_json()['url'])
+    u_id = session.get('user_id')
+    if u_id is not None:
+        # call db function
+        remove_from_watchlist(u_id, request.get_json()['url'])
+    else:
+        redirect(url_for('get_home'))
+
     return 'Success', 200
 
 @app.route('/watchlist')
 def get_watchlist_jobs():
-    # get watchlist from db
-    
-    # plz change these 'q' back to u_id once implemented
-    jobs = get_watchlist('q')
+    u_id = session.get('user_id')
+    if u_id is not None:
+        print("logged in")
+        jobs = get_watchlist(u_id)
+    else:
+        redirect(url_for('get_home'))
     return render_template('watchlist.html', jobs=jobs)
 
 @app.route('/profile')
@@ -172,21 +184,18 @@ def before_request_func():
         print("logged in")
         # change view depending on logged in
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def get_login():
-    email = "test"
-    password = "test"
-    error = None
-
-    if error is None:
-        session.clear()
+    if request.method == 'POST':
+        email = request.form.get('login_email')
+        password = request.form.get('login_pw')
         try:
+            session.clear()
             u_id = auth.login(email, password)
             session['user_id'] = u_id
             return redirect(url_for('get_home'))
         except:
-            print("error")
-
+            flash("Invalid email or password")
     return render_template('login.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -200,21 +209,18 @@ def get_signup():
         regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
         error = None
         if pw != pw2:
-            print("passwords doesnt match")
-            # error = passwords no match
+            error = "Passwords does not match"
         elif (re.search(regex, email)):
-            print("invalid email")
-            # error = invalid email
-            #blah blah maybe more checks, e.g. user exists
-
+            error = "Invalid email address"
         if error == None:
-            u_id = auth.signup(email, generate_password_hash(pw, method='sha256') ,fname, lname)
-            session['user_id'] = u_id
-            return redirect(url_for('get_home'))
+            try:
+                u_id = auth.signup(email, generate_password_hash(pw, method='sha256') ,fname, lname)
+                session['user_id'] = u_id
+                return redirect(url_for('get_home'))
+            except Exception as e:
+                flash(e)
         else:
-            print(error)
-            # flash error
-        return redirect(url_for('get_login'))
+            flash(error)
     return render_template('signup.html')
         
 @app.route('/resetpassword')
@@ -226,7 +232,7 @@ def test_db():
     return render_template("home.html")
 
 @app.route('/logout')
-def logout():
+def get_logout():
     session.pop('user_id', None) 
     return redirect(url_for('get_home'))
 

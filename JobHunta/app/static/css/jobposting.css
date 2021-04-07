@@ -1,6 +1,6 @@
 
 .title {
-    font-family: 'Bebas Neue', cursive;
+    font-family: 'Varela Round', sans-serif;
     font-size: 400%;
     text-align: center;
     margin: auto;
@@ -85,8 +85,4 @@ h3 {
     justify-content: space-evenly;
     width: 30%;
     margin: auto;
-}
-
-.active {
-    background-color: transparent;
 }

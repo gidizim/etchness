@@ -20,9 +20,12 @@
 
         <div class="profile-box">
             <h1>Log in</h1>
-            <form class="login" action="home.html" method="post">
-                <input type="text" placeholder="Email" name="email" required>
-                <input type="password" placeholder="Password" name="password" required>
+            <form class="login" method="post">
+                <input type="text" placeholder="Email" name="login_email" id="login_email"required>
+                <input type="password" placeholder="Password" name="login_pw" id="login_pw" required>
+                {% for message in get_flashed_messages() %}
+                    <div class="flash">{{ message }}</div>
+                {% endfor %}
                 <br>
                 <p>Haven't signed up yet? 
                     <a href="{{url_for('get_signup')}}">Create an account</a>

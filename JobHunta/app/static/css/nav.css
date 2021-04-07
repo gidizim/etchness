@@ -41,12 +41,16 @@ footer {
     font-size: 17px;
 }
 
+#logout {
+    float:right;
+}
 #login {
     float:right;
 }
 #signup {
     float:right;
 }
+
 
 /* Change the color of links on hover */
 .navMenu a:hover {

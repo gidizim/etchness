@@ -16,7 +16,7 @@ def signup(email, password, first_name, last_name):
         db.close_db()
 
         # Raise error
-        raise ValueError("Email already taken")
+        raise ValueError("Account with Email exists")
 
     # Creating user and obtaining u_id
     cur.execute("INSERT INTO user (email, password, first_name, last_name) VALUES (?, ?, ?, ?);", data)

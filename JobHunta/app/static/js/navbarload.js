@@ -7,6 +7,8 @@ function navLoaded()
         $('#home').addClass('active');
     else if (path == 'login')
         $('#login').addClass('active');
+    else if (path == 'signup')
+        $('#signup').addClass('active');
     else if (path == 'watchlist')
         $('#watchlist').addClass('active');
     else if (path == 'profile')
