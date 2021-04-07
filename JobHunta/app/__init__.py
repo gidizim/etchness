@@ -8,10 +8,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from . import auth
 from .popular import get_popular_jobs, append_popular_job, clear_popular_job
-from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist
+from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, in_watchlist
+from .user import get_user_details
 import os
 import re
-from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, in_watchlist
 # TODO need to add view functionality for if user is logged in or not
 
 
@@ -168,9 +168,12 @@ def get_watchlist_jobs():
         redirect(url_for('get_home'))
     return render_template('watchlist.html', jobs=jobs)
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 def get_profile():
-    return render_template('profile.html')
+    u_id = session['user_id']
+    user_info = get_user_details(u_id)
+    print(user_info)
+    return render_template('profile.html', user_info=user_info)
 
 @app.before_request
 def before_request_func():
