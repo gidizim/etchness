@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from . import auth
 from .popular import get_popular_jobs, append_popular_job, clear_popular_job
-from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist
+from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, reset_watchlist
 import os
 import re
 from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, in_watchlist
@@ -28,20 +28,28 @@ except OSError:
     pass
 
 db.init_app(app)
-
 app.secret_key= b'\x8b\x13\xac\xcc\x9b(\xdc\xf6\x80^T\xc9y\xd2n\x9d'
 
 @app.route('/')
 def get_home():
     # Show top 5 results
-
-    jobs = get_popular_jobs()
-
-
+    jobs = get_popular_jobs()    
+    print(jobs)
+    u_id = session.get('user_id')
+    login = 0
+    for job in jobs:
+        if u_id is None:
+            # update db
+            reset_watchlist()
+            job['in_watchlist'] = 0
+        else:
+            login = 1
+            added = in_watchlist(u_id, job['url'])
+            job['in_watchlist'] = 1 if added else 0
+        print(job['in_watchlist'])
+    
     if jobs == []:
-
         index = 1
-
         data = get_github_results('software', 'Sydney', False, 1)
         for job in data:
             info = {
@@ -53,7 +61,7 @@ def get_home():
                 'created': job['created_at'],
                 'url': job['url'],
                 'salary': 'Unknown',
-                'in_watchlist': False
+                'in_watchlist': 0,
             }
             jobs.append(info)
             append_popular_job(info)
@@ -61,7 +69,7 @@ def get_home():
             index += 1
 
 
-    return render_template('home.html', jobs=jobs[:6])
+    return render_template('home.html', jobs=jobs[:6], login=login)
 
 @app.route('/newsfeed')
 def get_news():
@@ -70,10 +78,10 @@ def get_news():
 
 @app.route('/components/<file>')
 def get_component(file):
-    login=False
+    login = 0
     u_id = session.get('user_id')
     if u_id is not None:
-        login = True
+        login = 1
     return render_template("components/" + file, login=login)
 
 @app.route('/<file>')
@@ -87,17 +95,22 @@ def get_job_results():
     global jobs
     
     u_id = session.get('user_id')
+    if u_id is not None:
+        login = 1
+    
     page = request.args.get(get_page_parameter(), type=int, default=1)
     i = (page - 1) * JOBS_PER_PAGE
-    curr_jobs = jobs[i : i + JOBS_PER_PAGE]
     pagination = Pagination(page=page, per_page=JOBS_PER_PAGE, total=len(jobs), record_name='jobs')
+    curr_jobs = jobs[i : i + JOBS_PER_PAGE]
     for job in curr_jobs:
         if in_watchlist(u_id, job['url']):
-            job['in_watchlist'] = True
-            
+            job['in_watchlist'] = 1
+
+
     if request.method != 'POST':
         print("in get")
-        return render_template('results.html', jobs=curr_jobs, pagination=pagination)
+        return render_template('results.html', jobs=curr_jobs, pagination=pagination, login=login)
+            
     ip = request.remote_addr
     useragent = request.headers.get('User-Agent')
 
@@ -121,13 +134,8 @@ def get_job_results():
         
     jobs = get_combined_results(useragent, ip, descrip, data['location'], full_time, part_time, job_type, data['page'])
     
-    curr_jobs = jobs[i : i + JOBS_PER_PAGE]
-    for job in curr_jobs:
-        if in_watchlist(u_id, job['url']):
-            job['in_watchlist'] = True
-
     print(len(jobs))
-    return render_template('results.html', jobs=curr_jobs, pagination=pagination)
+    return render_template('results.html', jobs=curr_jobs, pagination=pagination, login=login)
     
 
 job = {}
@@ -136,7 +144,8 @@ prev = None
 def get_job():
     global job
     global prev
-
+    login = 0
+    
     if request.method == 'POST':
         data = request.get_json(force=True)
         print(data)
@@ -144,8 +153,10 @@ def get_job():
         prev = data['prev']
 
     u_id = session.get('user_id')
+    if u_id is not None:
+        login = 1
     
-    return render_template('jobposting.html', job=job, prev=prev)
+    return render_template('jobposting.html', job=job, prev=prev, login=login)
 
 
 @app.route('/addToWatchlist', methods=['GET', 'POST'])
@@ -189,7 +200,6 @@ def before_request_func():
     u_id = session.get('user_id')
     if u_id is not None:
         print("logged in")
-        # change view depending on logged in
 
 @app.route('/login', methods=['GET', 'POST'])
 def get_login():
@@ -217,7 +227,7 @@ def get_signup():
         error = None
         if pw != pw2:
             error = "Passwords does not match"
-        elif (re.search(regex, email)):
+        elif (not re.search(regex, email)):
             error = "Invalid email address"
         if error == None:
             try:
@@ -225,9 +235,11 @@ def get_signup():
                 session['user_id'] = u_id
                 return redirect(url_for('get_home'))
             except Exception as e:
+                print("Exception raised", e)
                 flash(e)
         else:
             flash(error)
+
     return render_template('signup.html')
         
 @app.route('/resetpassword')
@@ -241,6 +253,7 @@ def test_db():
 @app.route('/logout')
 def get_logout():
     session.pop('user_id', None) 
+    reset_watchlist();
     return redirect(url_for('get_home'))
 
 if __name__ == "__main__":

@@ -88,9 +88,9 @@
                 <p>...{{descrip[:250]}}...</p>
                 <p> <b>Posted on:</b> {{job.created|striptags}} </p>
                 {% if job.in_watchlist %}
-                    <input id={{new_id}} class="button" type="button" value="Remove from watchlist" onclick="addToWatchlist({{job}}, '{{new_id}}')"></input>
+                    <input id={{new_id}} class="button" type="button" value="Remove from watchlist" onclick="addToWatchlist({{job}}, '{{new_id}}', {{login}})"></input>
                 {% else %}
-                    <input id={{new_id}} class="button" type="button" value="Add to watchlist" onclick="addToWatchlist({{job}}, '{{new_id}}')"></input>
+                    <input id={{new_id}} class="button" type="button" value="Add to watchlist" onclick="addToWatchlist({{job}}, '{{new_id}}', {{login}})"></input>
                 {% endif %}
             </div>
         {% endfor %}

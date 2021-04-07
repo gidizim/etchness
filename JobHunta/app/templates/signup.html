@@ -25,6 +25,9 @@
                 <input type="text" placeholder="Email" name="reg_email" id="reg_email" required>
                 <input type="password" placeholder="Password" name="reg_pw" id="reg_pw" required>   
                 <input type="password" placeholder="Confirm password" name="reg_pw2" id="reg_pw2" required>
+                {% for message in get_flashed_messages() %}
+                    <div class="flash">{{ message }}</div>
+                {% endfor %}
                 <p>Have an account already? 
                     <a href="{{url_for('get_login')}}">Log in</a>
                 </p>

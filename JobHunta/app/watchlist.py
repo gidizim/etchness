@@ -80,7 +80,7 @@ def in_watchlist(u_id, job_id):
 
     return len(result) > 0
 
-# Removes job posting to watchlist
+# Removes job posting from watchlist
 def remove_from_watchlist(u_id, job_id):
     # Getting db and cursor
     conn = db.get_db()
@@ -97,3 +97,13 @@ def remove_from_watchlist(u_id, job_id):
     db.close_db()
 
     return True
+
+# reset in_watchlist in job table
+def reset_watchlist():
+    # Getting db and cursor
+    conn = db.get_db()
+    cur = conn.cursor()
+
+    cur.execute("UPDATE job SET in_watchlist = ? WHERE in_watchlist = ?;", (False, True))
+
+    db.close_db()

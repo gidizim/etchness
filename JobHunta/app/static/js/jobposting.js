@@ -4,7 +4,7 @@ const createJobPosting = (event, job, prevPage) => {
     // do nothing if buttons are clicked
     if (event.target.value == 'Remove from watchlist') return;
     if (event.target.value == 'Add to watchlist') return;
-
+    
     console.log(job);
     const details = {
         'job': job,
@@ -24,7 +24,13 @@ const createJobPosting = (event, job, prevPage) => {
 
 
 // update db
-const addToWatchlist = (job, id) => {
+const addToWatchlist = (job, id, loggedIn) => {
+    console.log(loggedIn);
+    if (!loggedIn) {
+        window.location.href = "/login";
+        return;
+    }
+
     console.log(id);
     const button = document.getElementById(id);
     if (button.value == "Add to watchlist") {
