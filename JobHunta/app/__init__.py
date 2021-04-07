@@ -213,9 +213,11 @@ def get_signup():
                 session['user_id'] = u_id
                 return redirect(url_for('get_home'))
             except Exception as e:
+                print("Exception raised", e)
                 flash(e)
         else:
             flash(error)
+
     return render_template('signup.html')
         
 @app.route('/resetpassword')
