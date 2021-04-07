@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from . import auth
 from .popular import get_popular_jobs, append_popular_job, clear_popular_job
-from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, in_watchlist
+from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, reset_watchlist, in_watchlist
 from .user import get_user_details, set_user_details, reset_password
 import os
 import re
@@ -39,13 +39,24 @@ except OSError:
     pass
 
 db.init_app(app)
-
 app.secret_key= b'\x8b\x13\xac\xcc\x9b(\xdc\xf6\x80^T\xc9y\xd2n\x9d'
 
 @app.route('/')
 def get_home():
     # Show top 5 results
     jobs = get_popular_jobs()
+    u_id = session.get('user_id')
+    login = 0
+    for job in jobs:
+        if u_id is None:
+            # update db
+            reset_watchlist()
+            job['in_watchlist'] = 0
+        else:
+            login = 1
+            added = in_watchlist(u_id, job['url'])
+            job['in_watchlist'] = 1 if added else 0
+    
     if jobs == []:
         index = 1
         data = get_github_results('software', 'Sydney', False, 1)
@@ -58,7 +69,8 @@ def get_home():
                 'company': job['company'],
                 'created': job['created_at'],
                 'url': job['url'],
-                'salary': 'Unknown'
+                'salary': 'Unknown',
+                'in_watchlist': 0,
             }
             jobs.append(info)
             append_popular_job(info)
@@ -66,7 +78,7 @@ def get_home():
             index += 1
 
 
-    return render_template('home.html', jobs=jobs[:6])
+    return render_template('home.html', jobs=jobs[:6], login=login)
 
 @app.route('/newsfeed')
 def get_news():
@@ -75,10 +87,10 @@ def get_news():
 
 @app.route('/components/<file>')
 def get_component(file):
-    login=False
+    login = 0
     u_id = session.get('user_id')
     if u_id is not None:
-        login = True
+        login = 1
     return render_template("components/" + file, login=login)
 
 @app.route('/<file>')
@@ -90,14 +102,24 @@ JOBS_PER_PAGE = 15
 @app.route('/results', methods=['GET', 'POST'])
 def get_job_results():
     global jobs
+    
+    u_id = session.get('user_id')
+    if u_id is not None:
+        login = 1
+    
     page = request.args.get(get_page_parameter(), type=int, default=1)
     i = (page - 1) * JOBS_PER_PAGE
-    curr_jobs = jobs[i : i + JOBS_PER_PAGE]
     pagination = Pagination(page=page, per_page=JOBS_PER_PAGE, total=len(jobs), record_name='jobs')
+    curr_jobs = jobs[i : i + JOBS_PER_PAGE]
+    for job in curr_jobs:
+        if in_watchlist(u_id, job['url']):
+            job['in_watchlist'] = 1
+
 
     if request.method != 'POST':
         print("in get")
-        return render_template('results.html', jobs=curr_jobs, pagination=pagination)
+        return render_template('results.html', jobs=curr_jobs, pagination=pagination, login=login)
+            
     ip = request.remote_addr
     useragent = request.headers.get('User-Agent')
 
@@ -121,9 +143,8 @@ def get_job_results():
         
     jobs = get_combined_results(useragent, ip, descrip, data['location'], full_time, part_time, job_type, data['page'])
     
-    curr_jobs = jobs[i : i + JOBS_PER_PAGE]
     print(len(jobs))
-    return render_template('results.html', jobs=curr_jobs, pagination=pagination)
+    return render_template('results.html', jobs=curr_jobs, pagination=pagination, login=login)
     
 
 job = {}
@@ -132,8 +153,8 @@ prev = None
 def get_job():
     global job
     global prev
-    login=False
-    added=False
+    login = 0
+    
     if request.method == 'POST':
         data = request.get_json(force=True)
         print(data)
@@ -142,10 +163,9 @@ def get_job():
 
     u_id = session.get('user_id')
     if u_id is not None:
-        added = in_watchlist(u_id, job['url'])
-        login = True
-
-    return render_template('jobposting.html', job=job, prev=prev, added=added, login=login)
+        login = 1
+    
+    return render_template('jobposting.html', job=job, prev=prev, login=login)
 
 
 @app.route('/addToWatchlist', methods=['GET', 'POST'])
@@ -277,6 +297,7 @@ def test_db():
 @app.route('/logout')
 def get_logout():
     session.pop('user_id', None) 
+    reset_watchlist();
     return redirect(url_for('get_home'))
 
 if __name__ == "__main__":

@@ -1,7 +1,10 @@
 
 const createJobPosting = (event, job, prevPage) => {
     console.log(event.target)
-    if (event.target.value == 'Remove from Watchlist') return;
+    // do nothing if buttons are clicked
+    if (event.target.value == 'Remove from watchlist') return;
+    if (event.target.value == 'Add to watchlist') return;
+    
     console.log(job);
     const details = {
         'job': job,
@@ -21,9 +24,15 @@ const createJobPosting = (event, job, prevPage) => {
 
 
 // update db
-const addToWatchlist = (job) => {
-    console.log(job)
-    const button = document.getElementById('add');
+const addToWatchlist = (job, id, loggedIn) => {
+    console.log(loggedIn);
+    if (!loggedIn) {
+        window.location.href = "/login";
+        return;
+    }
+
+    console.log(id);
+    const button = document.getElementById(id);
     if (button.value == "Add to watchlist") {
         fetch('/addToWatchlist', {
             method: 'POST',
@@ -73,8 +82,4 @@ const removeJob = (job, url) => {
             console.log(response);
         }).catch((error) => console.log(error))
     }
-}
-// go back to home or results page
-const clickBack = () => {
-    location.href='/results'
 }

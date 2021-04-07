@@ -21,6 +21,7 @@ def get_popular_jobs():
         curr_job['created'] = row['created']
         curr_job['url'] = row['url']
         curr_job['salary'] = row['salary']
+        curr_job['in_watchlist'] = row['in_watchlist']
 
         results.append(dict(curr_job))
 
@@ -46,10 +47,11 @@ def append_popular_job(job_posting):
                 job_posting['company'],
                 job_posting['created'],
                 job_posting['url'],
-                job_posting['salary'])
+                job_posting['salary'],
+                job_posting['in_watchlist'])
 
 
-    cur.execute("INSERT INTO job VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?) ;", job_data)
+    cur.execute("INSERT INTO job VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ;", job_data)
     cur.execute("INSERT INTO popular VALUES ( ? ) ;", (job_id,))
 
     conn.commit()

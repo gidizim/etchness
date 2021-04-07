@@ -22,6 +22,7 @@ def get_watchlist(u_id):
         curr_job['salary'] = row['salary']
         curr_job['url'] = row['url']
         curr_job['created'] = row['created']
+        curr_job['in_watchlist'] = row['in_watchlist']
 
         results.append(curr_job)
 
@@ -37,7 +38,7 @@ def add_to_watchlist(u_id, job_posting):
 
     job_id = job_posting['url']
 
-
+    in_watchlist = True;
     job_data = (job_id,
                 job_posting['title'],
                 job_posting['job_type'],
@@ -46,16 +47,20 @@ def add_to_watchlist(u_id, job_posting):
                 job_posting['company'],
                 job_posting['created'],
                 job_posting['url'],
-                job_posting['salary'])
+                job_posting['salary'],
+                in_watchlist)
 
-    # only add if not already in job list
 
     cur.execute("INSERT INTO watchlist VALUES (?, ?);", (u_id, job_id))
 
     cur.execute("SELECT * FROM job WHERE id = '%s';" % job_id)
     result = cur.fetchall()
+    # only add if not already in job list
     if len(result) == 0:
-        cur.execute("INSERT INTO job VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ;", job_data)
+        cur.execute("INSERT INTO job VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ;", job_data)
+    # update in_watchlist to True
+    else:
+        cur.execute("UPDATE job SET in_watchlist = ? WHERE id = ?;", (in_watchlist, job_id))
 
     conn.commit()
     db.close_db()
@@ -75,13 +80,14 @@ def in_watchlist(u_id, job_id):
 
     return len(result) > 0
 
-# Removes job posting to watchlist
+# Removes job posting from watchlist
 def remove_from_watchlist(u_id, job_id):
     # Getting db and cursor
     conn = db.get_db()
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM watchlist WHERE user_id = '%s' AND job_id = '%s';" % (u_id, job_id))
+    cur.execute("UPDATE job SET in_watchlist = ? WHERE id = ?;", (False, job_id))
 
     if cur.rowcount != 0:
         cur.execute("DELETE FROM watchlist WHERE user_id = '%s' AND job_id = '%s';" % (u_id, job_id))
@@ -91,3 +97,13 @@ def remove_from_watchlist(u_id, job_id):
     db.close_db()
 
     return True
+
+# reset in_watchlist in job table
+def reset_watchlist():
+    # Getting db and cursor
+    conn = db.get_db()
+    cur = conn.cursor()
+
+    cur.execute("UPDATE job SET in_watchlist = ? WHERE in_watchlist = ?;", (False, True))
+
+    db.close_db()

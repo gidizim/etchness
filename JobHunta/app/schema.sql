@@ -37,7 +37,8 @@ CREATE TABLE job (
   company TEXT,
   created TEXT,
   url TEXT,
-  salary INTEGER
+  salary INTEGER,
+  in_watchlist BOOLEAN
 );
 
 CREATE TABLE popular (
