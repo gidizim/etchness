@@ -277,13 +277,13 @@ def get_resetpw():
                 print(token)
                 sent = True
                 email = email
-                # mail = Mail(app)
-                # msg = Message()
-                # msg.subject = "JobHunta Password reset"
-                # msg.sender = "jobhunta.etchness@gmail.com"
-                # msg.recipients = [email]
-                # msg.html = render_template("resetpw_defaultmsg.html", token=token)
-                # mail.send(msg)
+                mail = Mail(app)
+                msg = Message()
+                msg.subject = "JobHunta Password reset"
+                msg.sender = "jobhunta.etchness@gmail.com"
+                msg.recipients = [email]
+                msg.html = render_template("resetpw_defaultmsg.html", token=token)
+                mail.send(msg)
                 print("fucking kill me")
                 render_template("resetpw.html", sent=sent, verify=verify, email=email)
             except Exception as e:
@@ -309,6 +309,7 @@ def get_resetpw():
                 flash("Passwords do not match")
             else:
                 reset_password(get_user_id(email), generate_password_hash(pw, method='sha256'))
+                return redirect(url_for('get_login'))
     return render_template('resetpw.html', sent=sent, verify=verify, email=email)
 
 @app.route('/db_testing')
