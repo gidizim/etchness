@@ -14,6 +14,7 @@ def get_user_details(u_id):
 
         raise ValueError("Invalid user id")
 
+    data = data[0]
     result = {}
     result['email'] = data['email']
     result['password'] = '**********'
@@ -37,7 +38,7 @@ def set_user_details(u_id, email, first_name, last_name):
 
         raise ValueError("Invalid user id")
 
-    cur.execute("UPDATE user SET email = '%s', first_name = '%s', last_name = '%s' WHERE id = '%s'"
+    cur.execute("UPDATE user SET email = '%s', first_name = '%s', last_name = '%s' WHERE id = '%s';"
                 % (email, first_name, last_name, u_id))
 
     conn.commit()
@@ -55,7 +56,7 @@ def reset_password(u_id, hashed_password):
 
         raise ValueError("Invalid user id")
 
-    cur.execute("UPDATE user SET password = '%s' WHERE id = '%s'"
+    cur.execute("UPDATE user SET password = '%s' WHERE id = '%s';"
                 % (hashed_password, u_id))
 
     conn.commit()
