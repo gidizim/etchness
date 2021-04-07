@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="static/js/index.js"></script>
-    <script src="static/js/navbarload.js"></script>
+    <script src="../static/js/index.js"></script>
+    <script src="../static/js/navbarload.js"></script>
 
-    <link href="static/css/login.css" rel="stylesheet" type="text/css" />
-    <link href="static/css/nav.css" rel="stylesheet" type="text/css" />
+    <link href="../static/css/login.css" rel="stylesheet" type="text/css" />
+    <link href="../static/css/nav.css" rel="stylesheet" type="text/css" />
 
     <!-- font -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -20,14 +20,22 @@
         <div id="nav"></div>
         <div class="profile-box">
             <h1>Forgot password?</h1>
-            <form class="reset" action="home.html" method="post">
-                <input type="text" placeholder="Email" required>
-                <input type="password" placeholder="New password" name="password" required>   
-                <input type="password" placeholder="Confirm new password" name="confirmpw" required>
+            <p>Enter the email you created your account with and a link will be sent</p>
+            <form class="reset"  method="post">
+                <input type="text" placeholder="Email" name="reset_email" required>
+                <input class="submit-btn" type="submit" name="email_button" value="Send Email"></input>
+                <input type="text" placeholder="Token">
+                {% for message in get_flashed_messages() %}
+                    <div class="flash">{{ message }}</div>
+                {% endfor %}
+                <input class="submit-btn" type="submit" name="token_button" value="Verify Token"></input>
+
+                <input type="text" placeholder="New password" required>
+                <input type="text" placeholder="Confirm new password" required>
+                <input class="submit-btn" type="submit" name="password_button" value="Change password"></input>
                 <p>Have an account already? 
                     <a href="{{url_for('get_login')}}">Log in</a>
                 </p>
-                <input class="submit-btn" type="submit" value="Change password"></input>
             </form>
         </div>
         

@@ -29,6 +29,7 @@ body {
     border: none;
     cursor: pointer;
     font-family: 'Montserrat', sans-serif;
+    text-align: center;
     outline: none;
 }
 

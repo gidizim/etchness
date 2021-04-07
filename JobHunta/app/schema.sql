@@ -3,6 +3,8 @@ DROP TABLE IF EXISTS watchlist;
 DROP TABLE IF EXISTS popular;
 DROP TABLE IF EXISTS applied;
 DROP TABLE IF EXISTS job;
+DROP TABLE IF EXISTS password_reset;
+
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,6 +44,12 @@ CREATE TABLE job (
 CREATE TABLE popular (
   job_id TEXT NOT NULL,
   FOREIGN KEY (job_id) REFERENCES job(id)
+);
+
+CREATE TABLE password_reset (
+    email TEXT UNIQUE,
+    token TEXT,
+    FOREIGN KEY (email) REFERENCES user(email)
 );
 
 --INSERT INTO user (username, password, first_name, last_name) VALUES ('qwer', 'qwer', 'qwer', 'qwer');

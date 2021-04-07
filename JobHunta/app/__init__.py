@@ -1,17 +1,21 @@
+from mmap import ACCESS_DEFAULT
 from flask.templating import render_template_string
 from .newsfeed import getNews
 from .getJobs import get_combined_results, get_github_results
 from flask import Flask
 from flask import render_template, request, url_for, redirect, session, flash
+from flask_mail import Mail, Message
 from flask_paginate import Pagination, get_page_parameter
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from . import auth
 from .popular import get_popular_jobs, append_popular_job, clear_popular_job
-from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, reset_watchlist
+from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, reset_watchlist, in_watchlist
+from .user import get_user_details, set_user_details, reset_password
 import os
 import re
-from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, in_watchlist
+import string
+import random
 # TODO need to add view functionality for if user is logged in or not
 
 
@@ -19,6 +23,13 @@ app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
     SECRET_KEY='dev',
     DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+)
+app.config.update(
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT=465,
+    MAIL_USE_SSL=True,
+    MAIL_USERNAME = 'Jobhunta.Etchness@gmail.com',
+    MAIL_PASSWORD = 'SENG2021!'
 )
 
 # ensure the instance folder exists
@@ -33,8 +44,7 @@ app.secret_key= b'\x8b\x13\xac\xcc\x9b(\xdc\xf6\x80^T\xc9y\xd2n\x9d'
 @app.route('/')
 def get_home():
     # Show top 5 results
-    jobs = get_popular_jobs()    
-    print(jobs)
+    jobs = get_popular_jobs()
     u_id = session.get('user_id')
     login = 0
     for job in jobs:
@@ -46,7 +56,6 @@ def get_home():
             login = 1
             added = in_watchlist(u_id, job['url'])
             job['in_watchlist'] = 1 if added else 0
-        print(job['in_watchlist'])
     
     if jobs == []:
         index = 1
@@ -184,22 +193,27 @@ def remove_watchlist_job():
 def get_watchlist_jobs():
     u_id = session.get('user_id')
     if u_id is not None:
-        print("logged in")
         jobs = get_watchlist(u_id)
     else:
         redirect(url_for('get_home'))
     return render_template('watchlist.html', jobs=jobs)
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 def get_profile():
-    return render_template('profile.html')
-
-@app.before_request
-def before_request_func():
-    print("before_request is running!")
-    u_id = session.get('user_id')
-    if u_id is not None:
-        print("logged in")
+    u_id = session['user_id']
+    user_info = get_user_details(u_id)
+    if u_id is None:
+        redirect(url_for('get_home'))
+    if request.method == 'POST':
+        email = request.form.get('pro_email')
+        fname = request.form.get('pro_fname')
+        lname = request.form.get('pro_lname')
+        try:
+            set_user_details(u_id, email, fname, lname)
+            redirect(url_for('get_profile'))
+        except Exception as e:
+            flash(e)
+    return render_template('profile.html', user_info=user_info)
 
 @app.route('/login', methods=['GET', 'POST'])
 def get_login():
@@ -242,8 +256,26 @@ def get_signup():
 
     return render_template('signup.html')
         
-@app.route('/resetpassword')
+@app.route('/resetpw', methods = ['GET', 'POST'])
 def get_resetpw():
+    if request.method == 'POST':
+        print("================",request.form)
+        if "email_button" in request.form:
+            # generates 6 digit token
+            token = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+            email = request.form.get('reset_email')
+            mail = Mail(app)
+            msg = Message()
+            msg.subject = "JobHunta Password reset"
+            msg.sender = "jobhunta.etchness@gmail.com"
+            msg.recipients = [email]
+            msg.html = render_template("resetpw_defaultmsg.html", token=token)
+            mail.send(msg)
+        elif "token_button" in request.form:
+            print("check token")
+            
+        elif "password_button" in request.form:
+            print("reset password")
     return render_template('resetpw.html')
 
 @app.route('/db_testing')

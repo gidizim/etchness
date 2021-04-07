@@ -2,7 +2,6 @@
 function navLoaded()
 {
     var path = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
-    console.log(path)
     if (path == 'home')
         $('#home').addClass('active');
     else if (path == 'login')

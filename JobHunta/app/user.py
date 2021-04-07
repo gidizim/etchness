@@ -25,18 +25,18 @@ def get_user_details(u_id):
 
     return result
 
-# Returns a dictionary of user details from the database
+# Updates the given user's information in db
 def set_user_details(u_id, email, first_name, last_name):
     conn = db.get_db()
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM user WHERE id = '%s';" % u_id)
+    cur.execute("SELECT * FROM user WHERE email = '%s';" % email)
 
     data = cur.fetchall()
-    if len(data) == 0:
+    if len(data) != 0:
         db.close_db()
 
-        raise ValueError("Invalid user id")
+        raise ValueError("Account with Email already taken")
 
     cur.execute("UPDATE user SET email = '%s', first_name = '%s', last_name = '%s' WHERE id = '%s';"
                 % (email, first_name, last_name, u_id))

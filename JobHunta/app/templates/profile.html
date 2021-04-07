@@ -27,7 +27,7 @@
                         <label><b>First name:</b></label>
                     </td>
                     <td>
-                        <input type="text" disabled value="John" name="profile"></label>
+                        <input type="text" disabled value={{user_info.first_name}} name="pro_fname" id="pro_fname"></label>
                     </td>
                 </tr>
                 <tr>
@@ -35,7 +35,7 @@
                         <label><b>Last name:</b></label>
                     </td>
                     <td>
-                        <input type="text" disabled value="Smith" name="profile"></label>
+                        <input type="text" disabled value={{user_info.last_name}} name="pro_lname" id="pro_lname"></label>
                     </td>
                 </tr>
                 <tr>
@@ -43,21 +43,15 @@
                         <label><b>Email: </b></label>
                     </td>
                     <td>
-                        <input type="text" disabled value="john.smith@gmail.com" name="profile"></label>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label><b>Password:</b></label>
-                    </td>
-                    <td>
-                        <input type="password" disabled value="*********" name="profile"></label>
+                        <input type="text" disabled value={{user_info.email}} name="pro_email" id="pro_email"></label>
                     </td>
                 </tr>
             </table>
             </br>
             <input class="submit-btn" id="edit-btn" onclick="edit()" type="submit" value="Edit profile"></input>
+            <input class="submit-btn" id="resetpw-btn" onclick="{{url_for('get_resetpw')}}" type="button" value="Reset password"></input>
         </div>
+
         <div id="footer"></div>
     </body>
 

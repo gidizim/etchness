@@ -1,5 +1,6 @@
 from . import db
 from werkzeug.security import check_password_hash, generate_password_hash
+from random import seed, randint
 
 # Attempts to signup with user details, returns a user id to be used as a token
 def signup(email, password, first_name, last_name):
@@ -53,7 +54,36 @@ def login(email, password):
     return u_id
 
 
-# Since we aren't doing token checking atm, there is no token to invalidate
-def logout(token):
-    return True
+def add_reset_token(email, token):
+    conn = db.get_db()
+    cur = conn.cursor()
 
+    cur.execute("SELECT * FROM user WHERE email = '%s';" % email)
+
+    data = cur.fetchall()
+    if len(data) != 0:
+        cur.execute("INSERT INTO password_reset VALUES (?, ?);", (email, token))
+        conn.commit()
+        db.close_db()
+        return True
+    else:
+        db.close_db()
+        raise ValueError("No user with given email")
+
+def check_reset_token(email, token):
+    conn = db.get_db()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM password_reset WHERE email = '%s' AND token = '%s';" % (email, token))
+
+    data = cur.fetchall()
+
+    if len(data) == 1:
+        cur.execute("DELETE FROM password_reset WHERE email = '%s' AND token = '%s';" % (email, token))
+        conn.commit()
+        db.close_db()
+        return True
+
+    else:
+        db.close_db()
+        return False
