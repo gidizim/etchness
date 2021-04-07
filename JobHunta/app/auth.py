@@ -58,7 +58,7 @@ def login(email, password):
 def logout(token):
     return True
 
-def generate_reset_token(email):
+def generate_reset_token(email, token):
     conn = db.get_db()
     cur = conn.cursor()
 
@@ -70,10 +70,6 @@ def generate_reset_token(email):
         raise ValueError("No user with given email")
 
     cur.execute("SELECT * FROM password_reset WHERE email = '%s';" % email)
-
-    token = ""
-    for i in range(4):
-        token += str(randint(0, 9))
 
     data = cur.fetchall()
 
@@ -91,9 +87,6 @@ def generate_reset_token(email):
 def check_reset_token(email, token):
     conn = db.get_db()
     cur = conn.cursor()
-
-    if len(token) != 4:
-        raise ValueError("Invalid Token")
 
     cur.execute("SELECT * FROM password_reset WHERE email = '%s' AND token = '%s';" % (email, token))
 
