@@ -14,6 +14,7 @@ def get_user_details(u_id):
 
         raise ValueError("Invalid user id")
 
+    data = data[0]
     result = {}
     result['email'] = data['email']
     result['password'] = '**********'
