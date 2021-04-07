@@ -51,9 +51,3 @@ def login(email, password):
     # Saving changes and disconnecting from DB
     db.close_db()
     return u_id
-
-
-# Since we aren't doing token checking atm, there is no token to invalidate
-def logout(token):
-    return True
-
