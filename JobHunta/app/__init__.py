@@ -223,8 +223,6 @@ def get_resetpw():
 
 @app.route('/db_testing')
 def test_db():
-    auth.signup("qwertman2", "1", "qwer", "qwer")
-    auth.login("qwertman2", "1")
     return render_template("home.html")
 
 @app.route('/logout')

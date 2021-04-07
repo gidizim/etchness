@@ -28,22 +28,22 @@ def signup(email, password, first_name, last_name):
 
     return u_id
 
-# Attempts to log in returns boolean on whether it was successful or not
+# Attempts to log in returns u_id
 def login(email, password):
     conn = db.get_db()
     cur = conn.cursor()
 
     cur.execute("SELECT id, password FROM user WHERE email = '%s';" % email)
 
-    if len(cur.fetchall()) == 0:
+    data = cur.fetchall()
+    if len(data) == 0:
         db.close_db()
         raise ValueError("No user with given email")
 
+    # Getting u_id
+    (u_id, expected_password) = data[0]
 
-    (u_id, expected_password) = cur.fetchall()
-
-    check_password_hash(expected_password, password)
-
+    # Checking password
     if not check_password_hash(expected_password, password):
         db.close_db()
         raise ValueError("Incorrect password")

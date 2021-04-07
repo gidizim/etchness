@@ -38,6 +38,7 @@ def add_to_applied(u_id, job_posting):
     cur.execute("SELECT * FROM job WHERE  job_id = ?;", job_id)
 
     if cur.rowcount != 0:
+        pass
 
 
     job_data = (job_posting['id'],
