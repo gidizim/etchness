@@ -189,7 +189,7 @@ def get_profile():
         fname = request.form.get('pro_fname')
         lname = request.form.get('pro_lname')
         try:
-            set_user_details(u_id, email, fname, lname)
+            set_user_details(u_id, email.lower(), fname, lname)
             redirect(url_for('get_profile'))
         except Exception as e:
             flash(e)
@@ -202,7 +202,7 @@ def get_login():
         password = request.form.get('login_pw')
         try:
             session.clear()
-            u_id = auth.login(email, password)
+            u_id = auth.login(email.lower(), password)
             session['user_id'] = u_id
             return redirect(url_for('get_home'))
         except:
@@ -225,7 +225,7 @@ def get_signup():
             error = "Invalid email address"
         if error == None:
             try:
-                u_id = auth.signup(email, generate_password_hash(pw, method='sha256') ,fname, lname)
+                u_id = auth.signup(email.lower(), generate_password_hash(pw, method='sha256') ,fname, lname)
                 session['user_id'] = u_id
                 return redirect(url_for('get_home'))
             except Exception as e:
@@ -239,24 +239,36 @@ def get_signup():
 @app.route('/resetpw', methods = ['GET', 'POST'])
 def get_resetpw():
     if request.method == 'POST':
-        print("================",request.form)
         if "email_button" in request.form:
             # generates 6 digit token
             token = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
             email = request.form.get('reset_email')
-            mail = Mail(app)
-            msg = Message()
-            msg.subject = "JobHunta Password reset"
-            msg.sender = "jobhunta.etchness@gmail.com"
-            msg.recipients = [email]
-            msg.html = render_template("resetpw_defaultmsg.html", token=token)
-            mail.send(msg)
+            try:
+                auth.add_reset_token(email.lower(), token)
+                # mail = Mail(app)
+                # msg = Message()
+                # msg.subject = "JobHunta Password reset"
+                # msg.sender = "jobhunta.etchness@gmail.com"
+                # msg.recipients = [email]
+                # msg.html = render_template("resetpw_defaultmsg.html", token=token)
+                # mail.send(msg)
+                print("fucking kill me")
+                redirect("resetpw.html", sent=True, verify=False, email=email)
+            except Exception as e:
+                flash(e)
         elif "token_button" in request.form:
-            print("check token")
-            
+            token = request.form.get('reset_token')
+            email = request.form.get('reset_email')
+            if (auth.check_reset_token(email.lower(), token)):
+                print("valid")
+                render_template('resetpw.html', verify=True)
+            else:
+                flash("Token is invalid")
+                render_template('resetpw.html',verify=False, email=email)
         elif "password_button" in request.form:
+            # TODO
             print("reset password")
-    return render_template('resetpw.html')
+    return render_template('resetpw.html', verify=False)
 
 @app.route('/db_testing')
 def test_db():

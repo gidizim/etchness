@@ -62,7 +62,11 @@ def add_reset_token(email, token):
 
     data = cur.fetchall()
     if len(data) != 0:
-        cur.execute("INSERT INTO password_reset VALUES (?, ?);", (email, token))
+        cur.execute("SELECT * FROM password_reset WHERE email = '%s';" % email)
+        if len(cur.fetchall()) == 1:
+            cur.execute("UPDATE password_reset SET token = '%s' WHERE email = '%s';" % (token, email))
+        else:
+            cur.execute("INSERT INTO password_reset VALUES (?, ?);", (email, token))
         conn.commit()
         db.close_db()
         return True

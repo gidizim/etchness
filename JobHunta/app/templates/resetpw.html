@@ -19,20 +19,28 @@
     <body>
         <div id="nav"></div>
         <div class="profile-box">
-            <h1>Forgot password?</h1>
-            <p>Enter the email you created your account with and a link will be sent</p>
-            <form class="reset"  method="post">
-                <input type="text" placeholder="Email" name="reset_email" required>
-                <input class="submit-btn" type="submit" name="email_button" value="Send Email"></input>
-                <input type="text" placeholder="Token">
+            <h1>Change Password</h1>
+            <p>Enter the email you created your account with and a verification token will be sent</p>
+            <form class="reset"  method="post" autocomplete="off">
                 {% for message in get_flashed_messages() %}
-                    <div class="flash">{{ message }}</div>
+                <div class="flash">{{ message }}</div>
                 {% endfor %}
-                <input class="submit-btn" type="submit" name="token_button" value="Verify Token"></input>
 
-                <input type="text" placeholder="New password" required>
-                <input type="text" placeholder="Confirm new password" required>
-                <input class="submit-btn" type="submit" name="password_button" value="Change password"></input>
+                {% if verify == false %}
+                    {% if sent == false %}
+                        <input type="text" placeholder="Email" name="reset_email" required>
+                        <input class="submit-btn" type="submit" name="email_button" value="Send Email"></input>
+                    {% else %}
+                        <input type="text" placeholder="Email" name="reset_email" value="{{email}}" required>
+                        <input class="submit-btn" type="submit" name="email_button" value="Send Email"></input>
+                    {% endif %}
+                    <input type="text" placeholder="Token" name="reset_token">
+                    <input class="submit-btn" type="submit" name="token_button" value="Verify Token"></input>
+                {% else %}
+                    <input type="text" placeholder="New password" required>
+                    <input type="text" placeholder="Confirm new password" required>
+                    <input class="submit-btn" type="submit" name="password_button" value="Change password"></input>
+                {% endif %}
                 <p>Have an account already? 
                     <a href="{{url_for('get_login')}}">Log in</a>
                 </p>
