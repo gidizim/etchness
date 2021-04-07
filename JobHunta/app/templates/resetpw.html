@@ -22,7 +22,7 @@
             <h1>Forgot password?</h1>
             <p>Enter the email you created your account with and a link will be sent</p>
             <form class="reset"  method="post">
-                <input type="text" placeholder="Email" required>
+                <input type="text" placeholder="Email" name="reset_email" required>
                 <input class="submit-btn" type="submit" name="email_button" value="Send Email"></input>
                 <input type="text" placeholder="Token">
                 {% for message in get_flashed_messages() %}

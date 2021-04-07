@@ -1,3 +1,4 @@
+from mmap import ACCESS_DEFAULT
 from flask.templating import render_template_string
 from .newsfeed import getNews
 from .getJobs import get_combined_results, get_github_results
@@ -194,13 +195,6 @@ def get_profile():
             flash(e)
     return render_template('profile.html', user_info=user_info)
 
-@app.before_request
-def before_request_func():
-    print("before_request is running!")
-    u_id = session.get('user_id')
-    if u_id is not None:
-        print("logged in")
-
 @app.route('/login', methods=['GET', 'POST'])
 def get_login():
     if request.method == 'POST':
@@ -244,21 +238,24 @@ def get_signup():
         
 @app.route('/resetpw', methods = ['GET', 'POST'])
 def get_resetpw():
-    if request.method == 'post':
-        # generates 6 digit token
-        token = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-
-        mail = Mail(app)
-        msg = Message()
-        msg.subject = "JobHunta password reset"
-        msg.sender = os.getenv('MAIL_USERNAME')
-        msg.html = '''
-            <p>Verification Token</p>
-            <b><p>{{token}}</p><b>
-            <p>If you have not requested a password reset simply ignore this message.</p>
-            <p>Sincerely,</p>
-            <p>JobHunta</p>
-        '''
+    if request.method == 'POST':
+        print("================",request.form)
+        if "email_button" in request.form:
+            # generates 6 digit token
+            token = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+            email = request.form.get('reset_email')
+            mail = Mail(app)
+            msg = Message()
+            msg.subject = "JobHunta Password reset"
+            msg.sender = "jobhunta.etchness@gmail.com"
+            msg.recipients = [email]
+            msg.html = render_template("resetpw_defaultmsg.html", token=token)
+            mail.send(msg)
+        elif "token_button" in request.form:
+            print("check token")
+            
+        elif "password_button" in request.form:
+            print("reset password")
     return render_template('resetpw.html')
 
 @app.route('/db_testing')
