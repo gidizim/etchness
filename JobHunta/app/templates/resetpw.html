@@ -37,8 +37,8 @@
                     <input type="text" placeholder="Token" name="reset_token">
                     <input class="submit-btn" type="submit" name="token_button" value="Verify Token"></input>
                 {% else %}
-                    <input type="text" placeholder="New password" required>
-                    <input type="text" placeholder="Confirm new password" required>
+                    <input type="text" placeholder="New password" name="reset_pw" required>
+                    <input type="text" placeholder="Confirm new password"  name="reset_pw2" required>
                     <input class="submit-btn" type="submit" name="password_button" value="Change password"></input>
                 {% endif %}
                 <p>Have an account already? 

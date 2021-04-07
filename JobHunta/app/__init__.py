@@ -11,7 +11,7 @@ from . import db
 from . import auth
 from .popular import get_popular_jobs, append_popular_job, clear_popular_job
 from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, reset_watchlist, in_watchlist
-from .user import get_user_details, set_user_details, reset_password
+from .user import get_user_details, get_user_id, set_user_details, reset_password
 import os
 import re
 import string
@@ -259,6 +259,7 @@ def get_signup():
 @app.route('/resetpw', methods = ['GET', 'POST'])
 def get_resetpw():
     if request.method == 'POST':
+        email = request.form.get('reset_email')
         if "email_button" in request.form:
             # generates 6 digit token
             token = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
@@ -273,7 +274,7 @@ def get_resetpw():
                 # msg.html = render_template("resetpw_defaultmsg.html", token=token)
                 # mail.send(msg)
                 print("fucking kill me")
-                redirect("resetpw.html", sent=True, verify=False, email=email)
+                render_template("resetpw.html", sent=True, verify=False, email=email)
             except Exception as e:
                 flash(e)
         elif "token_button" in request.form:
@@ -286,8 +287,12 @@ def get_resetpw():
                 flash("Token is invalid")
                 render_template('resetpw.html',verify=False, email=email)
         elif "password_button" in request.form:
-            # TODO
-            print("reset password")
+            pw = request.form.get('reset_pw')
+            pw2 = request.form.get('reset_pw2')
+            if (pw != pw2):
+                flash("Passwords do not match")
+            else:
+                reset_password(get_user_id(email), generate_password_hash(pw, method='sha256'))
     return render_template('resetpw.html', verify=False)
 
 @app.route('/db_testing')
