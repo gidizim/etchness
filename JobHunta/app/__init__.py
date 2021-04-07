@@ -255,16 +255,27 @@ def get_signup():
             flash(error)
 
     return render_template('signup.html')
-        
+sent = False
+email = ''
+verify = False
 @app.route('/resetpw', methods = ['GET', 'POST'])
 def get_resetpw():
+    global sent
+    global email
+    global verify
     if request.method == 'POST':
+        print(request.form)
         if "email_button" in request.form:
+            sent = False
+            print("sent: " + str(sent))
             # generates 6 digit token
             token = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
             email = request.form.get('reset_email')
             try:
                 auth.add_reset_token(email.lower(), token)
+                print(token)
+                sent = True
+                email = email
                 # mail = Mail(app)
                 # msg = Message()
                 # msg.subject = "JobHunta Password reset"
@@ -273,22 +284,27 @@ def get_resetpw():
                 # msg.html = render_template("resetpw_defaultmsg.html", token=token)
                 # mail.send(msg)
                 print("fucking kill me")
-                redirect("resetpw.html", sent=True, verify=False, email=email)
+                render_template("resetpw.html", sent=sent, verify=verify, email=email)
             except Exception as e:
+                sent = False
                 flash(e)
         elif "token_button" in request.form:
+            print(sent)
+            print("in token")
             token = request.form.get('reset_token')
             email = request.form.get('reset_email')
+            
             if (auth.check_reset_token(email.lower(), token)):
                 print("valid")
-                render_template('resetpw.html', verify=True)
+                verify = True
+                render_template('resetpw.html', sent=sent, verify=verify, email=email)
             else:
                 flash("Token is invalid")
-                render_template('resetpw.html',verify=False, email=email)
+                render_template('resetpw.html', sent=sent, verify=verify, email=email)
         elif "password_button" in request.form:
             # TODO
             print("reset password")
-    return render_template('resetpw.html', verify=False)
+    return render_template('resetpw.html', sent=sent, verify=verify, email=email)
 
 @app.route('/db_testing')
 def test_db():

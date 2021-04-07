@@ -25,21 +25,17 @@
                 {% for message in get_flashed_messages() %}
                 <div class="flash">{{ message }}</div>
                 {% endfor %}
-
-                {% if verify == false %}
-                    {% if sent == false %}
-                        <input type="text" placeholder="Email" name="reset_email" required>
-                        <input class="submit-btn" type="submit" name="email_button" value="Send Email"></input>
-                    {% else %}
-                        <input type="text" placeholder="Email" name="reset_email" value="{{email}}" required>
-                        <input class="submit-btn" type="submit" name="email_button" value="Send Email"></input>
-                    {% endif %}
-                    <input type="text" placeholder="Token" name="reset_token">
-                    <input class="submit-btn" type="submit" name="token_button" value="Verify Token"></input>
-                {% else %}
+                {% if verify %}
                     <input type="text" placeholder="New password" required>
                     <input type="text" placeholder="Confirm new password" required>
                     <input class="submit-btn" type="submit" name="password_button" value="Change password"></input>
+                {% else %}
+                    <input type="text" placeholder="Email" name="reset_email" value="{{email}}" required>
+                    <input class="submit-btn" type="submit" name="email_button" value="Send Email"></input>
+                    {% if sent %}
+                        <input type="text" placeholder="Token" name="reset_token">
+                        <input class="submit-btn" type="submit" name="token_button" value="Verify Token"></input>
+                    {% endif %}
                 {% endif %}
                 <p>Have an account already? 
                     <a href="{{url_for('get_login')}}">Log in</a>
