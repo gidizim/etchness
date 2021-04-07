@@ -1,5 +1,6 @@
 from . import db
 from werkzeug.security import check_password_hash, generate_password_hash
+from random import seed, randint
 
 # Attempts to signup with user details, returns a user id to be used as a token
 def signup(email, password, first_name, last_name):
@@ -51,3 +52,48 @@ def login(email, password):
     # Saving changes and disconnecting from DB
     db.close_db()
     return u_id
+
+
+def generate_reset_token(email):
+    conn = db.get_db()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM user WHERE email = '%s';" % email)
+
+    data = cur.fetchall()
+    if len(data) == 0:
+        db.close_db()
+        raise ValueError("No user with given email")
+
+    cur.execute("SELECT * FROM password_reset WHERE email = '%s';" % email)
+
+    token = ""
+    for i in range(4):
+        token += str(randint(0, 9))
+
+    data = cur.fetchall()
+
+    if len(data) == 0:
+        cur.execute("INSERT INTO password_reset VALUES (?, ?);", (email, token))
+
+    else:
+        cur.execute("UPDATE password_reset SET token = '%s' WHERE email = '%s';" % (token, email))
+
+    conn.commit()
+    db.close_db()
+
+    return token
+
+def check_reset_token(email, token):
+    conn = db.get_db()
+    cur = conn.cursor()
+
+    if len(token) != 4:
+        raise ValueError("Invalid Token")
+
+    cur.execute("SELECT * FROM password_reset WHERE email = '%s' AND token = '%s';" % (email, token))
+
+    data = cur.fetchall()
+
+    db.close_db()
+    return len(data) == 1
