@@ -69,7 +69,6 @@ def add_reset_token(email, token):
     else:
         db.close_db()
         raise ValueError("No user with given email")
-    return False
 
 def check_reset_token(email, token):
     conn = db.get_db()
@@ -79,5 +78,12 @@ def check_reset_token(email, token):
 
     data = cur.fetchall()
 
-    db.close_db()
-    return len(data) == 1
+    if len(data) == 1:
+        cur.execute("DELETE FROM password_reset WHERE email = '%s' AND token = '%s';" % (email, token))
+        conn.commit()
+        db.close_db()
+        return True
+
+    else:
+        db.close_db()
+        return False
