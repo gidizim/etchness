@@ -26,8 +26,8 @@
                 <div class="flash">{{ message }}</div>
                 {% endfor %}
                 {% if verify %}
-                    <input type="text" placeholder="New password" required>
-                    <input type="text" placeholder="Confirm new password" required>
+                    <input type="text" placeholder="New password" name="reset_pw" required>
+                    <input type="text" placeholder="Confirm new password"  name="reset_pw2" required>
                     <input class="submit-btn" type="submit" name="password_button" value="Change password"></input>
                 {% else %}
                     <input type="text" placeholder="Email" name="reset_email" value="{{email}}" required>

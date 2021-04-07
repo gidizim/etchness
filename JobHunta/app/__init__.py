@@ -11,7 +11,7 @@ from . import db
 from . import auth
 from .popular import get_popular_jobs, append_popular_job, clear_popular_job
 from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, reset_watchlist, in_watchlist
-from .user import get_user_details, set_user_details, reset_password
+from .user import get_user_details, get_user_id, set_user_details, reset_password
 import os
 import re
 import string
@@ -265,6 +265,7 @@ def get_resetpw():
     global verify
     if request.method == 'POST':
         print(request.form)
+        # email = request.form.get('reset_email')
         if "email_button" in request.form:
             sent = False
             print("sent: " + str(sent))
@@ -302,8 +303,12 @@ def get_resetpw():
                 flash("Token is invalid")
                 render_template('resetpw.html', sent=sent, verify=verify, email=email)
         elif "password_button" in request.form:
-            # TODO
-            print("reset password")
+            pw = request.form.get('reset_pw')
+            pw2 = request.form.get('reset_pw2')
+            if (pw != pw2):
+                flash("Passwords do not match")
+            else:
+                reset_password(get_user_id(email), generate_password_hash(pw, method='sha256'))
     return render_template('resetpw.html', sent=sent, verify=verify, email=email)
 
 @app.route('/db_testing')
