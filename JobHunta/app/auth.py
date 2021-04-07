@@ -58,7 +58,7 @@ def login(email, password):
 def logout(token):
     return True
 
-def generate_reset_token(email, token):
+def add_reset_token(email, token):
     conn = db.get_db()
     cur = conn.cursor()
 
