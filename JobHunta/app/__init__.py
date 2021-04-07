@@ -12,6 +12,7 @@ from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist
 import os
 import re
 from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, in_watchlist
+from .user import get_user_details, set_user_details, reset_password
 # TODO need to add view functionality for if user is logged in or not
 
 
