@@ -213,7 +213,7 @@ def get_profile():
         try:
             set_user_details(u_id, email.lower(), fname, lname)
             flash("Changes saved")
-            time.sleep(3)
+            
             return redirect(url_for('get_profile'))
         except Exception as e:
             flash(e)
@@ -267,7 +267,7 @@ verify = False
 @app.route('/resetpw', methods = ['GET', 'POST'])
 def get_resetpw():
     global sent
-    global email
+    global email 
     global verify
     if request.method == 'POST':
         print(request.form)
@@ -291,7 +291,7 @@ def get_resetpw():
                 msg.html = render_template("resetpw_defaultmsg.html", token=token)
                 mail.send(msg)
                 print("fucking kill me")
-                render_template("resetpw.html", sent=sent, verify=verify, email=email)
+                return render_template("resetpw.html", sent=sent, verify=verify, email=email)
             except Exception as e:
                 sent = False
                 flash(e)
@@ -304,10 +304,10 @@ def get_resetpw():
             if (auth.check_reset_token(email.lower(), token)):
                 print("valid")
                 verify = True
-                render_template('resetpw.html', sent=sent, verify=verify, email=email)
+                return render_template('resetpw.html', sent=sent, verify=verify, email=email)
             else:
                 flash("Token is invalid")
-                render_template('resetpw.html', sent=sent, verify=verify, email=email)
+                return render_template('resetpw.html', sent=sent, verify=verify, email=email)
         elif "password_button" in request.form:
             pw = request.form.get('reset_pw')
             pw2 = request.form.get('reset_pw2')
