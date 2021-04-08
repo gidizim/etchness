@@ -82,7 +82,7 @@ def get_home():
 
 @app.route('/newsfeed')
 def get_news():
-    articles = getNews("jobs", "en", 3)
+    articles = getNews("Australia Jobs", "en", 3)
     return render_template('newsfeed.html', articles=articles['articles'][:5])
 
 @app.route('/components/<file>')

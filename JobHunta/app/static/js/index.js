@@ -8,7 +8,5 @@ const edit = () => {
         button.value = "Save changes";
         button.style.backgroundColor = "rgb(168, 24, 8)";
     }
-    for (let i = 0; i < profileFeatures.length; i++) {
-        profileFeatures[i].disabled = !profileFeatures[i].disabled;
-    }
+
 }
