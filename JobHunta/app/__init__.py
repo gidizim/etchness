@@ -59,7 +59,7 @@ def get_home():
     
     if jobs == []:
         index = 1
-        data = get_github_results('software', 'Sydney', False, 1)
+        data = get_github_results('software', '', True , 1)
         for job in data:
             info = {
                 'title': job['title'],
@@ -76,8 +76,6 @@ def get_home():
             append_popular_job(info)
 
             index += 1
-
-
     return render_template('home.html', jobs=jobs[:6], login=login)
 
 @app.route('/newsfeed')
@@ -203,6 +201,7 @@ def get_watchlist_jobs():
 @app.route('/profile', methods=['GET', 'POST'])
 def get_profile():
     u_id = session['user_id']
+    print(u_id)
     user_info = get_user_details(u_id)
     if u_id is None:
         redirect(url_for('get_home'))
