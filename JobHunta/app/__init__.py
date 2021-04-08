@@ -102,7 +102,7 @@ JOBS_PER_PAGE = 15
 @app.route('/results', methods=['GET', 'POST'])
 def get_job_results():
     global jobs
-    
+    login = 0
     u_id = session.get('user_id')
     if u_id is not None:
         login = 1
