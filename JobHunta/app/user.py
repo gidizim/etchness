@@ -5,7 +5,6 @@ def get_user_details(u_id):
     conn = db.get_db()
     cur = conn.cursor()
 
-
     cur.execute("SELECT * FROM user WHERE id = '%s';" % u_id)
 
     data = cur.fetchall()
@@ -30,7 +29,7 @@ def set_user_details(u_id, email, first_name, last_name):
     conn = db.get_db()
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM user WHERE email = '%s';" % email)
+    cur.execute("SELECT * FROM user WHERE email = '%s' AND id != '%s';" % (email, u_id))
 
     data = cur.fetchall()
     if len(data) != 0:

@@ -16,6 +16,7 @@ import os
 import re
 import string
 import random
+import time
 # TODO need to add view functionality for if user is logged in or not
 
 
@@ -80,7 +81,7 @@ def get_home():
 
 @app.route('/newsfeed')
 def get_news():
-    articles = getNews("jobs", "en", 3)
+    articles = getNews("Australia Jobs", "en", 3)
     return render_template('newsfeed.html', articles=articles['articles'][:5])
 
 @app.route('/components/<file>')
@@ -175,7 +176,7 @@ def add_watchlist_job():
         # call db function
         add_to_watchlist(u_id, request.get_json()['job'])
     else:
-        redirect(url_for('get_home'))
+        return redirect(url_for('get_home'))
     return 'Success', 200
 
 @app.route('/removeFromWatchlist', methods=['GET', 'POST'])
@@ -185,7 +186,7 @@ def remove_watchlist_job():
         # call db function
         remove_from_watchlist(u_id, request.get_json()['url'])
     else:
-        redirect(url_for('get_home'))
+        return redirect(url_for('get_home'))
 
     return 'Success', 200
 
@@ -195,26 +196,28 @@ def get_watchlist_jobs():
     if u_id is not None:
         jobs = get_watchlist(u_id)
     else:
-        redirect(url_for('get_home'))
+        return redirect(url_for('get_home'))
     return render_template('watchlist.html', jobs=jobs)
 
 @app.route('/profile', methods=['GET', 'POST'])
 def get_profile():
-    u_id = session['user_id']
-    print(u_id)
-    user_info = get_user_details(u_id)
+    u_id = session.get('user_id')
     if u_id is None:
-        redirect(url_for('get_home'))
+        return redirect(url_for('get_home'))
     if request.method == 'POST':
+        user_info = get_user_details(u_id)
         email = request.form.get('pro_email')
         fname = request.form.get('pro_fname')
         lname = request.form.get('pro_lname')
         try:
             set_user_details(u_id, email.lower(), fname, lname)
-            redirect(url_for('get_profile'))
+            flash("Changes saved")
+            return redirect(url_for('get_profile'))
         except Exception as e:
             flash(e)
-    return render_template('profile.html', user_info=user_info)
+    else:
+        user_info = get_user_details(u_id)
+        return render_template('profile.html', user_info=user_info)
 
 @app.route('/login', methods=['GET', 'POST'])
 def get_login():
@@ -320,7 +323,7 @@ def test_db():
 @app.route('/logout')
 def get_logout():
     session.pop('user_id', None) 
-    reset_watchlist();
+    reset_watchlist()
     return redirect(url_for('get_home'))
 
 if __name__ == "__main__":
