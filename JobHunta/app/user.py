@@ -65,16 +65,16 @@ def reset_password(u_id, hashed_password):
 def get_user_id(email):
     conn = db.get_db()
     cur = conn.cursor()
-    cur.execute("SELECT id FROM user WHERE email = '%s';" % email)
+    cur.execute("SELECT * FROM user WHERE email = '%s';" % email)
     data = cur.fetchall()
     if len(data) == 0:
         db.close_db()
-
         raise ValueError("Invalid email address")
-    
+    data = data[0]
+    data = data['id']
     db.close_db()
-    return data[0]
-
+    return data
+    
 
 
 
