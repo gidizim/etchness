@@ -3,6 +3,7 @@ const searchInput = document.getElementById('search-input');
 const state = document.getElementById('state');
 const suburb = document.getElementById('suburb');
 const jobtype = document.getElementById('jobtype');
+const salary = document.getElementById('salary');
 let page = 0;
 searchBtn.addEventListener('click', () => {
     // event.preventDefault();
@@ -18,13 +19,22 @@ searchBtn.addEventListener('click', () => {
     } else if (state.value == 'None') {
         location = suburb.value
     }
+    
+    let nSalary = salary.value;
+    if (salary.value == 'None' || salary.value == "") {
+        nSalary = 0;
+    }
+    console.log(salary.value);
+    console.log(nSalary);
     console.log(location)
     const info = {
         'description': searchInput.value ? searchInput.value : '',
         'job_type': jobtype.value,
         'location': location,
         'page': page,
+        'salary': nSalary,
     }
+    console.log(info)
     fetch('/results', {
         method: 'POST',
         header: {
@@ -37,7 +47,6 @@ searchBtn.addEventListener('click', () => {
         console.log(response);
         if (response.status === 200) {
             window.location.href = "/results";
-            // "{{ url_for('get_job_results') }}";
         }
         return response.json();
     }).then((data) => {
