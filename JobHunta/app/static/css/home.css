@@ -66,40 +66,6 @@
     outline: none;
     font-family: 'Montserrat', sans-serif;
 }
-/* 
-.item {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    margin: 10px auto;
-    background-color: #FDF2ED;
-    width: 80%;
-    height: 150px;
-    border: 5px solid rgb(252, 76, 56);
-    border-radius: 20px;
-}
-
-.item:hover {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.item p {
-margin: 0.5em;
-}
-
-.thumbnail {
-    display: flex;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    margin-left: 10px;
-    margin-right: 20px;
-    float: left
-}
-
-.description {
-    display: flex;
-    flex-direction: column;
-} */
 
 #recommend_header {
     text-decoration: none;

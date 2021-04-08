@@ -6,8 +6,8 @@
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
         <script src="{{ url_for('static', filename='js/navbarload.js') }}"></script>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/watchlist.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/jobposting.css') }}">
 
@@ -20,6 +20,47 @@
     <body>
         <div id="nav"></div>
         <div class="title">Search Results</div>
+        
+    <div class="search_box">
+        <input type="text" class="search_bar" id="search-input" placeholder="Search For Jobs" >
+        <input type="button" class="search_button" id="search-btn" value="Search">
+    </div>
+    <br>
+    <br>
+    <div class="filters">
+        <b><p> Only show jobs where</p></b>
+        <select id="salary" class="filter">
+            <option value="" selected disabled hidden>Min salary</option>
+            <option value="50 000">50 000</option>
+            <option value="75 000">75 000</option>
+            <option value="100 000">100 000</option>
+            <option value="150 000">150 000</option>
+        </select>
+
+        <select id="jobtype" class="filter">
+            <option value="None" selected disabled hidden>Job type</option>
+            <option value="Full Time">Full Time</option>
+            <option value="Part Time"> Part Time </option>
+        </select>
+
+        <select id="state" class="filter">
+            <option value="None" selected disabled hidden>State</option>
+            <option value="NSW">NSW</option>
+            <option value="VIC">VIC</option>
+            <option value="WA">WA</option>
+            <option value="SA">SA</option>
+            <option value="QLD">QLD</option>
+            <option value="TAS">TAS</option>
+        </select>
+
+        <select id="suburb" class="filter">
+            <option value="None" selected disabled hidden>Suburb</option>
+            <option value="Epping">Epping</option>
+            <option value="Hornsby">Hornsby</option>
+            <option value="Chatswood">Chatswood</option>
+        </select>
+    </div>
+
         {{ pagination.links }}
         <div id="watchlist-container">
             {% if jobs == [] %}
@@ -59,5 +100,6 @@
         {{ pagination.links }}
         <div id="footer"></div>
         <script src="{{ url_for('static', filename='js/jobposting.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/search.js') }}"></script>
     </body>
 </html>
