@@ -11,13 +11,13 @@ searchBtn.addEventListener('click', () => {
     console.log(suburb.value);
     console.log(jobtype.value);
     console.log(searchInput.value);
-    let location = suburb.value + ', ' + state.value;
+    let location = suburb.value + ', ' + state.value + ', ' + 'Australia';
     if (suburb.value == 'None' && state.value == 'None') {
-        location = 'Australia'
+        location = 'Australia';
     } else if (suburb.value == 'None') {
-        location = state.value
+        location = state.value + ', ' + 'Australia';
     } else if (state.value == 'None') {
-        location = suburb.value
+        location = suburb.value + ', ' + 'Australia';
     }
     
     let nSalary = parseInt(salary.value);
@@ -26,7 +26,7 @@ searchBtn.addEventListener('click', () => {
     }
     console.log(salary.value);
     console.log(nSalary);
-    console.log(location)
+    console.log(location);
     const info = {
         'description': searchInput.value ? searchInput.value : '',
         'job_type': jobtype.value,
