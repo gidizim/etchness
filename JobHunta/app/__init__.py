@@ -196,14 +196,14 @@ def get_watchlist_jobs():
     if u_id is not None:
         jobs = get_watchlist(u_id)
     else:
-        return redirect(url_for('get_home'))
+        return redirect(url_for('get_login'))
     return render_template('watchlist.html', jobs=jobs)
 
 @app.route('/profile', methods=['GET', 'POST'])
 def get_profile():
     u_id = session.get('user_id')
     if u_id is None:
-        return redirect(url_for('get_home'))
+        return redirect(url_for('get_login'))
 
     if request.method == 'POST':
         user_info = get_user_details(u_id)
