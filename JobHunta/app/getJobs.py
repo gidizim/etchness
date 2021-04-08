@@ -17,11 +17,12 @@ def get_github_results(descrip, location, full_time, page):
 ADZUNA_API = 'fee7b067359bebd25438ecd0db7c5f95'
 ADZUNA_ID = '0c843767'
 
-def get_adzuna_results(descrip, location, full_time, part_time, page):
+def get_adzuna_results(descrip, location, full_time, part_time, page, salary):
     # assuming that we are only getting jobs in australia
     country = 'au'
     # return results in json
     print(page+1)
+    print(salary)
     baseURL = 'https://api.adzuna.com/v1/api/jobs/au/search/1'
     params = {
         'app_id': ADZUNA_ID,
@@ -30,6 +31,7 @@ def get_adzuna_results(descrip, location, full_time, part_time, page):
         'what': descrip,
         'where': location,
         'sort_by': 'relevance',
+        'salary_min': salary,
         'salary_include_unknown': 1,
         'content-type': 'application/json'
     }
@@ -64,14 +66,14 @@ def get_careerjet_results(client_useragent, client_ip, descrip, location, page, 
                         'page'        : page,
                         # full time or part time (f/p)
                         'contractperiod': job_type,
-                        'pagesize'   : 50
+                        'pagesize'   : 50,
                       })
 
     return result_json
 
-def get_combined_results(useragent, ip, descrip, location, full_time, part_time, job_type, page):
+def get_combined_results(useragent, ip, descrip, location, full_time, part_time, job_type, page, salary):
     job_results = []
-    adzuna_resp = get_adzuna_results(descrip, location, full_time, part_time, page)
+    adzuna_resp = get_adzuna_results(descrip, location, full_time, part_time, page, salary)
     github_resp = get_github_results(descrip, location, full_time, page)
     careerjet_resp = get_careerjet_results(useragent, ip, descrip, location, page, job_type)
     for job in github_resp:
@@ -134,7 +136,7 @@ def get_combined_results(useragent, ip, descrip, location, full_time, part_time,
                 'company': job['company'],
                 'created': job['date'],
                 'url': job['url'],
-                'salary': job['salary'],
+                'salary': 'Unknown',
                 'in_watchlist': False
             }
             job_results.append(info)

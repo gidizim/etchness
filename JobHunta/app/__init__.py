@@ -1,7 +1,7 @@
 from mmap import ACCESS_DEFAULT
 from flask.templating import render_template_string
 from .newsfeed import getNews
-from .getJobs import get_combined_results, get_github_results
+from .getJobs import get_combined_results, get_github_results, get_careerjet_results, get_adzuna_results
 from flask import Flask
 from flask import render_template, request, url_for, redirect, session, flash
 from flask_mail import Mail, Message
@@ -102,7 +102,7 @@ JOBS_PER_PAGE = 15
 @app.route('/results', methods=['GET', 'POST'])
 def get_job_results():
     global jobs
-    
+    login = 0
     u_id = session.get('user_id')
     if u_id is not None:
         login = 1
@@ -114,6 +114,8 @@ def get_job_results():
     for job in curr_jobs:
         if in_watchlist(u_id, job['url']):
             job['in_watchlist'] = 1
+        else:
+            job['in_watchlist'] = 0
 
 
     if request.method != 'POST':
@@ -140,8 +142,8 @@ def get_job_results():
 
     if data['description'] == 'None':
         descrip = ''
-        
-    jobs = get_combined_results(useragent, ip, descrip, data['location'], full_time, part_time, job_type, data['page'])
+    print(data)
+    jobs = get_combined_results(useragent, ip, descrip, data['location'], full_time, part_time, job_type, data['page'], data['salary'])
     
     print(len(jobs))
     return render_template('results.html', jobs=curr_jobs, pagination=pagination, login=login)
