@@ -60,7 +60,7 @@ def get_home():
     
     if jobs == []:
         index = 1
-        data = get_github_results('software', 'Sydney', False, 1)
+        data = get_github_results('software', '', True , 1)
         for job in data:
             info = {
                 'title': job['title'],
@@ -77,8 +77,6 @@ def get_home():
             append_popular_job(info)
 
             index += 1
-
-
     return render_template('home.html', jobs=jobs[:6], login=login)
 
 @app.route('/newsfeed')

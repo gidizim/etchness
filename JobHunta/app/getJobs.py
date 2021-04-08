@@ -27,7 +27,7 @@ def get_adzuna_results(descrip, location, full_time, part_time, page, salary):
     params = {
         'app_id': ADZUNA_ID,
         'app_key': ADZUNA_API,
-        'results_per_page': 50,
+        'results_per_page': 30,
         'what': descrip,
         'where': location,
         'sort_by': 'relevance',
@@ -76,6 +76,8 @@ def get_combined_results(useragent, ip, descrip, location, full_time, part_time,
     adzuna_resp = get_adzuna_results(descrip, location, full_time, part_time, page, salary)
     github_resp = get_github_results(descrip, location, full_time, page)
     careerjet_resp = get_careerjet_results(useragent, ip, descrip, location, page, job_type)
+    print("github " + str(len(github_resp)))
+
     for job in github_resp:
         info = {
             'title': job['title'],

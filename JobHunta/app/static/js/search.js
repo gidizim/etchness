@@ -20,7 +20,7 @@ searchBtn.addEventListener('click', () => {
         location = suburb.value
     }
     
-    let nSalary = salary.value;
+    let nSalary = parseInt(salary.value);
     if (salary.value == 'None' || salary.value == "") {
         nSalary = 0;
     }

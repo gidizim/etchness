@@ -23,7 +23,9 @@
                 <h3>{{job.company}}</h3>
                 <h4>{{job.location}}</h4>
                 <h4>{{job.jobtype}}</h4>
-                <h4>{{job.salary}}</h4>
+                {% if job.salary != 'Unknown' %}
+                    <h4>Salary: {{job.salary}}</h4>
+                {% endif %}
                 <p><b>Posted on:</b> {{job.created}}</p>
             </div>
             <h3>Job description</h3>
