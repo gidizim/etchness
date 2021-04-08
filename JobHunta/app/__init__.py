@@ -204,6 +204,7 @@ def get_profile():
     u_id = session.get('user_id')
     if u_id is None:
         return redirect(url_for('get_home'))
+
     if request.method == 'POST':
         user_info = get_user_details(u_id)
         email = request.form.get('pro_email')
@@ -212,6 +213,7 @@ def get_profile():
         try:
             set_user_details(u_id, email.lower(), fname, lname)
             flash("Changes saved")
+            time.sleep(3)
             return redirect(url_for('get_profile'))
         except Exception as e:
             flash(e)
