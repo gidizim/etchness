@@ -21,34 +21,16 @@
         <div id="nav"></div>
         <div class="profile-box">
             <h1>Profile</h1>
-            <table>
-                <tr>
-                    <td>
-                        <label><b>First name:</b></label>
-                    </td>
-                    <td>
-                        <input type="text" disabled value={{user_info.first_name}} name="pro_fname" id="pro_fname"></label>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label><b>Last name:</b></label>
-                    </td>
-                    <td>
-                        <input type="text" disabled value={{user_info.last_name}} name="pro_lname" id="pro_lname"></label>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label><b>Email: </b></label>
-                    </td>
-                    <td>
-                        <input type="text" disabled value={{user_info.email}} name="pro_email" id="pro_email"></label>
-                    </td>
-                </tr>
-            </table>
-            </br>
-            <input class="submit-btn" id="edit-btn" onclick="edit()" type="submit" value="Edit profile"></input>
+            <form method="post">
+                <input type="text" value={{user_info.first_name}} name="pro_fname" id="pro_fname">
+                <input type="text" value={{user_info.last_name}} name="pro_lname" id="pro_lname">
+                <input type="text" value={{user_info.email}} name="pro_email" id="pro_email">
+                {% for message in get_flashed_messages() %}
+                    <div class="flash">{{ message }}</div>
+                {% endfor %}
+                <input class="submit-btn" id="edit-btn" type="submit" value="Save Changes" ></input>
+            </form>
+
             <input class="submit-btn" id="resetpw-btn" onclick="location.href='/resetpw'" type="button" value="Reset password"></input>
         </div>
 
