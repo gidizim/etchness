@@ -10,7 +10,7 @@
 
         <link rel="stylesheet" href="static/css/nav.css">
         <link rel="stylesheet" href="static/css/newsfeed.css">
-
+        <link rel="stylesheet" href="static/css/search.css">
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
         <!-- font -->
@@ -23,6 +23,30 @@
         <div id="nav"></div>
 
         <div class="title">Newsfeed</div>
+
+        <div class="search_box">
+            <input type="text" class="search_bar" id="search-input" placeholder="Search For news" >
+            <input type="button" class="search_button" id="search-btn" value="Search">
+        </div>
+        <br>
+        <br>
+        <div class="filters">
+            <b><p> Only show news within:</p></b>
+            <select id="timeframe" class="filter">
+                <option value="" selected disabled hidden>Time frame</option>
+                <option value="Day">day</option>
+                <option value="Month">month</option>
+                <option value="Year">year</option>
+            </select>
+    
+            <select id="location" class="filter">
+                <option value="None" selected disabled hidden>Location</option>
+                <option value="Local">Local</option>
+                <option value="National">National</option>
+                <option value="International"> International </option>
+            </select>
+        </div>
+
         <!-- Filler content for actual api implementation -->
         <div class="newsContainer">
             {% for article in articles %}
@@ -39,4 +63,6 @@
 
         <div id="footer"></div>
     </body>
+    <script src="static/js/searchnewsfeed.js"></script>
+    <script src="static/js/jobposting.js"></script>
 </html>
