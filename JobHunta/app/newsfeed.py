@@ -12,7 +12,7 @@ def getNews(keyword, lang, from_days):
                                         domains="9news.com.au, News.com.au, smh.com.au, theguardian.com")
     return articles
 
-def searchednews(location, ntime): 
+def searchednews(location, timeframe): 
     if ntime == "day":
         ntime = date.today()
     elif ntime == "month":
