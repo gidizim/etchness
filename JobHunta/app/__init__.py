@@ -88,9 +88,10 @@ def get_news():
 def get_newsresults():
     ## Why is session.get printing None in terminal
     print("Back end")
-    desc = session.get('description')
-    desc1 = session.get('location')
-    desc2 = session.get('ntime')
+    data = request.get_json(force=True)
+    desc = data['description']
+    desc1 = data['location']
+    desc2 = data['ntime']
     print(desc)
     print(desc1)
     print(desc2)
