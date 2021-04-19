@@ -5,9 +5,6 @@ const location = document.getElementById('location');
 
 searchBtn.addEventListener('click', () => {
 
-    console.log(timeframe.value);
-    console.log(location.value);
-
     let location = location.value;
     if (location == 'None') {
         location = None;
@@ -37,11 +34,10 @@ searchBtn.addEventListener('click', () => {
     const info = {
         'description': searchInput.value ? searchInput.value : '',
         'location': location,
-        'page': page,
         'ntime': ntime,
     }
     console.log(info)
-    fetch('/results', {
+    fetch('/newsresults', {
         method: 'POST',
         header: {
             'Accept': 'application/json',
