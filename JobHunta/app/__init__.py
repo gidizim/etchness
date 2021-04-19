@@ -1,6 +1,6 @@
 from mmap import ACCESS_DEFAULT
 from flask.templating import render_template_string
-from .newsfeed import getNews
+from .newsfeed import getNews, searchednews
 from .getJobs import get_combined_results, get_github_results, get_careerjet_results, get_adzuna_results
 from flask import Flask
 from flask import render_template, request, url_for, redirect, session, flash
@@ -79,8 +79,23 @@ def get_home():
             index += 1
     return render_template('home.html', jobs=jobs[:6], login=login)
 
-@app.route('/newsfeed')
+@app.route('/newsfeed', methods=['GET', 'POST'])
 def get_news():
+    articles = getNews("Australia Jobs", "en", 3)
+    return render_template('newsfeed.html', articles=articles['articles'][:5])
+
+@app.route('/newsresults', methods=['GET', 'POST'])
+def get_newsresults():
+    ## Why is session.get printing None in terminal
+    print("Back end")
+    desc = session.get('description')
+    desc1 = session.get('location')
+    desc2 = session.get('ntime')
+    print(desc)
+    print(desc1)
+    print(desc2)
+
+    ## Below just to keep server quiet
     articles = getNews("Australia Jobs", "en", 3)
     return render_template('newsfeed.html', articles=articles['articles'][:5])
 

@@ -22,7 +22,6 @@ def searchednews(location, ntime):
     articles = newsapi.get_everything(q=keyword,
                                         language=en,
                                         page=1,
-
                                         from_param=ntime,
                                         to=date.today(),
                                         sources="abc-news-au, news-com-au",

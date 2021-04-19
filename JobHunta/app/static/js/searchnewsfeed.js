@@ -1,11 +1,11 @@
 const searchBtn = document.getElementById('search-btn');
 const searchInput = document.getElementById('search-input');
 const timeframe = document.getElementById('timeframe');
-const location = document.getElementById('location');
+const locationfilter = document.getElementById('location');
 
 searchBtn.addEventListener('click', () => {
 
-    let location = location.value;
+    let location = locationfilter.value;
     if (location == 'None') {
         location = None;
     } else if (location == 'Local') {
@@ -48,7 +48,7 @@ searchBtn.addEventListener('click', () => {
     }).then((response) => {
         console.log(response);
         if (response.status === 200) {
-            window.location.href = "/results";
+            window.location.href = "/newsresults";
         }
         return response.json();
     }).then((data) => {
