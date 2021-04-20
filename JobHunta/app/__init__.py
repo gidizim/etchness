@@ -3,7 +3,7 @@ from flask.templating import render_template_string
 from .newsfeed import getNews, searchedNews
 from .getJobs import get_combined_results, get_github_results, get_careerjet_results, get_adzuna_results
 from flask import Flask
-from flask import render_template, request, url_for, redirect, session, flash
+from flask import render_template, request, url_for, redirect, session, flash, jsonify
 from flask_mail import Mail, Message
 from flask_paginate import Pagination, get_page_parameter
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -79,20 +79,34 @@ def get_home():
             index += 1
     return render_template('home.html', jobs=jobs[:6], login=login)
 
+# List of articles is empty when server is first set up
+articles = None
 @app.route('/newsfeed', methods=['GET', 'POST'])
 def get_news():
-    articles = getNews("Australia Jobs", "en", 3)
-    return render_template('newsfeed.html', articles=articles['articles'][:5])
+    # Ensuring articles is getting and setting globally
+    global articles
 
-@app.route('/newsresults', methods=['GET', 'POST'])
-def get_newsresults():
-    data = request.get_json(force=True)
-    description = data['description']
-    location = data['location']
-    timeframe = data['ntime']
-    category = data['category']
-    articles = getNews("Australia Jobs", "en", 3)
-    return render_template('newsfeed.html', articles=articles['articles'][:5])
+    # If post method, update list of articles
+    if request.method == 'POST':
+
+        # Get data from POST request
+        data = request.get_json(force=True)
+        description = data['description']
+        location = data['location']
+        timeframe = data['ntime']
+        category = data['category']
+
+        articles = getNews("Scott", "en", 3)
+
+        # Empty response to indicate success
+        return jsonify({})
+    else:
+        # If no list of articles, then get default list
+        if articles == None:
+            articles = getNews("Australia Jobs", "en", 3)
+
+        # Send back HTML with articles attached, only for GET.
+        return render_template('newsfeed.html', articles=articles['articles'][:5])
 
 
 @app.route('/components/<file>')
@@ -126,7 +140,6 @@ def get_job_results():
             job['in_watchlist'] = 1
         else:
             job['in_watchlist'] = 0
-
 
     if request.method != 'POST':
         print("in get")

@@ -33,7 +33,7 @@ searchBtn.addEventListener('click', () => {
     }
 
     console.log(info)
-    fetch('/newsresults', {
+    fetch('/newsfeed', {
         method: 'POST',
         header: {
             'Accept': 'application/json',
@@ -44,7 +44,7 @@ searchBtn.addEventListener('click', () => {
     }).then((response) => {
         console.log(response);
         if (response.status === 200) {
-            window.location.href = "/newsresults";
+            window.location.href = "/newsfeed";
         }
         return response.json();
     }).then((data) => {
