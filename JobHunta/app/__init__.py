@@ -80,35 +80,42 @@ def get_home():
     return render_template('home.html', jobs=jobs[:6], login=login)
 
 # List of articles is empty when server is first set up
-articles = None
+articles = []
+ARTICLES_PER_PAGE = 15
 @app.route('/newsfeed', methods=['GET', 'POST'])
 def get_news():
-    # Ensuring articles is getting and setting globally
     global articles
-
-    # If post method, update list of articles
-    if request.method == 'POST':
-
-        # Get data from POST request
-        data = request.get_json(force=True)
-        description = data['description']
-        location = data['location']
-        timeframe = data['ntime']
-        category = data['category']
-
-        articles = searchedNews(description,location, timeframe, category)
-        print(location)
-        # Empty response to indicate success
-        print(articles)
-        return render_template('newsfeed.html', articles=articles['articles'][:5])
+    print(request.method)
+    
+    
+    if not articles:
+        articles = getNews('Australia Jobs', 'en', 3)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    i = (page - 1) * ARTICLES_PER_PAGE
+    pagination = Pagination(page=page, per_page=ARTICLES_PER_PAGE, total=len(articles), record_name='articles')
+    print(articles)
+    
+    curr_articles = articles['articles'][i : i + ARTICLES_PER_PAGE]
         
-    else:
-        # If no list of articles, then get default list
-        if articles == None:
-            articles = getNews("Australia Jobs", "en", 3)
+    if request.method != 'POST':
+        return render_template('newsfeed.html', articles=curr_articles, pagination=pagination)
+            
+        #return render_template('newsfeed.html', articles=articles['articles'][:5])
+        
+    # Ensuring articles is getting and setting globally
+    
 
         # Send back HTML with articles attached, only for GET.
-        return render_template('newsfeed.html', articles=articles['articles'][:5])
+    # If post method, update list of articles
+    
+    # Get data from POST request
+    else:
+        data = request.get_json(force=True)
+        description = data['description']
+        articles = getNews(description, 'en', 3)
+    return render_template('newsfeed.html', articles=curr_articles, pagination=pagination)
+        
+   
 
 
 @app.route('/components/<file>')

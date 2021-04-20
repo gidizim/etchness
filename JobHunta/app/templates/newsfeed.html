@@ -56,7 +56,7 @@
                 <option value="us">United States</option>
             </select>
         </div>
-
+        {{ pagination.links }}
         <!-- Filler content for actual api implementation -->
         <div class="newsContainer">
             {% for article in articles %}
@@ -70,7 +70,7 @@
                 </div>
             {% endfor %}  
         </div>
-
+        {{ pagination.links }}
         <div id="footer"></div>
     </body>
     <script src="static/js/searchnewsfeed.js"></script>
