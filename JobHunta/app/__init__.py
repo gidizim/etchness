@@ -81,7 +81,7 @@ def get_home():
 
 # List of articles is empty when server is first set up
 articles = []
-ARTICLES_PER_PAGE = 15
+ARTICLES_PER_PAGE = 5
 @app.route('/newsfeed', methods=['GET', 'POST'])
 def get_news():
     global articles
@@ -92,7 +92,7 @@ def get_news():
         articles = getNews('Australia Jobs', 'en', 3)
     page = request.args.get(get_page_parameter(), type=int, default=1)
     i = (page - 1) * ARTICLES_PER_PAGE
-    pagination = Pagination(page=page, per_page=ARTICLES_PER_PAGE, total=len(articles), record_name='articles')
+    pagination = Pagination(page=page, per_page=ARTICLES_PER_PAGE, total=len(articles['articles']), record_name='articles')
     print(articles)
     
     curr_articles = articles['articles'][i : i + ARTICLES_PER_PAGE]
@@ -112,7 +112,12 @@ def get_news():
     else:
         data = request.get_json(force=True)
         description = data['description']
-        articles = getNews(description, 'en', 3)
+        category = data['category']
+        from_day = data['ntime']
+        country = data['location']
+        stringofwords = description + category + country
+        articles = getNews(description, 'en', from_day)
+        curr_articles = articles['articles'][i : i + ARTICLES_PER_PAGE]
     return render_template('newsfeed.html', articles=curr_articles, pagination=pagination)
         
    

@@ -3,10 +3,16 @@ from datetime import date, timedelta
 newsapi = NewsApiClient(api_key='db0f90a0065445e786863c1ce792fef6')
 
 def getNews(keyword, lang, from_days): 
+    if from_days  == 'Day':
+        from_days = 1
+    elif from_days == 'Month':
+        from_days = 30
+    elif from_days == 'Year':
+        from_days = 365
     articles = newsapi.get_everything(q=keyword,
                                         language=lang,
                                         page=1,
-                                        from_param=date.today() - timedelta(days=from_days),
+                                        from_param=date.today() - timedelta(days=int(from_days)),
                                         to=date.today(),
                                         sources="abc-news-au, news-com-au",
                                         domains="9news.com.au, News.com.au, smh.com.au, theguardian.com")
