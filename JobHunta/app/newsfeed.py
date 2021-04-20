@@ -12,15 +12,10 @@ def getNews(keyword, lang, from_days):
                                         domains="9news.com.au, News.com.au, smh.com.au, theguardian.com")
     return articles
 
-def searchednews(location, timeframe): 
-    if ntime == "day":
-        ntime = date.today()
-    elif ntime == "month":
-        ntime = date.month()
-    elif ntime == "year":
-        ntime = date.year()
-    articles = newsapi.get_everything(q=keyword,
-                                        language=en,
+
+def searchedNews(description,location, timeframe): 
+    articles = newsapi.get_everything(q=description,
+                                        language='en',
                                         page=1,
                                         from_param=ntime,
                                         to=date.today(),

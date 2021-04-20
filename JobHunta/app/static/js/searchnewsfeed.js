@@ -1,41 +1,37 @@
 const searchBtn = document.getElementById('search-btn');
 const searchInput = document.getElementById('search-input');
 const timeframe = document.getElementById('timeframe');
+const categoryfilter = document.getElementById('category');
 const locationfilter = document.getElementById('location');
 
 searchBtn.addEventListener('click', () => {
 
-    let location = locationfilter.value;
-    if (location == 'None') {
-        location = None;
-    } else if (location == 'Local') {
-        location = 'NSW';
-    } else if (location == 'National') {
-        location = 'Australia';
-    } else if (location == 'International') {
-        location =  None;
-    }
-    
     let ntime= timeframe.value;
-    if (timeframe.value == "") {
+    if (timeframe.value == "None") {
         ntime = 0;
     }
-    if (ntime == 'day') {
-        ntime = 'day';
-    } else if (ntime == 'month') {
-        ntime = 'month';
-    } else if (ntime == 'year') {
-        ntime = 'year';
+
+    let location = locationfilter.value;
+    if (location == 'None') {
+        location = 'None';
     }
 
-    console.log(location)
-    console.log(ntime)
+    let category = categoryfilter.value;
+    if (category == 'None') {
+        category = 'None';
+    }
+
+    console.log(ntime);
+    console.log(location);
+    console.log(category);
 
     const info = {
         'description': searchInput.value ? searchInput.value : '',
         'location': location,
         'ntime': ntime,
+        'category': category,
     }
+
     console.log(info)
     fetch('/newsresults', {
         method: 'POST',

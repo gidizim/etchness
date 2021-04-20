@@ -1,6 +1,6 @@
 from mmap import ACCESS_DEFAULT
 from flask.templating import render_template_string
-from .newsfeed import getNews, searchednews
+from .newsfeed import getNews, searchedNews
 from .getJobs import get_combined_results, get_github_results, get_careerjet_results, get_adzuna_results
 from flask import Flask
 from flask import render_template, request, url_for, redirect, session, flash
@@ -86,19 +86,14 @@ def get_news():
 
 @app.route('/newsresults', methods=['GET', 'POST'])
 def get_newsresults():
-    ## Why is session.get printing None in terminal
-    print("Back end")
     data = request.get_json(force=True)
-    desc = data['description']
-    desc1 = data['location']
-    desc2 = data['ntime']
-    print(desc)
-    print(desc1)
-    print(desc2)
-
-    ## Below just to keep server quiet
+    description = data['description']
+    location = data['location']
+    timeframe = data['ntime']
+    category = data['category']
     articles = getNews("Australia Jobs", "en", 3)
     return render_template('newsfeed.html', articles=articles['articles'][:5])
+
 
 @app.route('/components/<file>')
 def get_component(file):
