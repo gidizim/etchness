@@ -22,14 +22,16 @@ searchBtn.addEventListener('click', () => {
     }
 
     console.log(ntime);
-    console.log(location);
     console.log(category);
+    console.log(location);
+    
 
     const info = {
         'description': searchInput.value ? searchInput.value : '',
-        'location': location,
+        
         'ntime': ntime,
         'category': category,
+        'location': location,
     }
 
     console.log(info)

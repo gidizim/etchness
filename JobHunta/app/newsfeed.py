@@ -13,12 +13,36 @@ def getNews(keyword, lang, from_days):
     return articles
 
 
-def searchedNews(description,location, timeframe): 
-    articles = newsapi.get_everything(q=description,
-                                        language='en',
+
+
+def searchedNews(description,location, timeframe, category): 
+    
+    ntime = gettime(timeframe)
+    articles = newsapi.get_everything(q=description  + category,
+                                       
                                         page=1,
-                                        from_param=ntime,
-                                        to=date.today(),
                                         sources="abc-news-au, news-com-au",
-                                        domains="9news.com.au, News.com.au, smh.com.au, theguardian.com")
+                                        domains="9news.com.au, News.com.au, smh.com.au, theguardian.com",
+                                        #cant mix
+                                        #sources='abc-news-au, news-com-au',
+                                        language='en',
+                                        from_param=ntime,
+                                        to=date.today())
+                                        
+                                        #country=location)
+                                        
+                                        #domains="9news.com.au, News.com.au, smh.com.au, theguardian.com")
+    
     return articles
+
+
+def gettime(timeframe): 
+    ntime = date.today()
+    if timeframe == "day":
+        ntime = date.today() - timedelta(days=1)
+    elif timeframe == "month":
+        ntime = date.today() - timedelta(days=30)
+    elif timeframe == "year":
+        ntime = date.today() - timedelta(days=365)
+        
+    return ntime

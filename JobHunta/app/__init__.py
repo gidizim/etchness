@@ -96,10 +96,12 @@ def get_news():
         timeframe = data['ntime']
         category = data['category']
 
-        articles = getNews("Scott", "en", 3)
-
+        articles = searchedNews(description,location, timeframe, category)
+        print(location)
         # Empty response to indicate success
-        return jsonify({})
+        print(articles)
+        return render_template('newsfeed.html', articles=articles['articles'][:5])
+        
     else:
         # If no list of articles, then get default list
         if articles == None:
