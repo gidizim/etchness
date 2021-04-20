@@ -158,8 +158,12 @@ def get_job():
     
     if request.method == 'POST':
         data = request.get_json(force=True)
-        print(data)
+
         job = data['job']
+        job['num_applied'] = 0
+        job['num_responded'] = 0
+        job['num_interviewed'] = 0
+        print(job)
         prev = data['prev']
 
     u_id = session.get('user_id')

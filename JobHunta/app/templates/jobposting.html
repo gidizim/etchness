@@ -27,6 +27,11 @@
                     <h4>Salary: {{job.salary}}</h4>
                 {% endif %}
                 <p><b>Posted on:</b> {{job.created}}</p>
+
+                <p><b> {{job.num_applied}} people have applied.</p>
+                <p><b> {{job.num_responded}} people have received a response.</p>
+                <p><b> {{job.num_interviewed}} people have received an interview or been rejected.</p>
+
             </div>
             <h3>Job description</h3>
             <p class="description">{{job.description}}</p>

@@ -83,3 +83,5 @@ const removeJob = (job, url) => {
         }).catch((error) => console.log(error))
     }
 }
+
+// 2 Buttons, one increments job counter, one resets
