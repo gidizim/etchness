@@ -40,7 +40,6 @@ def add_to_applied(u_id, job_posting):
     if cur.rowcount != 0:
         pass
 
-
     job_data = (job_posting['id'],
                 job_posting['title'],
                 job_posting['job_type'],
@@ -51,8 +50,8 @@ def add_to_applied(u_id, job_posting):
                 job_posting['salary'])
 
 
-    cur.execute("INSERT INTO job VALUES ( ?, ?, ?, ?, ?, ?, ?, ?) ;", job_data)
-    cur.execute("INSERT INTO applied VALUES (?, ?);", (u_id, job_id))
+    cur.execute("INSERT INTO job VALUES (?, ?, ?, ?, ?, ?, ?, ?) ;", job_data)
+    cur.execute("INSERT INTO applied VALUES (?, ?, 1, 0, 0);", (u_id, job_id))
 
     conn.commit()
     db.close_db()
@@ -90,3 +89,23 @@ def remove_from_applied(u_id, job_posting):
     db.close_db()
 
     return True
+
+# Returns a tuple of number of users interviewed/applied etc
+def get_num_applied(job_id):
+    conn = db.get_db()
+    cur = conn.cursor()
+
+    print(job_id)
+    cur.execute("SELECT * FROM applied WHERE job_id = '%s';" % (job_id))
+
+    print(cur.rowcount)
+    if len(cur.fetchall()) == 0:
+        db.close_db()
+        return (0, 0, 0)
+
+    cur.execute("SELECT SUM(responded) + 1, SUM(interviewed), SUM(finalised) FROM applied WHERE job_id = '%s';" % (job_id))
+
+    data = cur.fetchall()
+    data = data[0]
+    db.close_db()
+    return (data[0], data[1], data[2])

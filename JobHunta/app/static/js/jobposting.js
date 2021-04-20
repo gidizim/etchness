@@ -85,3 +85,8 @@ const removeJob = (job, url) => {
 }
 
 // 2 Buttons, one increments job counter, one resets
+const incrementJob = () => {
+    
+}
+
+//

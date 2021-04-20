@@ -17,6 +17,9 @@ CREATE TABLE user (
 CREATE TABLE applied (
   user_id INTEGER NOT NULL,
   job_id INTEGER NOT NULL,
+  responded INTEGER NOT NULL,
+  interviewed INTEGER NOT NULL,
+  finalised INTEGER NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user(id),
   FOREIGN KEY (job_id) REFERENCES job(id)
 );

@@ -43,6 +43,11 @@
                     <input id="add" class="button" type="button" value="Add to watchlist" onclick="addToWatchlist({{job}}, 'add', {{login}})"></input>
                 {% endif %}
                 <input class="button" type="button" value="Apply now" onclick="window.open('{{job.url}}','_blank')"></input>
+                {% if login %}
+                    <input class="button" type="button" value="I've applied" onclick="incrementJob()"></input>
+                {% endif %}
+
+
             </div>
         </div>
         <div id="footer"></div>

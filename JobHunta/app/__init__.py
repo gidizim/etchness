@@ -12,6 +12,7 @@ from . import auth
 from .popular import get_popular_jobs, append_popular_job, clear_popular_job
 from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, reset_watchlist, in_watchlist
 from .user import get_user_details, get_user_id, set_user_details, reset_password
+from .applyJobs import get_num_applied
 import os
 import re
 import string
@@ -160,10 +161,10 @@ def get_job():
         data = request.get_json(force=True)
 
         job = data['job']
-        job['num_applied'] = 0
-        job['num_responded'] = 0
-        job['num_interviewed'] = 0
-        print(job)
+        print(job['url'])
+        applications = get_num_applied(job['url'])
+        (job['num_applied'], job['num_responded'], job['num_interviewed']) = applications
+
         prev = data['prev']
 
     u_id = session.get('user_id')
