@@ -29,7 +29,6 @@ searchBtn.addEventListener('click', () => {
 
     const info = {
         'description': searchInput.value ? searchInput.value : '',
-        
         'ntime': ntime,
         'category': category,
         'location': location,

@@ -10,7 +10,7 @@ def getNews(keyword, lang, from_days):
         from_days = 30
     elif from_days == 'Year':
         from_days = 365
-        
+
 
     articles = newsapi.get_everything(q=keyword,
                                         language=lang,
@@ -44,37 +44,32 @@ def searchedNews(description,location, timeframe, category):
     
     return articles
 
-
-
-def save_most_recent_search(string):
-    if (string == None):
-        string = "Australia Jobs"
+def add_to_searched(u_id, keyword):
+    if (keyword == None):
+        keyword = "Australia Jobs"
     
     conn = db.get_db()
     cur = conn.cursor()
-    cur.execute("SELECT search FROM most_recent_searches;")
+    # TODO: prevent duplicates
+    cur.execute("INSERT INTO searched_keywords VALUES (?, ?);", (u_id, keyword))
 
-    data = cur.fetchall()
-    if len(data) != 0:
-        cur.execute("UPDATE most_recent_searches SET search = '%s';" % (string))
-
-    cur.execute("UPDATE most_recent_searches SET search = '%s';" % (string))
     conn.commit()
     db.close_db()
 
 
-def get_most_recent_search():
+def get_keywords(u_id):
 
     conn = db.get_db()
     cur = conn.cursor()
-    cur.execute("SELECT search FROM most_recent_searches")
-    string = cur.fetchall()
     
-    if (string == None):
-        string = "Australia Jobs"
-        cur.execute("UPDATE most_recent_searches SET search = '%s';" % (string))
-    
+    cur.execute("SELECT * FROM searched_keywords WHERE user_id = '%s';" % u_id);
+
+    keywords = []
+    for row in cur.fetchall():
+        keywords.append(row['keyword']);
+    print(keywords);
+
     conn.commit()
     db.close_db()
 
-    return string
+    return keywords

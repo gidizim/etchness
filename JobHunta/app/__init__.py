@@ -1,6 +1,6 @@
 from mmap import ACCESS_DEFAULT
 from flask.templating import render_template_string
-from .newsfeed import getNews, searchedNews, get_most_recent_search, save_most_recent_search
+from .newsfeed import getNews, searchedNews, get_keywords, add_to_searched
 from .getJobs import get_combined_results, get_github_results, get_careerjet_results, get_adzuna_results
 from flask import Flask
 from flask import render_template, request, url_for, redirect, session, flash, jsonify
@@ -85,13 +85,22 @@ ARTICLES_PER_PAGE = 5
 @app.route('/newsfeed', methods=['GET', 'POST'])
 def get_news():
     global articles
-    
+    u_id = session.get('user_id')
+    # initial display of newsfeed
     if not articles:
-        recent_search = get_most_recent_search()
-        print(recent_search)
-        #articles = getNews(recent_search['string'], 'en', 3)
-        articles = getNews('Australian Jobs', 'en', 3)
+        # for logged in user
+        if u_id:
+            print(get_keywords(u_id))
+            if get_keywords(u_id):
+                # get the most recent 3 words
+                keywords = ' '.join(get_keywords(u_id)[:3]);
+        # for other users
+        else:
+            keywords = 'Australian jobs'
+        print(keywords)
+        articles = getNews(keywords, 'en', 3)
 
+    print(articles)
     page = request.args.get(get_page_parameter(), type=int, default=1)
     i = (page - 1) * ARTICLES_PER_PAGE
     pagination = Pagination(page=page, per_page=ARTICLES_PER_PAGE, total=len(articles['articles']), record_name='articles')
@@ -117,10 +126,12 @@ def get_news():
         from_day = data['ntime']
         country = data['location']
 
-        stringofwords = description + category + country
-        save_most_recent_search(stringofwords) 
+        searched_keywords = description + category + country
+        if u_id:
+            add_to_searched(u_id, searched_keywords) 
 
-        articles = getNews(description, 'en', from_day)
+        articles = getNews(searched_keywords, 'en', from_day)
+        print(searched_keywords);
         curr_articles = articles['articles'][i : i + ARTICLES_PER_PAGE]
     return render_template('newsfeed.html', articles=curr_articles, pagination=pagination)
         
@@ -129,10 +140,12 @@ def get_news():
 
 @app.route('/components/<file>')
 def get_component(file):
+    global articles
     login = 0
     u_id = session.get('user_id')
     if u_id is not None:
         login = 1
+        articles = []
     return render_template("components/" + file, login=login)
 
 @app.route('/<file>')
@@ -366,6 +379,8 @@ def test_db():
 
 @app.route('/logout')
 def get_logout():
+    global articles
+    articles = []
     session.pop('user_id', None) 
     reset_watchlist()
     return redirect(url_for('get_home'))

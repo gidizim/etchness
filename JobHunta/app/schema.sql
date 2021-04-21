@@ -53,9 +53,10 @@ CREATE TABLE password_reset (
     FOREIGN KEY (email) REFERENCES user(email)
 );
 
-CREATE TABLE most_recent_searches (
-    search TEXT
+CREATE TABLE searched_keywords (
+  user_id INTEGER NOT NULL,
+  keyword TEXT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES user(id)
 );
-
 --INSERT INTO user (username, password, first_name, last_name) VALUES ('qwer', 'qwer', 'qwer', 'qwer');
 --SELECT * FROM user;
