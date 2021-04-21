@@ -44,3 +44,15 @@
     margin-bottom: 0px;
     margin-left: 0px;
 }
+
+.pagination ul {
+    display: flex;
+    list-style-type: none;
+    justify-content: space-evenly;
+    width: 30%;
+    margin: auto;
+}
+
+.active {
+    background-color: transparent;
+}

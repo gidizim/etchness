@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS popular;
 DROP TABLE IF EXISTS applied;
 DROP TABLE IF EXISTS job;
 DROP TABLE IF EXISTS password_reset;
+DROP TABLE IF EXISTS most_recent_searches;
 
 
 CREATE TABLE user (
@@ -54,6 +55,10 @@ CREATE TABLE password_reset (
     email TEXT UNIQUE,
     token TEXT,
     FOREIGN KEY (email) REFERENCES user(email)
+);
+
+CREATE TABLE most_recent_searches (
+    search TEXT
 );
 
 --INSERT INTO user (username, password, first_name, last_name) VALUES ('qwer', 'qwer', 'qwer', 'qwer');

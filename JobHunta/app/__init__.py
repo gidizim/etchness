@@ -1,6 +1,6 @@
 from mmap import ACCESS_DEFAULT
 from flask.templating import render_template_string
-from .newsfeed import getNews
+from .newsfeed import getNews, searchedNews, get_most_recent_search, save_most_recent_search
 from .getJobs import get_combined_results, get_github_results, get_careerjet_results, get_adzuna_results
 from flask import Flask
 from flask import render_template, request, url_for, redirect, session, flash, jsonify
@@ -103,10 +103,53 @@ def get_home():
             index += 1
     return render_template('home.html', jobs=jobs[:6], login=login, popup=popup, u_id=u_id, job=nudge_job)
 
-@app.route('/newsfeed')
+# List of articles is empty when server is first set up
+articles = []
+ARTICLES_PER_PAGE = 5
+@app.route('/newsfeed', methods=['GET', 'POST'])
 def get_news():
-    articles = getNews("Australia Jobs", "en", 3)
-    return render_template('newsfeed.html', articles=articles['articles'][:5])
+    global articles
+    
+    if not articles:
+        recent_search = get_most_recent_search()
+        print(recent_search)
+        #articles = getNews(recent_search['string'], 'en', 3)
+        articles = getNews('Australian Jobs', 'en', 3)
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    i = (page - 1) * ARTICLES_PER_PAGE
+    pagination = Pagination(page=page, per_page=ARTICLES_PER_PAGE, total=len(articles['articles']), record_name='articles')
+    
+    curr_articles = articles['articles'][i : i + ARTICLES_PER_PAGE]
+        
+    if request.method != 'POST':
+        return render_template('newsfeed.html', articles=curr_articles, pagination=pagination)
+            
+        #return render_template('newsfeed.html', articles=articles['articles'][:5])
+        
+    # Ensuring articles is getting and setting globally
+    
+
+        # Send back HTML with articles attached, only for GET.
+    # If post method, update list of articles
+    
+    # Get data from POST request
+    else:
+        data = request.get_json(force=True)
+        description = data['description']
+        category = data['category']
+        from_day = data['ntime']
+        country = data['location']
+
+        stringofwords = description + category + country
+        save_most_recent_search(stringofwords) 
+
+        articles = getNews(description, 'en', from_day)
+        curr_articles = articles['articles'][i : i + ARTICLES_PER_PAGE]
+    return render_template('newsfeed.html', articles=curr_articles, pagination=pagination)
+        
+   
+
 
 @app.route('/components/<file>')
 def get_component(file):
@@ -139,7 +182,6 @@ def get_job_results():
             job['in_watchlist'] = 1
         else:
             job['in_watchlist'] = 0
-
 
     if request.method != 'POST':
         print("in get")
