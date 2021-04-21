@@ -146,7 +146,7 @@ def get_nudge_job(u_id):
     conn = db.get_db()
     cur = conn.cursor()
 
-    cur.execute("SELECT job_id FROM applied WHERE user_id = '%s' AND last_updated < datetime('now', '-7 day');" % (u_id))
+    cur.execute("SELECT job_id FROM applied WHERE user_id = '%s' AND finalised = 0 AND last_updated < datetime('now', '-7 day');" % (u_id))
 
     data = cur.fetchall()
     if len(data) == 0:
@@ -156,7 +156,7 @@ def get_nudge_job(u_id):
     data = data[0]
     job_id = data[0]
 
-    cur.execute("SELECT * FROM job WHERE id = '%s';" % (job_id))
+    cur.execute("SELECT * FROM job WHERE id = '%s'" % (job_id))
     data = cur.fetchall()
 
     if len(data) == 0:
