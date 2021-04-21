@@ -7,6 +7,16 @@
     justify-content: center;
 }
 
+#appliedjobs-container {
+    display: flex;
+    margin: auto;
+    width: 75%;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+
+
 .title {
     font-family: 'Varela Round', sans-serif;
     font-size: 100px;

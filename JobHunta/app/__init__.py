@@ -12,13 +12,12 @@ from . import auth
 from .popular import get_popular_jobs, append_popular_job, clear_popular_job
 from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, reset_watchlist, in_watchlist
 from .user import get_user_details, get_user_id, set_user_details, reset_password
+from .applyJobs import get_num_applied, already_applied, add_to_applied, remove_from_applied, get_applied
 import os
 import re
 import string
 import random
 import time
-# TODO need to add view functionality for if user is logged in or not
-
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
@@ -41,13 +40,14 @@ except OSError:
 
 db.init_app(app)
 app.secret_key= b'\x8b\x13\xac\xcc\x9b(\xdc\xf6\x80^T\xc9y\xd2n\x9d'
-
+popup = -1
 @app.route('/')
 def get_home():
+    global popup
     # Show top 5 results
     jobs = get_popular_jobs()
     u_id = session.get('user_id')
-    if not u_id:
+    if u_id is not None:
         reset_watchlist()
         if jobs:
             # if not logged in and popular jobs have been stored in db
@@ -78,7 +78,6 @@ def get_home():
             jobs = get_adzuna_results(keyword, 'Sydney', '', 1, 1, 100)
             if jobs == 'invalid':
                 jobs = get_github_results(keyword, '', True , 1)
-    print("end of if")
     # update watchlist
     for job in jobs:
         added = in_watchlist(u_id, job['url'])
@@ -219,16 +218,43 @@ def get_job():
     
     if request.method == 'POST':
         data = request.get_json(force=True)
-        print(data)
+
         job = data['job']
+        print(job['url'])
+        applications = get_num_applied(job['url'])
+        (job['num_applied'], job['num_responded'], job['num_interviewed'], job['num_finalised']) = applications
+
         prev = data['prev']
 
     u_id = session.get('user_id')
+    flag = 0
+
     if u_id is not None:
+        applied = already_applied(u_id, job['url'])
+
+        for i, res in enumerate(applied):
+            if res == 1:
+                flag = i + 1
+
+        print("Flag", flag)
+
         login = 1
     
-    return render_template('jobposting.html', job=job, prev=prev, login=login)
+    return render_template('jobposting.html', job=job, prev=prev, login=login, u_id=u_id, flag=flag)
 
+@app.route('/applyToJob', methods=['POST'])
+def apply_to_job():
+    data = request.get_json(force=True)
+    add_to_applied(data['u_id'], data['jobposting'])
+
+    return jsonify({})
+
+@app.route('/removeFromJob', methods=['DELETE'])
+def remove_from_job():
+    data = request.get_json(force=True)
+    remove_from_applied(data['u_id'], data['jobposting'])
+
+    return jsonify({})
 
 @app.route('/addToWatchlist', methods=['GET', 'POST'])
 def add_watchlist_job():
@@ -255,10 +281,13 @@ def remove_watchlist_job():
 def get_watchlist_jobs():
     u_id = session.get('user_id')
     if u_id is not None:
-        jobs = get_watchlist(u_id)
+        watchlist_jobs = get_watchlist(u_id)
+        applied_jobs = get_applied(u_id)
     else:
         return redirect(url_for('get_login'))
-    return render_template('watchlist.html', jobs=jobs)
+
+
+    return render_template('watchlist.html', watchlist_jobs=watchlist_jobs, applied_jobs=applied_jobs)
 
 @app.route('/profile', methods=['GET', 'POST'])
 def get_profile():
@@ -341,7 +370,6 @@ def get_resetpw():
             email = request.form.get('reset_email')
             try:
                 auth.add_reset_token(email.lower(), token)
-                print(token)
                 sent = True
                 email = email
                 mail = Mail(app)
@@ -351,14 +379,12 @@ def get_resetpw():
                 msg.recipients = [email]
                 msg.html = render_template("resetpw_defaultmsg.html", token=token)
                 mail.send(msg)
-                print("fucking kill me")
                 return render_template("resetpw.html", sent=sent, verify=verify, email=email)
             except Exception as e:
                 sent = False
                 flash(e)
         elif "token_button" in request.form:
-            print(sent)
-            print("in token")
+
             token = request.form.get('reset_token')
             email = request.form.get('reset_email')
             
