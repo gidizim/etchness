@@ -12,7 +12,7 @@ from . import auth
 from .popular import get_popular_jobs, append_popular_job, clear_popular_job
 from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, reset_watchlist, in_watchlist
 from .user import get_user_details, get_user_id, set_user_details, reset_password
-from .applyJobs import get_num_applied, already_applied, add_to_applied, remove_from_applied, get_applied, get_nudge_job
+from .applyJobs import get_num_applied, already_applied, add_to_applied, remove_from_applied, get_applied, get_nudge_job, update_date
 import os
 import re
 import string
@@ -211,6 +211,14 @@ def apply_to_job():
     data = request.get_json(force=True)
     print(data)
     add_to_applied(data['u_id'], data['jobposting'])
+
+    return jsonify({})
+
+@app.route('/updateJob', methods=['POST'])
+def update_job():
+    data = request.get_json(force=True)
+    print("ran")
+    update_date(data['u_id'], data['jobposting'])
 
     return jsonify({})
 

@@ -38,7 +38,6 @@ def add_to_applied(u_id, job_posting):
 
     job_id = job_posting['url']
 
-
     cur.execute("SELECT * FROM job WHERE  id = '%s';" % (job_id))
 
     # If no job with that id exists, add that job the list of jobs
@@ -68,12 +67,10 @@ def add_to_applied(u_id, job_posting):
             if res == 1:
                 flag = i
 
-        print("Flag", flag)
 
 
         if flag == 0:
             cur.execute("UPDATE applied SET responded = 1, last_updated = datetime('now') WHERE job_id = '%s' AND user_id = '%s';" % (job_id, u_id))
-            print(u_id)
 
         elif flag == 2:
             cur.execute("UPDATE applied SET interviewed = 1, last_updated = datetime('now') WHERE job_id = '%s' AND user_id = '%s';" % (job_id, u_id))
@@ -183,8 +180,23 @@ def get_nudge_job(u_id):
 
     return curr_job
 
+def update_date(u_id, job_posting):
+    conn = db.get_db()
+    cur = conn.cursor()
 
 
+    job_id = job_posting['id']
 
+    cur.execute("SELECT * FROM applied WHERE user_id = '%s' AND job_id = '%s';" % (u_id, job_id))
+
+    if len(cur.fetchall()) == 0:
+        db.close_db()
+        return True
+
+    cur.execute("UPDATE applied SET last_updated = datetime('now', '-3 days') WHERE job_id = '%s' AND user_id = '%s';" % (job_id, u_id))
+
+    conn.commit()
+    db.close_db()
+    return True
 
 

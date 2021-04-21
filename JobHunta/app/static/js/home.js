@@ -25,7 +25,20 @@ const updateJob = (jobposting, u_id) => {
     }).catch( (error) => console.log(error))
 };
 
-no.addEventListener("click", () => {
-    popup.style.display = 'none';
-});
+const updateDateJob = (jobposting, u_id) => {
+    fetch('/updateJob', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({'jobposting': jobposting, 'u_id': u_id})
+
+    }).then( (response) =>
+    {
+        if (response.status === 200) {
+            popup.style.display = 'none';
+        }
+
+    }).catch( (error) => console.log(error))
+};
 
