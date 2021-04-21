@@ -1,6 +1,6 @@
 from mmap import ACCESS_DEFAULT
 from flask.templating import render_template_string
-from .newsfeed import getNews, searchedNews
+from .newsfeed import getNews, searchedNews, get_most_recent_search, save_most_recent_search
 from .getJobs import get_combined_results, get_github_results, get_careerjet_results, get_adzuna_results
 from flask import Flask
 from flask import render_template, request, url_for, redirect, session, flash, jsonify
@@ -85,15 +85,16 @@ ARTICLES_PER_PAGE = 5
 @app.route('/newsfeed', methods=['GET', 'POST'])
 def get_news():
     global articles
-    print(request.method)
-    
     
     if not articles:
-        articles = getNews('Australia Jobs', 'en', 3)
+        recent_search = get_most_recent_search()
+        print(recent_search)
+        #articles = getNews(recent_search['string'], 'en', 3)
+        articles = getNews('Australian Jobs', 'en', 3)
+
     page = request.args.get(get_page_parameter(), type=int, default=1)
     i = (page - 1) * ARTICLES_PER_PAGE
     pagination = Pagination(page=page, per_page=ARTICLES_PER_PAGE, total=len(articles['articles']), record_name='articles')
-    print(articles)
     
     curr_articles = articles['articles'][i : i + ARTICLES_PER_PAGE]
         
@@ -115,7 +116,10 @@ def get_news():
         category = data['category']
         from_day = data['ntime']
         country = data['location']
+
         stringofwords = description + category + country
+        save_most_recent_search(stringofwords) 
+
         articles = getNews(description, 'en', from_day)
         curr_articles = articles['articles'][i : i + ARTICLES_PER_PAGE]
     return render_template('newsfeed.html', articles=curr_articles, pagination=pagination)
