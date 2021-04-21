@@ -9,7 +9,7 @@ searchBtn.addEventListener('click', () => {
     let ntime= timeframe.value;
     console.log(timeframe.value)
     if (timeframe.value == "") {
-        ntime = 0;
+        ntime = 1;
     }
 
     let location = locationfilter.value;
@@ -29,7 +29,6 @@ searchBtn.addEventListener('click', () => {
 
     const info = {
         'description': searchInput.value ? searchInput.value : '',
-        
         'ntime': ntime,
         'category': category,
         'location': location,

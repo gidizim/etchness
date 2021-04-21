@@ -1,6 +1,6 @@
 from mmap import ACCESS_DEFAULT
 from flask.templating import render_template_string
-from .newsfeed import getNews, searchedNews, get_most_recent_search, save_most_recent_search
+from .newsfeed import getNews, get_keywords, add_to_searched
 from .getJobs import get_combined_results, get_github_results, get_careerjet_results, get_adzuna_results
 from flask import Flask
 from flask import render_template, request, url_for, redirect, session, flash, jsonify
@@ -18,8 +18,6 @@ import re
 import string
 import random
 import time
-# TODO need to add view functionality for if user is logged in or not
-
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
@@ -49,59 +47,59 @@ def get_home():
     # Show top 5 results
     jobs = get_popular_jobs()
     u_id = session.get('user_id')
-    login = 0
-    print("Popup", popup)
-
-    if u_id:
-        # already been shown once
-        if popup == 1:
-            popup = 0
-            nudge_job = None
-
-        elif popup == -1:
-            popup = 1
-            nudge_job = get_nudge_job(u_id)
-
-            # If no judge to nudge
-            if nudge_job == None:
-                popup = 0
-        else:
-            nudge_job = None
-
-    else:
+    if u_id is None:
         popup = -1
-        nudge_job = None
-
-    for job in jobs:
-        if u_id is None:
-            # update db
-            reset_watchlist()
-            job['in_watchlist'] = 0
+        reset_watchlist()
+        if jobs != []:
+            print("there are jobs")
+            # if not logged in and popular jobs have been stored in db
+            return render_template('home.html', jobs=jobs[:5], login=0);
         else:
-            login = 1
-            added = in_watchlist(u_id, job['url'])
-            job['in_watchlist'] = 1 if added else 0
-    
-    if jobs == []:
-        index = 1
-        data = get_github_results('software', '', True , 1)
-        for job in data:
-            info = {
-                'title': job['title'],
-                'job_type': job['type'],
-                'description': job['description'],
-                'location': job['location'],
-                'company': job['company'],
-                'created': job['created_at'],
-                'url': job['url'],
-                'salary': 'Unknown',
-                'in_watchlist': 0,
-            }
-            jobs.append(info)
-            append_popular_job(info)
+            print("there are no jobs")
+            # if not logged in and jobs are empty then we add
+            jobs = get_github_results('software', '', True , 1)
+            print(len(jobs))
+            for job in jobs:
+                append_popular_job(job)
+        return render_template('home.html', jobs=jobs[:5], login=0);
+            
+    jobs = get_popular_jobs()
+    keywords = get_keywords(u_id)
+    print("in reverse")
+    keywords.reverse()
+    print(keywords)
+    print(set(keywords))
+    print(len(jobs))
 
-            index += 1
-    return render_template('home.html', jobs=jobs[:6], login=login, popup=popup, u_id=u_id, job=nudge_job)
+    # if logged in then reset jobs if keywords exist
+    if keywords != []:
+        jobs = []
+        print("has keywords")
+        # get the most recent 3 searched words
+        for keyword in list(set(keywords))[:3]:
+            # result = get_adzuna_results(keyword, 'Sydney', '', 1, 1, 100)
+            # if result == 'invalid':
+            #     print("got github jobs")
+            result = get_github_results(keyword, '', True , 1)
+            for job in result:
+                jobs.append(job)
+            
+    print(len(jobs))
+
+    # already been shown once
+    if popup == 1:
+        popup = 0
+    elif popup == -1:
+        popup = 1
+
+    print(popup);
+    for job in jobs[:5]:
+        added = in_watchlist(u_id, job['url'])
+        print('in watchlist')
+        print(added)
+        job['in_watchlist'] = 1 if added else 0
+
+    return render_template('home.html', jobs=jobs[:5], login=1)
 
 # List of articles is empty when server is first set up
 articles = []
@@ -109,43 +107,46 @@ ARTICLES_PER_PAGE = 5
 @app.route('/newsfeed', methods=['GET', 'POST'])
 def get_news():
     global articles
-    
+    u_id = session.get('user_id')
+    # initial display of newsfeed
     if not articles:
-        recent_search = get_most_recent_search()
-        print(recent_search)
-        #articles = getNews(recent_search['string'], 'en', 3)
-        articles = getNews('Australian Jobs', 'en', 3)
+        # for logged in user
+        keywords = get_keywords(u_id)
+        keywords.reverse()
+        if u_id and keywords:    
+            print(set(keywords))
+            # get the most recent 3 words
+            newsfeed = []
+            for keyword in list(set(keywords))[:3]:
+                for news in getNews(keyword, 'en', 3)['articles']:
+                    newsfeed.append(news)
+            articles = { 'articles': newsfeed }
+
+        # for other users
+        else:
+            articles = getNews('Australian jobs', 'en', 3)
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
     i = (page - 1) * ARTICLES_PER_PAGE
     pagination = Pagination(page=page, per_page=ARTICLES_PER_PAGE, total=len(articles['articles']), record_name='articles')
     
     curr_articles = articles['articles'][i : i + ARTICLES_PER_PAGE]
-        
     if request.method != 'POST':
         return render_template('newsfeed.html', articles=curr_articles, pagination=pagination)
-            
-        #return render_template('newsfeed.html', articles=articles['articles'][:5])
-        
-    # Ensuring articles is getting and setting globally
-    
 
-        # Send back HTML with articles attached, only for GET.
-    # If post method, update list of articles
-    
-    # Get data from POST request
-    else:
-        data = request.get_json(force=True)
-        description = data['description']
-        category = data['category']
-        from_day = data['ntime']
-        country = data['location']
+    data = request.get_json(force=True)
+    description = data['description']
+    category = data['category']
+    from_day = data['ntime']
+    country = data['location']
 
-        stringofwords = description + category + country
-        save_most_recent_search(stringofwords) 
+    # searched_keywords = description + ' ' + category + ' ' + country
+    searched_keywords = description
+    if u_id:
+        add_to_searched(u_id, searched_keywords.strip()) 
 
-        articles = getNews(description, 'en', from_day)
-        curr_articles = articles['articles'][i : i + ARTICLES_PER_PAGE]
+    articles = getNews(searched_keywords.strip(), 'en', from_day)
+    curr_articles = articles['articles'][i : i + ARTICLES_PER_PAGE]
     return render_template('newsfeed.html', articles=curr_articles, pagination=pagination)
         
    
@@ -153,10 +154,12 @@ def get_news():
 
 @app.route('/components/<file>')
 def get_component(file):
+    global articles
     login = 0
     u_id = session.get('user_id')
     if u_id is not None:
         login = 1
+        articles = []
     return render_template("components/" + file, login=login)
 
 @app.route('/<file>')
@@ -208,6 +211,10 @@ def get_job_results():
     if data['description'] == 'None':
         descrip = ''
     print(data)
+    
+    if u_id and descrip:
+        add_to_searched(u_id, descrip)
+        print(descrip)
     jobs = get_combined_results(useragent, ip, descrip, data['location'], full_time, part_time, job_type, data['page'], data['salary'])
     
     print(len(jobs))
@@ -224,9 +231,7 @@ def get_job():
     
     if request.method == 'POST':
         data = request.get_json(force=True)
-
         job = data['job']
-        print(job['url'])
         applications = get_num_applied(job['url'])
         (job['num_applied'], job['num_responded'], job['num_interviewed'], job['num_finalised']) = applications
 
@@ -428,8 +433,10 @@ def test_db():
 @app.route('/logout')
 def get_logout():
     global popup
+    global articles
     popup = -1
     print("Logout", popup)
+    articles = []
     session.pop('user_id', None) 
     reset_watchlist()
     return redirect(url_for('get_home'))
