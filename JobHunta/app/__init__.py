@@ -3,7 +3,7 @@ from flask.templating import render_template_string
 from .newsfeed import getNews
 from .getJobs import get_combined_results, get_github_results, get_careerjet_results, get_adzuna_results
 from flask import Flask
-from flask import render_template, request, url_for, redirect, session, flash
+from flask import render_template, request, url_for, redirect, session, flash, jsonify
 from flask_mail import Mail, Message
 from flask_paginate import Pagination, get_page_parameter
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -12,7 +12,7 @@ from . import auth
 from .popular import get_popular_jobs, append_popular_job, clear_popular_job
 from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, reset_watchlist, in_watchlist
 from .user import get_user_details, get_user_id, set_user_details, reset_password
-from .applyJobs import get_num_applied
+from .applyJobs import get_num_applied, already_applied, add_to_applied, remove_from_applied
 import os
 import re
 import string
@@ -163,16 +163,39 @@ def get_job():
         job = data['job']
         print(job['url'])
         applications = get_num_applied(job['url'])
-        (job['num_applied'], job['num_responded'], job['num_interviewed']) = applications
+        (job['num_applied'], job['num_responded'], job['num_interviewed'], job['num_finalised']) = applications
 
         prev = data['prev']
 
     u_id = session.get('user_id')
+    flag = 0
+
     if u_id is not None:
+        applied = already_applied(u_id, job['url'])
+
+        for i, res in enumerate(applied):
+            if res == 1:
+                flag = i + 1
+
+        print("Flag", flag)
+
         login = 1
     
-    return render_template('jobposting.html', job=job, prev=prev, login=login)
+    return render_template('jobposting.html', job=job, prev=prev, login=login, u_id=u_id, flag=flag)
 
+@app.route('/applyToJob', methods=['POST'])
+def apply_to_job():
+    data = request.get_json(force=True)
+    add_to_applied(data['u_id'], data['jobposting'])
+
+    return jsonify({})
+
+@app.route('/removeFromJob', methods=['DELETE'])
+def remove_from_job():
+    data = request.get_json(force=True)
+    remove_from_applied(data['u_id'], data['jobposting'])
+
+    return jsonify({})
 
 @app.route('/addToWatchlist', methods=['GET', 'POST'])
 def add_watchlist_job():
@@ -285,7 +308,6 @@ def get_resetpw():
             email = request.form.get('reset_email')
             try:
                 auth.add_reset_token(email.lower(), token)
-                print(token)
                 sent = True
                 email = email
                 mail = Mail(app)
@@ -295,14 +317,12 @@ def get_resetpw():
                 msg.recipients = [email]
                 msg.html = render_template("resetpw_defaultmsg.html", token=token)
                 mail.send(msg)
-                print("fucking kill me")
                 return render_template("resetpw.html", sent=sent, verify=verify, email=email)
             except Exception as e:
                 sent = False
                 flash(e)
         elif "token_button" in request.form:
-            print(sent)
-            print("in token")
+
             token = request.form.get('reset_token')
             email = request.form.get('reset_email')
             

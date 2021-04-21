@@ -85,8 +85,63 @@ const removeJob = (job, url) => {
 }
 
 // 2 Buttons, one increments job counter, one resets
-const incrementJob = () => {
-    
+const incrementJob = (jobposting, u_id) => {
+    const button = document.getElementById('application');
+
+    // Send Post request, on success update button.value
+
+    fetch('/applyToJob', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({'jobposting': jobposting, 'u_id': u_id})
+
+    }).then( (response) =>
+    {
+        if (response.status === 200) {
+
+            if (button.value == "I've applied")
+            {
+                button.value = "I've received a response";
+            }
+            else if (button.value == "I've received a response")
+            {
+                button.value = "I've received an interview";
+            }
+            else if (button.value == "I've received an interview")
+            {
+                button.value = "I've finalised the offer";
+            }
+            else if (button.value == "I've finalised the offer")
+            {
+                button.value = "Thanks for the response!"
+            }
+        }
+
+    }).catch( (error) => console.log(error))
+}
+
+const unmarkJob = (jobposting, u_id) => {
+    const button = document.getElementById('application');
+
+    // Send Post request, on success update button.value
+
+    fetch('/removeFromJob', {
+        method: 'DELETE',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({'jobposting': jobposting, 'u_id': u_id})
+
+    }).then( (response) =>
+    {
+        if (response.status === 200) {
+
+            button.value = "I've applied";
+
+        }
+    }).catch( (error) => console.log(error))
 }
 
 //
