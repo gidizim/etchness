@@ -71,7 +71,8 @@ def add_to_watchlist(u_id, job_posting):
 def in_watchlist(u_id, job_id):
     conn = db.get_db()
     cur = conn.cursor()
-    
+    print(u_id)
+    print(job_id)
     cur.execute("SELECT * FROM watchlist WHERE user_id = '%s' AND job_id = '%s';" % (u_id, job_id))
 
     result = cur.fetchall()

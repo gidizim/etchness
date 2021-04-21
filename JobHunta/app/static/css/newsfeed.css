@@ -5,6 +5,7 @@
     justify-content: space-between;
     padding: auto;
     row-gap: 20px;
+    text-align: center;
 }
 
 .newsItem {

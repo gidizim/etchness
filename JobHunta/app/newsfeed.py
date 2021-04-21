@@ -4,14 +4,8 @@ from datetime import date, timedelta
 newsapi = NewsApiClient(api_key='db0f90a0065445e786863c1ce792fef6')
 
 def getNews(keyword, lang, from_days): 
-    if from_days  == 'Day':
-        from_days = 1
-    elif from_days == 'Month':
-        from_days = 30
-    elif from_days == 'Year':
-        from_days = 365
-
-
+    print(from_days)
+    print(keyword)
     articles = newsapi.get_everything(q=keyword,
                                         language=lang,
                                         page=1,
@@ -19,30 +13,31 @@ def getNews(keyword, lang, from_days):
                                         to=date.today(),
                                         sources="abc-news-au, news-com-au",
                                         domains="9news.com.au, News.com.au, smh.com.au, theguardian.com")
+    print('articles has ' + str(len(articles['articles'])))
     return articles
 
 
 
 
-def searchedNews(description,location, timeframe, category): 
+# def searchedNews(description,location, timeframe, category): 
     
-    ntime = gettime(timeframe)
-    articles = newsapi.get_everything(q=description  + category,
+#     ntime = gettime(timeframe)
+#     articles = newsapi.get_everything(q=description  + category,
                                        
-                                        page=1,
-                                        sources="abc-news-au, news-com-au",
-                                        domains="9news.com.au, News.com.au, smh.com.au, theguardian.com",
-                                        #cant mix
-                                        #sources='abc-news-au, news-com-au',
-                                        language='en',
-                                        from_param=ntime,
-                                        to=date.today())
+#                                         page=1,
+#                                         sources="abc-news-au, news-com-au",
+#                                         domains="9news.com.au, News.com.au, smh.com.au, theguardian.com",
+#                                         #cant mix
+#                                         #sources='abc-news-au, news-com-au',
+#                                         language='en',
+#                                         from_param=ntime,
+#                                         to=date.today())
                                         
-                                        #country=location)
+#                                         #country=location)
                                         
-                                        #domains="9news.com.au, News.com.au, smh.com.au, theguardian.com")
+#                                         #domains="9news.com.au, News.com.au, smh.com.au, theguardian.com")
     
-    return articles
+#     return articles
 
 def add_to_searched(u_id, keyword):
     if (keyword == None):
@@ -50,7 +45,6 @@ def add_to_searched(u_id, keyword):
     
     conn = db.get_db()
     cur = conn.cursor()
-    # TODO: prevent duplicates
     cur.execute("INSERT INTO searched_keywords VALUES (?, ?);", (u_id, keyword))
 
     conn.commit()

@@ -149,9 +149,9 @@ def get_combined_results(useragent, ip, descrip, location, full_time, part_time,
     print("github " + str(len(github_resp)))
     print("adzuna " + str(len(adzuna_resp)))
     print("careerjet " + str(len(careerjet_resp)))
-    for job in adzuna_resp:
-        job_results.append(job)
     for job in github_resp:
+        job_results.append(job)
+    for job in adzuna_resp:
         job_results.append(job)
     for job in careerjet_resp:
         job_results.append(job)

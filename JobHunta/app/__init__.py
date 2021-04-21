@@ -1,6 +1,6 @@
 from mmap import ACCESS_DEFAULT
 from flask.templating import render_template_string
-from .newsfeed import getNews, searchedNews, get_keywords, add_to_searched
+from .newsfeed import getNews, get_keywords, add_to_searched
 from .getJobs import get_combined_results, get_github_results, get_careerjet_results, get_adzuna_results
 from flask import Flask
 from flask import render_template, request, url_for, redirect, session, flash, jsonify
@@ -47,18 +47,18 @@ def get_home():
     # Show top 5 results
     jobs = get_popular_jobs()
     u_id = session.get('user_id')
-    if u_id is not None:
+    if u_id is None:
+        popup = -1
         reset_watchlist()
-        if jobs:
+        if jobs != []:
+            print("there are jobs")
             # if not logged in and popular jobs have been stored in db
             return render_template('home.html', jobs=jobs[:5], login=0);
         else:
+            print("there are no jobs")
             # if not logged in and jobs are empty then we add
-            jobs = get_adzuna_results('software', 'Sydney', '', 1, 1, '')
-            print('adzuna');
-            print(jobs)
-            if jobs == 'invalid':
-                jobs = get_github_results('software', '', True , 1)
+            jobs = get_github_results('software', '', True , 1)
+            print(len(jobs))
             for job in jobs:
                 append_popular_job(job)
         return render_template('home.html', jobs=jobs[:5], login=0);
@@ -69,18 +69,34 @@ def get_home():
     keywords.reverse()
     print(keywords)
     print(set(keywords))
+    print(len(jobs))
 
     # if logged in then reset jobs if keywords exist
-    if keywords is not None:
+    if keywords != []:
         jobs = []
+        print("has keywords")
         # get the most recent 3 searched words
         for keyword in list(set(keywords))[:3]:
-            jobs = get_adzuna_results(keyword, 'Sydney', '', 1, 1, 100)
-            if jobs == 'invalid':
-                jobs = get_github_results(keyword, '', True , 1)
-    # update watchlist
-    for job in jobs:
+            # result = get_adzuna_results(keyword, 'Sydney', '', 1, 1, 100)
+            # if result == 'invalid':
+            #     print("got github jobs")
+            result = get_github_results(keyword, '', True , 1)
+            for job in result:
+                jobs.append(job)
+            
+    print(len(jobs))
+
+    # already been shown once
+    if popup == 1:
+        popup = 0
+    elif popup == -1:
+        popup = 1
+
+    print(popup);
+    for job in jobs[:5]:
         added = in_watchlist(u_id, job['url'])
+        print('in watchlist')
+        print(added)
         job['in_watchlist'] = 1 if added else 0
 
     return render_template('home.html', jobs=jobs[:5], login=1)
@@ -95,29 +111,26 @@ def get_news():
     # initial display of newsfeed
     if not articles:
         # for logged in user
-        if u_id:
-            keywords = get_keywords(u_id)
-            keywords.reverse()
-            print(keywords)
-            if keywords:
-                # get the most recent 3 words
-                newsfeed = []
-                for keyword in list(set(keywords))[:3]:
-                    for news in getNews(keyword, 'en', 3)['articles']:
-                        newsfeed.append(news)
-                articles = { 'articles': newsfeed }
+        keywords = get_keywords(u_id)
+        keywords.reverse()
+        if u_id and keywords:    
+            print(set(keywords))
+            # get the most recent 3 words
+            newsfeed = []
+            for keyword in list(set(keywords))[:3]:
+                for news in getNews(keyword, 'en', 3)['articles']:
+                    newsfeed.append(news)
+            articles = { 'articles': newsfeed }
 
         # for other users
         else:
             articles = getNews('Australian jobs', 'en', 3)
-            # print(articles)
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
     i = (page - 1) * ARTICLES_PER_PAGE
     pagination = Pagination(page=page, per_page=ARTICLES_PER_PAGE, total=len(articles['articles']), record_name='articles')
     
     curr_articles = articles['articles'][i : i + ARTICLES_PER_PAGE]
-        
     if request.method != 'POST':
         return render_template('newsfeed.html', articles=curr_articles, pagination=pagination)
 
@@ -127,12 +140,12 @@ def get_news():
     from_day = data['ntime']
     country = data['location']
 
-    searched_keywords = description + category + country
+    # searched_keywords = description + ' ' + category + ' ' + country
+    searched_keywords = description
     if u_id:
-        add_to_searched(u_id, searched_keywords) 
+        add_to_searched(u_id, searched_keywords.strip()) 
 
-    articles = getNews(searched_keywords, 'en', from_day)
-    print(searched_keywords);
+    articles = getNews(searched_keywords.strip(), 'en', from_day)
     curr_articles = articles['articles'][i : i + ARTICLES_PER_PAGE]
     return render_template('newsfeed.html', articles=curr_articles, pagination=pagination)
         
@@ -218,9 +231,7 @@ def get_job():
     
     if request.method == 'POST':
         data = request.get_json(force=True)
-
         job = data['job']
-        print(job['url'])
         applications = get_num_applied(job['url'])
         (job['num_applied'], job['num_responded'], job['num_interviewed'], job['num_finalised']) = applications
 

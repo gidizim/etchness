@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS popular;
 DROP TABLE IF EXISTS applied;
 DROP TABLE IF EXISTS job;
 DROP TABLE IF EXISTS password_reset;
-DROP TABLE IF EXISTS most_recent_searches;
+DROP TABLE IF EXISTS searched_keywords;
 
 
 CREATE TABLE user (
