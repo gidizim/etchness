@@ -7,7 +7,8 @@ const locationfilter = document.getElementById('location');
 searchBtn.addEventListener('click', () => {
 
     let ntime= timeframe.value;
-    if (timeframe.value == "None") {
+    console.log(timeframe.value)
+    if (timeframe.value == "") {
         ntime = 0;
     }
 
