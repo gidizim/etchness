@@ -42,13 +42,24 @@ except OSError:
 
 db.init_app(app)
 app.secret_key= b'\x8b\x13\xac\xcc\x9b(\xdc\xf6\x80^T\xc9y\xd2n\x9d'
-
+popup = -1
 @app.route('/')
 def get_home():
+    global popup
     # Show top 5 results
     jobs = get_popular_jobs()
     u_id = session.get('user_id')
     login = 0
+    if u_id:
+        # already been shown once
+        if popup == 1:
+            popup = 0
+        elif popup == -1:
+            popup = 1
+    else:
+        popup = -1
+
+    print(popup);
     for job in jobs:
         if u_id is None:
             # update db
@@ -78,7 +89,7 @@ def get_home():
             append_popular_job(info)
 
             index += 1
-    return render_template('home.html', jobs=jobs[:6], login=login)
+    return render_template('home.html', jobs=jobs[:6], login=login, popup=popup)
 
 @app.route('/newsfeed')
 def get_news():

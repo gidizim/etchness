@@ -93,3 +93,46 @@ body {
     /* Margin bottom prevents footer from blocking last block*/
     margin-bottom: 80px;
 }
+
+#popup-box {
+    /* display: none; */
+    display: block;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    padding-top: 30%;
+    width: 100%;
+    height: 100%;  
+    background-color: grey;
+    background-color: rgb(0,0,0,0.7);
+}
+
+#close {
+    float: right;
+    font-size: 40px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer
+}
+
+#close:hover {
+    opacity: 0.7;
+}
+
+#error-msg {
+    padding-top: 10px;
+    color: white;
+}
+
+#popup-content {
+    font-size: 16pt;
+    background-color: grey;
+    border: 2px solid saddlebrown;
+    width: 325px;
+    margin: auto;
+    padding: 0px 10px 0 20px;
+    text-align: center;
+    border-radius: 15px;
+    border: 5px solid lightgrey;
+}
