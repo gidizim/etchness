@@ -20,6 +20,7 @@ CREATE TABLE applied (
   responded INTEGER NOT NULL,
   interviewed INTEGER NOT NULL,
   finalised INTEGER NOT NULL,
+  last_updated TEXT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user(id),
   FOREIGN KEY (job_id) REFERENCES job(id)
 );

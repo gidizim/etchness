@@ -12,7 +12,7 @@ from . import auth
 from .popular import get_popular_jobs, append_popular_job, clear_popular_job
 from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, reset_watchlist, in_watchlist
 from .user import get_user_details, get_user_id, set_user_details, reset_password
-from .applyJobs import get_num_applied, already_applied, add_to_applied, remove_from_applied, get_applied
+from .applyJobs import get_num_applied, already_applied, add_to_applied, remove_from_applied, get_applied, get_nudge_job
 import os
 import re
 import string
@@ -54,10 +54,21 @@ def get_home():
         # already been shown once
         if popup == 1:
             popup = 0
+            nudge_job = None
+
         elif popup == -1:
             popup = 1
+            nudge_job = get_nudge_job(u_id)
+
+            # If no judge to nudge
+            if nudge_job == None:
+                popup = 0
+        else:
+            nudge_job = None
+
     else:
-        popup = -1
+        popup = 0
+        nudge_job = None
 
     print(popup);
     for job in jobs:
@@ -89,7 +100,7 @@ def get_home():
             append_popular_job(info)
 
             index += 1
-    return render_template('home.html', jobs=jobs[:6], login=login, popup=popup)
+    return render_template('home.html', jobs=jobs[:6], login=login, popup=popup, u_id=u_id, job=nudge_job)
 
 @app.route('/newsfeed')
 def get_news():
@@ -197,6 +208,7 @@ def get_job():
 @app.route('/applyToJob', methods=['POST'])
 def apply_to_job():
     data = request.get_json(force=True)
+    print(data)
     add_to_applied(data['u_id'], data['jobposting'])
 
     return jsonify({})
@@ -359,6 +371,7 @@ def get_resetpw():
 
 @app.route('/db_testing')
 def test_db():
+    print(get_nudge_job(1))
     return render_template("home.html")
 
 @app.route('/logout')

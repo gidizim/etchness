@@ -55,24 +55,31 @@ def add_to_applied(u_id, job_posting):
 
         cur.execute("INSERT INTO job VALUES (?, ?, ?, ?, ?, ?, ?, ?) ;", job_data)
 
+    print("What the fuck is going on??")
+
     cur.execute("SELECT * FROM applied WHERE  job_id = '%s' AND user_id = '%s';" % (job_id, u_id))
     data = cur.fetchall()
     if len(data) == 0:
-        cur.execute("INSERT INTO applied VALUES (?, ?, 0, 0, 0);", (u_id, job_id))
+        cur.execute("INSERT INTO applied VALUES (?, ?, 0, 0, 0, datetime('now'));", (u_id, job_id))
     else:
+
         flag = 0
         for i, res in enumerate(data[0]):
             if res == 1:
                 flag = i
 
+        print("Flag", flag)
+
+
         if flag == 0:
-            cur.execute("UPDATE applied SET responded = 1 WHERE job_id = '%s' AND user_id = '%s';" % (job_id, u_id))
+            cur.execute("UPDATE applied SET responded = 1, last_updated = datetime('now') WHERE job_id = '%s' AND user_id = '%s';" % (job_id, u_id))
+            print(u_id)
 
         elif flag == 2:
-            cur.execute("UPDATE applied SET interviewed = 1 WHERE job_id = '%s' AND user_id = '%s';" % (job_id, u_id))
+            cur.execute("UPDATE applied SET interviewed = 1, last_updated = datetime('now') WHERE job_id = '%s' AND user_id = '%s';" % (job_id, u_id))
 
         elif flag == 3:
-            cur.execute("UPDATE applied SET finalised = 1 WHERE job_id = '%s' AND user_id = '%s';" % (job_id, u_id))
+            cur.execute("UPDATE applied SET finalised = 1, last_updated = datetime('now') WHERE job_id = '%s' AND user_id = '%s';" % (job_id, u_id))
 
         else:
             pass
@@ -137,3 +144,47 @@ def get_num_applied(job_id):
     data = data[0]
     db.close_db()
     return (data[0], data[1], data[2], data[3])
+
+def get_nudge_job(u_id):
+    conn = db.get_db()
+    cur = conn.cursor()
+
+    cur.execute("SELECT job_id FROM applied WHERE user_id = '%s' AND last_updated < datetime('now', '-7 day');" % (u_id))
+
+    data = cur.fetchall()
+    if len(data) == 0:
+        db.close_db()
+        return None
+
+    data = data[0]
+    job_id = data[0]
+
+    cur.execute("SELECT * FROM job WHERE id = '%s';" % (job_id))
+    data = cur.fetchall()
+
+    if len(data) == 0:
+        db.close_db()
+        print("Should never reach this point")
+        return None
+
+    row = data[0]
+
+    curr_job = {}
+    curr_job['id'] = row['id']
+    curr_job['title'] = row['title']
+    curr_job['job_type'] = row['job_type']
+    curr_job['description'] = row['description']
+    curr_job['company'] = row['company']
+    curr_job['location'] = row['location']
+    curr_job['salary'] = row['salary']
+    curr_job['url'] = row['url']
+    curr_job['created'] = row['created']
+    curr_job['in_watchlist'] = row['in_watchlist']
+
+    return curr_job
+
+
+
+
+
+

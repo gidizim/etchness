@@ -60,11 +60,14 @@
             <option value="Chatswood">Chatswood</option>
         </select>
     </div>
-    {% if popup and popup != -1 %}
+    {% if popup  %}
         <div id="popup-box">
             <div id="popup-content">
                 <span id="close">&times;</span>
-                <p id="error-msg">Please update your job progress if you have received any responses :)</p>
+                <p id="error-msg">Have you received a response from {{job.title}}</p>
+                <input class="button" type="button" id="yesButton" value="Yes" onclick="updateJob({{job}}, {{u_id}})">
+                <input class="button" type="button" id="noButton" value="No">
+                <input class="button" type="button" id="postingButton" value="Posting" onclick="createJobPosting(event, {{job|striptags}}, '/')">
             </div>
         </div>
     {% endif %}
