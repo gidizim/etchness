@@ -50,6 +50,8 @@ def get_home():
     jobs = get_popular_jobs()
     u_id = session.get('user_id')
     login = 0
+    print("Popup", popup)
+
     if u_id:
         # already been shown once
         if popup == 1:
@@ -67,10 +69,9 @@ def get_home():
             nudge_job = None
 
     else:
-        popup = 0
+        popup = -1
         nudge_job = None
 
-    print(popup);
     for job in jobs:
         if u_id is None:
             # update db
@@ -376,6 +377,9 @@ def test_db():
 
 @app.route('/logout')
 def get_logout():
+    global popup
+    popup = -1
+    print("Logout", popup)
     session.pop('user_id', None) 
     reset_watchlist()
     return redirect(url_for('get_home'))
