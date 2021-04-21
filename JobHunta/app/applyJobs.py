@@ -7,7 +7,7 @@ def get_applied(u_id):
     conn = db.get_db()
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM jobs, applied WHERE applied.u_id = '%s' AND applied.job_id = job.id;" % (u_id))
+    cur.execute("SELECT * FROM job, applied WHERE applied.user_id = '%s' AND applied.job_id = job.id;" % (u_id))
 
     results = []
 
@@ -18,8 +18,11 @@ def get_applied(u_id):
         curr_job['job_type'] = row['job_type']
         curr_job['description'] = row['description']
         curr_job['company'] = row['company']
-        curr_job['url'] = row['url']
+        curr_job['location'] = row['location']
         curr_job['salary'] = row['salary']
+        curr_job['url'] = row['url']
+        curr_job['created'] = row['created']
+        curr_job['in_watchlist'] = row['in_watchlist']
 
         results.append(curr_job)
 

@@ -7,7 +7,7 @@ def get_watchlist(u_id):
     conn = db.get_db()
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM job, watchlist WHERE watchlist.user_id = '%s' AND watchlist.job_id = job.id;" % u_id)
+    cur.execute("""SELECT * FROM job, watchlist WHERE watchlist.user_id = '%s' AND watchlist.job_id = job.id AND watchlist.job_id NOT IN (SELECT id FROM job, applied WHERE applied.user_id = '%s' AND applied.job_id = job.id);""" % (u_id, u_id))
 
     results = []
 

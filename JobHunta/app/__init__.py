@@ -12,7 +12,7 @@ from . import auth
 from .popular import get_popular_jobs, append_popular_job, clear_popular_job
 from .watchlist import get_watchlist, add_to_watchlist, remove_from_watchlist, reset_watchlist, in_watchlist
 from .user import get_user_details, get_user_id, set_user_details, reset_password
-from .applyJobs import get_num_applied, already_applied, add_to_applied, remove_from_applied
+from .applyJobs import get_num_applied, already_applied, add_to_applied, remove_from_applied, get_applied
 import os
 import re
 import string
@@ -222,10 +222,13 @@ def remove_watchlist_job():
 def get_watchlist_jobs():
     u_id = session.get('user_id')
     if u_id is not None:
-        jobs = get_watchlist(u_id)
+        watchlist_jobs = get_watchlist(u_id)
+        applied_jobs = get_applied(u_id)
     else:
         return redirect(url_for('get_login'))
-    return render_template('watchlist.html', jobs=jobs)
+
+
+    return render_template('watchlist.html', watchlist_jobs=watchlist_jobs, applied_jobs=applied_jobs)
 
 @app.route('/profile', methods=['GET', 'POST'])
 def get_profile():

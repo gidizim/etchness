@@ -22,7 +22,6 @@ const createJobPosting = (event, job, prevPage) => {
     }).catch((error) => console.log(error))
 }
 
-
 // update db
 const addToWatchlist = (job, id, loggedIn) => {
     console.log(loggedIn);
