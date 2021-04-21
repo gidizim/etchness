@@ -28,10 +28,10 @@
                 {% endif %}
                 <p><b>Posted on:</b> {{job.created}}</p>
 
-                <p>{{job.num_applied}} people have applied.</p>
-                <p>{{job.num_responded}} people have received a response.</p>
-                <p>{{job.num_interviewed}} people have received an interview or been rejected.</p>
-                <p>{{job.num_finalised}} people have finalised their offer.</p>
+                <p id='applied'>{{job.num_applied}} people have applied.</p>
+                <p id='responded'>{{job.num_responded}} people have received a response.</p>
+                <p id='interviewed'>{{job.num_interviewed}} people have received an interview.</p>
+                <p id='finalised'>{{job.num_finalised}} people have finalised their offer.</p>
 
             </div>
             <h3>Job description</h3>
