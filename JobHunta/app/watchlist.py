@@ -38,7 +38,8 @@ def add_to_watchlist(u_id, job_posting):
 
     job_id = job_posting['url']
 
-    in_watchlist = True;
+    in_watchlist = True
+
     job_data = (job_id,
                 job_posting['title'],
                 job_posting['job_type'],
@@ -50,8 +51,11 @@ def add_to_watchlist(u_id, job_posting):
                 job_posting['salary'],
                 in_watchlist)
 
+    cur.execute("SELECT * FROM watchlist WHERE user_id = '%s' AND job_id = '%s';" % (u_id, job_id))
 
-    cur.execute("INSERT INTO watchlist VALUES (?, ?);", (u_id, job_id))
+    data = cur.fetchall()
+    if (len(data) == 0):
+        cur.execute("INSERT INTO watchlist VALUES (?, ?);", (u_id, job_id))
 
     cur.execute("SELECT * FROM job WHERE id = '%s';" % job_id)
     result = cur.fetchall()

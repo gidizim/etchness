@@ -47,21 +47,25 @@ def get_home():
     # Show top 5 results
     jobs = get_popular_jobs()
     u_id = session.get('user_id')
+
     if u_id is None:
         popup = -1
         reset_watchlist()
         if jobs != []:
             print("there are jobs")
             # if not logged in and popular jobs have been stored in db
-            return render_template('home.html', jobs=jobs[:5], login=0);
+            return render_template('home.html', jobs=jobs[:5], login=0, popup=popup, u_id=None, job=None);
         else:
             print("there are no jobs")
             # if not logged in and jobs are empty then we add
             jobs = get_github_results('software', '', True , 1)
             print(len(jobs))
+            print(jobs)
             for job in jobs:
+
+
                 append_popular_job(job)
-        return render_template('home.html', jobs=jobs[:5], login=0);
+        return render_template('home.html', jobs=jobs[:5], login=0, popup=popup, u_id=None, job=None);
             
     jobs = get_popular_jobs()
     keywords = get_keywords(u_id)
@@ -99,7 +103,13 @@ def get_home():
         print(added)
         job['in_watchlist'] = 1 if added else 0
 
-    return render_template('home.html', jobs=jobs[:5], login=1)
+    nudge_job = get_nudge_job(u_id)
+    if nudge_job == None:
+        popup = -1
+
+    print("Nudge", nudge_job, popup)
+
+    return render_template('home.html', jobs=jobs[:5], login=0, popup=popup, u_id=u_id, job=nudge_job);
 
 # List of articles is empty when server is first set up
 articles = []
@@ -148,9 +158,6 @@ def get_news():
     articles = getNews(searched_keywords.strip(), 'en', from_day)
     curr_articles = articles['articles'][i : i + ARTICLES_PER_PAGE]
     return render_template('newsfeed.html', articles=curr_articles, pagination=pagination)
-        
-   
-
 
 @app.route('/components/<file>')
 def get_component(file):
@@ -233,6 +240,7 @@ def get_job():
         data = request.get_json(force=True)
         job = data['job']
         applications = get_num_applied(job['url'])
+
         (job['num_applied'], job['num_responded'], job['num_interviewed'], job['num_finalised']) = applications
 
         prev = data['prev']
@@ -256,7 +264,7 @@ def get_job():
 @app.route('/applyToJob', methods=['POST'])
 def apply_to_job():
     data = request.get_json(force=True)
-    print(data)
+    print("FUCK", data)
     add_to_applied(data['u_id'], data['jobposting'])
 
     return jsonify({})

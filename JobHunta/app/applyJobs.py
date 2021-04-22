@@ -42,19 +42,20 @@ def add_to_applied(u_id, job_posting):
 
     # If no job with that id exists, add that job the list of jobs
     if len(cur.fetchall()) == 0:
-        job_data = (job_posting['id'],
+        job_data = (job_id,
                     job_posting['title'],
                     job_posting['job_type'],
                     job_posting['description'],
                     job_posting['location'],
                     job_posting['company'],
+                    job_posting['created'],
                     job_posting['url'],
                     job_posting['salary'])
 
 
-        cur.execute("INSERT INTO job VALUES (?, ?, ?, ?, ?, ?, ?, ?) ;", job_data)
 
-    print("What the fuck is going on??")
+        cur.execute("INSERT INTO job VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0) ;", job_data)
+
 
     cur.execute("SELECT * FROM applied WHERE  job_id = '%s' AND user_id = '%s';" % (job_id, u_id))
     data = cur.fetchall()
@@ -146,10 +147,13 @@ def get_nudge_job(u_id):
     conn = db.get_db()
     cur = conn.cursor()
 
+    print(u_id)
+
     cur.execute("SELECT job_id FROM applied WHERE user_id = '%s' AND finalised = 0 AND last_updated < datetime('now', '-7 day');" % (u_id))
 
     data = cur.fetchall()
     if len(data) == 0:
+        print("No match")
         db.close_db()
         return None
 
@@ -184,8 +188,7 @@ def update_date(u_id, job_posting):
     conn = db.get_db()
     cur = conn.cursor()
 
-
-    job_id = job_posting['id']
+    job_id = job_posting['url']
 
     cur.execute("SELECT * FROM applied WHERE user_id = '%s' AND job_id = '%s';" % (u_id, job_id))
 
