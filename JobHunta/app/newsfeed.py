@@ -1,7 +1,7 @@
 from . import db
 from newsapi import NewsApiClient
 from datetime import date, timedelta
-newsapi = NewsApiClient(api_key='db0f90a0065445e786863c1ce792fef6')
+newsapi = NewsApiClient(api_key='9a581e460ddd45f6aa51e889efcb4dae')
 
 def getNews(keyword, lang, from_days): 
     print(from_days)
