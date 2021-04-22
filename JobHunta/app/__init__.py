@@ -290,7 +290,6 @@ def get_resetpw():
                 msg.recipients = [email]
                 msg.html = render_template("resetpw_defaultmsg.html", token=token)
                 mail.send(msg)
-                print("fucking kill me")
                 return render_template("resetpw.html", sent=sent, verify=verify, email=email)
             except Exception as e:
                 sent = False
