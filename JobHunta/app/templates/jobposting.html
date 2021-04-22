@@ -27,6 +27,12 @@
                     <h4>Salary: {{job.salary}}</h4>
                 {% endif %}
                 <p><b>Posted on:</b> {{job.created}}</p>
+
+                <p id='applied'>{{job.num_applied}} people have applied.</p>
+                <p id='responded'>{{job.num_responded}} people have received a response.</p>
+                <p id='interviewed'>{{job.num_interviewed}} people have received an interview.</p>
+                <p id='finalised'>{{job.num_finalised}} people have finalised their offer.</p>
+
             </div>
             <h3>Job description</h3>
             <p class="description">{{job.description}}</p>
@@ -38,6 +44,24 @@
                     <input id="add" class="button" type="button" value="Add to watchlist" onclick="addToWatchlist({{job}}, 'add', {{login}})"></input>
                 {% endif %}
                 <input class="button" type="button" value="Apply now" onclick="window.open('{{job.url}}','_blank')"></input>
+                {% if login %}
+                    {% if flag == 0 %}
+                        <input class="button" id="application" type="button" value="I've applied" onclick="incrementJob({{job}}, {{ u_id }})"></input>
+                    {% elif flag == 1 %}
+                        <input class="button" id="application" type="button" value="I've received a response" onclick="incrementJob({{job}}, {{ u_id }})"></input>
+                    {% elif flag == 2 %}
+                        <input class="button" id="application" type="button" value="I've received an interview" onclick="incrementJob({{job}}, {{ u_id }})"></input>
+                    {% elif flag == 3 %}
+                        <input class="button" id="application" type="button" value="I've finalised the offer" onclick="incrementJob({{job}}, {{ u_id }})"></input>
+                    {% elif flag == 4 %}
+                        <input class="button" id="application" type="button" value="Thanks for the response!" onclick="incrementJob({{job}}, {{ u_id }})"></input>
+                    {% endif %}
+                    <input class="button" id="unmarkApplication" type="button" value="Undo all applications" onclick="unmarkJob({{job}}, {{ u_id }})"></input>
+
+
+                {% endif %}
+
+
             </div>
         </div>
         <div id="footer"></div>

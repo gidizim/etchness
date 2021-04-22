@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS popular;
 DROP TABLE IF EXISTS applied;
 DROP TABLE IF EXISTS job;
 DROP TABLE IF EXISTS password_reset;
+DROP TABLE IF EXISTS searched_keywords;
 
 
 CREATE TABLE user (
@@ -17,6 +18,10 @@ CREATE TABLE user (
 CREATE TABLE applied (
   user_id INTEGER NOT NULL,
   job_id INTEGER NOT NULL,
+  responded INTEGER NOT NULL,
+  interviewed INTEGER NOT NULL,
+  finalised INTEGER NOT NULL,
+  last_updated TEXT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user(id),
   FOREIGN KEY (job_id) REFERENCES job(id)
 );
@@ -52,5 +57,10 @@ CREATE TABLE password_reset (
     FOREIGN KEY (email) REFERENCES user(email)
 );
 
+CREATE TABLE searched_keywords (
+  user_id INTEGER NOT NULL,
+  keyword TEXT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES user(id)
+);
 --INSERT INTO user (username, password, first_name, last_name) VALUES ('qwer', 'qwer', 'qwer', 'qwer');
 --SELECT * FROM user;

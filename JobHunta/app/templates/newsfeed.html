@@ -10,7 +10,7 @@
 
         <link rel="stylesheet" href="static/css/nav.css">
         <link rel="stylesheet" href="static/css/newsfeed.css">
-
+        <link rel="stylesheet" href="static/css/search.css">
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
         <!-- font -->
@@ -22,8 +22,48 @@
     <body>
         <div id="nav"></div>
         <div class="title">Newsfeed</div>
+        <div class="search_box">
+            <input type="text" class="search_bar" id="search-input" placeholder="Search For News" >
+            <input type="button" class="search_button" id="search-btn" value="Search">
+        </div>
+        <br>
+        <br>
+        <div class="filters">
+            <b><p> Only show news within:</p></b>
+            <select id="timeframe" class="filter">
+                <option value="" selected disabled hidden>time-frame</option>
+                <option value="1">Today</option>
+                <option value="7">1 Week ago</option>
+                <option value="14">2 Weeks ago</option>
+                <option value="21">3 Weeks ago</option>
+                <option value="30">1 Month ago</option>
+            </select>
+
+            <select id="category" class="filter">
+                <option value="" selected disabled hidden>category</option>
+                <option value="business">business</option>
+                <option value="entertainment">entertainment</option>
+                <option value="general">general</option>
+                <option value="health"> health </option>
+                <option value="science"> science </option>
+                <option value="sports"> sports </option>
+                <option value="technology"> technology </option>
+            </select>
+
+            <select id="location" class="filter">
+                <option value="" selected disabled hidden>country</option>
+                <option value="au">Australia</option>
+                <option value="nz">New Zealand</option>
+                <option value="gb">United Kingdom</option>
+                <option value="us">United States</option>
+            </select>
+        </div>
+        {{ pagination.links }}
         <!-- Filler content for actual api implementation -->
         <div class="newsContainer">
+            {% if articles == [] %}
+                <h3>No results found</h3>
+            {% endif %}
             {% for article in articles %}
                 <div class="newsItem">
                     <img src={{article.urlToImage}} width='150px'>
@@ -35,6 +75,9 @@
                 </div>
             {% endfor %}  
         </div>
+        {{ pagination.links }}
         <div id="footer"></div>
     </body>
+    <script src="static/js/searchnewsfeed.js"></script>
+    <script src="static/js/jobposting.js"></script>
 </html>

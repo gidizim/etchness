@@ -69,7 +69,7 @@
             {% for job in jobs %}
                 {% set index = loop.index %}
                 {% set new_id = "add" + index|string %}
-                <div class="item" onclick="createJobPosting(event, {{job|striptags}}, '/')">
+                <div class="item" onclick="createJobPosting(event, {{job|striptags}}, '/results')">
                     {% if job.job_type == 'Unknown'%}
                         {% set jobtype = ''%}
                     {% elif job.job_type == 'part_time' %}
