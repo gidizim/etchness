@@ -1,4 +1,4 @@
-# Job Hunta
+# JobHunta
 # Created by Etchness
 ## For UNSW SENG2021
 
