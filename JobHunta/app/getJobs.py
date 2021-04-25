@@ -34,11 +34,6 @@ ADZUNA_API = 'fee7b067359bebd25438ecd0db7c5f95'
 ADZUNA_ID = '0c843767'
 
 def get_adzuna_results(descrip, location, full_time, part_time, page, salary):
-    # assuming that we are only getting jobs in australia
-    country = 'au'
-    # return results in json
-    print(page+1)
-    print(salary)
     baseURL = 'https://api.adzuna.com/v1/api/jobs/au/search/1'
     params = {
         'app_id': ADZUNA_ID,
@@ -58,8 +53,7 @@ def get_adzuna_results(descrip, location, full_time, part_time, page, salary):
         params['part_time'] = 1
 
     response = requests.get(baseURL, params = params)
-    print((response))
-    
+
     if response.status_code == 200: 
         results = response.json()
         job_results = []
@@ -101,7 +95,6 @@ CAREERJET_ID = 'ace0afe5820cf82e55eea526ed3aeb39'
 
 def get_careerjet_results(client_useragent, client_ip, descrip, location, page, job_type):
     cj  =  CareerjetAPIClient("en_AU");
-    # baseURL = 'https://www.careerjet.com.au'
     baseURL = 'https://www.careerjet.com.au/search/jobs?'
     result_json = cj.search({
                         'affid'       : CAREERJET_ID,
@@ -155,10 +148,4 @@ def get_combined_results(useragent, ip, descrip, location, full_time, part_time,
         job_results.append(job)
     for job in careerjet_resp:
         job_results.append(job)
-    # print('job results')
-    # print(job_results)
     return job_results
-
-# get_github_results('software', 'Sydney', False, 1)
-# print (get_adzuna_results('software', 'Sydney', '', 1, 1))
-# print (get_combined_results('software', 'Sydney', '', 1, 1))

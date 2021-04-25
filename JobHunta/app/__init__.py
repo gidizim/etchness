@@ -52,43 +52,31 @@ def get_home():
         popup = -1
         reset_watchlist()
         if jobs != []:
-            print("there are jobs")
             # if not logged in and popular jobs have been stored in db
             return render_template('home.html', jobs=jobs[:5], login=0, popup=popup, u_id=None, job=None);
         else:
-            print("there are no jobs")
             # if not logged in and jobs are empty then we add
-            jobs = get_github_results('software', '', True , 1)
-            print(len(jobs))
-            print(jobs)
+            jobs = get_adzuna_results('Software', 'Australia', 1, 1, 1, 0)
+            if jobs == 'invalid':
+                jobs = get_github_results('Software', '', True , 1)
             for job in jobs:
-
-
                 append_popular_job(job)
         return render_template('home.html', jobs=jobs[:5], login=0, popup=popup, u_id=None, job=None);
             
     jobs = get_popular_jobs()
     keywords = get_keywords(u_id)
-    print("in reverse")
     keywords.reverse()
-    print(keywords)
-    print(set(keywords))
-    print(len(jobs))
 
     # if logged in then reset jobs if keywords exist
     if keywords != []:
         jobs = []
-        print("has keywords")
         # get the most recent 3 searched words
         for keyword in list(set(keywords))[:3]:
-            # result = get_adzuna_results(keyword, 'Sydney', '', 1, 1, 100)
-            # if result == 'invalid':
-            #     print("got github jobs")
-            result = get_github_results(keyword, '', True , 1)
+            result = get_adzuna_results(keyword, 'Australia', 1, 1, 1, 0)
+            if result == 'invalid':
+                result = get_github_results(keyword, '', True , 1)
             for job in result:
                 jobs.append(job)
-            
-    print(len(jobs))
 
     # already been shown once
     if popup == 1:
@@ -96,20 +84,15 @@ def get_home():
     elif popup == -1:
         popup = 1
 
-    print(popup);
     for job in jobs[:5]:
         added = in_watchlist(u_id, job['url'])
-        print('in watchlist')
-        print(added)
         job['in_watchlist'] = 1 if added else 0
 
     nudge_job = get_nudge_job(u_id)
     if nudge_job == None:
         popup = -1
 
-    print("Nudge", nudge_job, popup)
-
-    return render_template('home.html', jobs=jobs[:5], login=0, popup=popup, u_id=u_id, job=nudge_job);
+    return render_template('home.html', jobs=jobs[:5], login=1, popup=popup, u_id=u_id, job=nudge_job);
 
 # List of articles is empty when server is first set up
 articles = []
@@ -123,8 +106,7 @@ def get_news():
         # for logged in user
         keywords = get_keywords(u_id)
         keywords.reverse()
-        if u_id and keywords:    
-            print(set(keywords))
+        if u_id and keywords:
             # get the most recent 3 words
             newsfeed = []
             for keyword in list(set(keywords))[:3]:
@@ -150,8 +132,7 @@ def get_news():
     from_day = data['ntime']
     country = data['location']
 
-    # searched_keywords = description + ' ' + category + ' ' + country
-    searched_keywords = description
+    searched_keywords = description + ' ' + category + ' ' + country
     if u_id:
         add_to_searched(u_id, searched_keywords.strip()) 
 
@@ -194,14 +175,12 @@ def get_job_results():
             job['in_watchlist'] = 0
 
     if request.method != 'POST':
-        print("in get")
         return render_template('results.html', jobs=curr_jobs, pagination=pagination, login=login)
             
     ip = request.remote_addr
     useragent = request.headers.get('User-Agent')
 
     data = request.get_json(force=True)
-    print(data)
     descrip = data['description']
     full_time = 1
     part_time = 1
@@ -217,14 +196,12 @@ def get_job_results():
 
     if data['description'] == 'None':
         descrip = ''
-    print(data)
     
     if u_id and descrip:
         add_to_searched(u_id, descrip)
-        print(descrip)
+
     jobs = get_combined_results(useragent, ip, descrip, data['location'], full_time, part_time, job_type, data['page'], data['salary'])
-    
-    print(len(jobs))
+
     return render_template('results.html', jobs=curr_jobs, pagination=pagination, login=login)
     
 
@@ -255,8 +232,6 @@ def get_job():
             if res == 1:
                 flag = i + 1
 
-        print("Flag", flag)
-
         login = 1
     
     return render_template('jobposting.html', job=job, prev=prev, login=login, u_id=u_id, flag=flag)
@@ -264,7 +239,6 @@ def get_job():
 @app.route('/applyToJob', methods=['POST'])
 def apply_to_job():
     data = request.get_json(force=True)
-    print("FUCK", data)
     add_to_applied(data['u_id'], data['jobposting'])
 
     return jsonify({})
@@ -272,7 +246,6 @@ def apply_to_job():
 @app.route('/updateJob', methods=['POST'])
 def update_job():
     data = request.get_json(force=True)
-    print("ran")
     update_date(data['u_id'], data['jobposting'])
 
     return jsonify({})
@@ -388,11 +361,8 @@ def get_resetpw():
     global email 
     global verify
     if request.method == 'POST':
-        print(request.form)
-        # email = request.form.get('reset_email')
         if "email_button" in request.form:
             sent = False
-            print("sent: " + str(sent))
             # generates 6 digit token
             token = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
             email = request.form.get('reset_email')
@@ -417,7 +387,6 @@ def get_resetpw():
             email = request.form.get('reset_email')
             
             if (auth.check_reset_token(email.lower(), token)):
-                print("valid")
                 verify = True
                 return render_template('resetpw.html', sent=sent, verify=verify, email=email)
             else:
@@ -435,7 +404,6 @@ def get_resetpw():
 
 @app.route('/db_testing')
 def test_db():
-    print(get_nudge_job(1))
     return render_template("home.html")
 
 @app.route('/logout')
@@ -443,7 +411,6 @@ def get_logout():
     global popup
     global articles
     popup = -1
-    print("Logout", popup)
     articles = []
     session.pop('user_id', None) 
     reset_watchlist()

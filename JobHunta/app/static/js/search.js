@@ -6,11 +6,6 @@ const jobtype = document.getElementById('jobtype');
 const salary = document.getElementById('salary');
 let page = 0;
 searchBtn.addEventListener('click', () => {
-    // event.preventDefault();
-    console.log(state.value);
-    console.log(suburb.value);
-    console.log(jobtype.value);
-    console.log(searchInput.value);
     let location = suburb.value + ', ' + state.value + ', ' + 'Australia';
     if (suburb.value == 'None' && state.value == 'None') {
         location = 'Australia';
@@ -24,9 +19,6 @@ searchBtn.addEventListener('click', () => {
     if (salary.value == 'None' || salary.value == "") {
         nSalary = 0;
     }
-    console.log(salary.value);
-    console.log(nSalary);
-    console.log(location);
     const info = {
         'description': searchInput.value ? searchInput.value : '',
         'job_type': jobtype.value,

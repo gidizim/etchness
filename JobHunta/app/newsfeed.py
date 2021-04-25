@@ -16,29 +16,6 @@ def getNews(keyword, lang, from_days):
     print('articles has ' + str(len(articles['articles'])))
     return articles
 
-
-
-
-# def searchedNews(description,location, timeframe, category): 
-    
-#     ntime = gettime(timeframe)
-#     articles = newsapi.get_everything(q=description  + category,
-                                       
-#                                         page=1,
-#                                         sources="abc-news-au, news-com-au",
-#                                         domains="9news.com.au, News.com.au, smh.com.au, theguardian.com",
-#                                         #cant mix
-#                                         #sources='abc-news-au, news-com-au',
-#                                         language='en',
-#                                         from_param=ntime,
-#                                         to=date.today())
-                                        
-#                                         #country=location)
-                                        
-#                                         #domains="9news.com.au, News.com.au, smh.com.au, theguardian.com")
-    
-#     return articles
-
 def add_to_searched(u_id, keyword):
     if (keyword == None):
         keyword = "Australia Jobs"
@@ -50,7 +27,6 @@ def add_to_searched(u_id, keyword):
     conn.commit()
     db.close_db()
 
-
 def get_keywords(u_id):
 
     conn = db.get_db()
@@ -61,7 +37,6 @@ def get_keywords(u_id):
     keywords = []
     for row in cur.fetchall():
         keywords.append(row['keyword']);
-    print(keywords);
 
     conn.commit()
     db.close_db()

@@ -1,8 +1,6 @@
-// currently closes but we dont want it to reappear when home is refreshed
 const close = document.getElementById('close');
 const popup = document.getElementById('popup-box');
-const yes = document.getElementById('yesButton');
-const no = document.getElementById('noButton');
+
 close.addEventListener("click", (event) => {
     event.preventDefault();
     popup.style.display = 'none';

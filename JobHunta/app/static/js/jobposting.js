@@ -4,8 +4,7 @@ const createJobPosting = (event, job, prevPage) => {
     // do nothing if buttons are clicked
     if (event.target.value == 'Remove from watchlist') return;
     if (event.target.value == 'Add to watchlist') return;
-    
-    console.log(job);
+
     const details = {
         'job': job,
         'prev': prevPage
@@ -30,7 +29,6 @@ const addToWatchlist = (job, id, loggedIn) => {
         return;
     }
 
-    console.log(id);
     const button = document.getElementById(id);
     if (button.value == "Add to watchlist") {
         fetch('/addToWatchlist', {
@@ -65,7 +63,6 @@ const addToWatchlist = (job, id, loggedIn) => {
 const removeJob = (job, url) => {
     const watchlistContainer = document.getElementById('watchlist-container');
     // confirm with user
-    console.log(url)
     const confirm = window.confirm('Are you sure you want to remove this job from your watchlist?\nThis action is irreversible.')
     if (confirm) {
         fetch('/removeFromWatchlist', {
@@ -85,7 +82,12 @@ const removeJob = (job, url) => {
 let jobProgress;
 // 2 Buttons, one increments job counter, one resets
 const incrementJob = (jobposting, u_id) => {
-    console.log(jobProgress);
+    const button = document.getElementById('application');
+    // live update the numbers
+    const applied = document.getElementById('applied');
+    const resp = document.getElementById('responded');
+    const interview = document.getElementById('interviewed');
+    const finalised = document.getElementById('finalised');
     if (!jobProgress) {
         jobProgress = {
             applied: jobposting.num_applied, 
@@ -94,12 +96,6 @@ const incrementJob = (jobposting, u_id) => {
             finalised: jobposting.num_finalised
         }
     }
-    const button = document.getElementById('application');
-    // live update the numbers
-    const applied = document.getElementById('applied');
-    const resp = document.getElementById('responded');
-    const interview = document.getElementById('interviewed');
-    const finalised = document.getElementById('finalised');
     // Send Post request, on success update button.value
     
     fetch('/applyToJob', {

@@ -22,11 +22,6 @@ searchBtn.addEventListener('click', () => {
         category = 'None';
     }
 
-    console.log(ntime);
-    console.log(category);
-    console.log(location);
-    
-
     const info = {
         'description': searchInput.value ? searchInput.value : '',
         'ntime': ntime,

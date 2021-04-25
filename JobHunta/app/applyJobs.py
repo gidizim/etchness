@@ -128,10 +128,8 @@ def get_num_applied(job_id):
     conn = db.get_db()
     cur = conn.cursor()
 
-    print(job_id)
     cur.execute("SELECT * FROM applied WHERE job_id = '%s';" % (job_id))
 
-    print(cur.rowcount)
     if len(cur.fetchall()) == 0:
         db.close_db()
         return (0, 0, 0, 0)
@@ -147,13 +145,10 @@ def get_nudge_job(u_id):
     conn = db.get_db()
     cur = conn.cursor()
 
-    print(u_id)
-
     cur.execute("SELECT job_id FROM applied WHERE user_id = '%s' AND finalised = 0 AND last_updated < datetime('now', '-7 day');" % (u_id))
 
     data = cur.fetchall()
     if len(data) == 0:
-        print("No match")
         db.close_db()
         return None
 
@@ -165,7 +160,6 @@ def get_nudge_job(u_id):
 
     if len(data) == 0:
         db.close_db()
-        print("Should never reach this point")
         return None
 
     row = data[0]

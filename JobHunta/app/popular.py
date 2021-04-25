@@ -1,6 +1,5 @@
 from . import db
 
-#
 def get_popular_jobs():
     conn = db.get_db()
     cur = conn.cursor()
